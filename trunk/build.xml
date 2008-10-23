@@ -1,0 +1,60 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for create Build for SecurityManager-->
+<project name="SecurityManager" default="compile">
+	<property name="base.dir" value="." />
+	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="build.dir" value="${base.dir}/build" />
+	<property name="src.dir" value="${base.dir}/src" />
+	<property name="target.dir" value="${base.dir}/classes" />
+
+	<target name="compile" depends="init">
+			<javac destdir="${target.dir}" includes="**/*.*" debug="on" includeAntRuntime="false" target="1.5">
+				<src path="${src.dir}" />
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</javac>
+			<copy todir="${target.dir}">
+				<fileset dir="${src.dir}">
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+					<include name="**/*.hbm.xml" />
+					<include name="**/*.ser" />
+				</fileset>
+			</copy>
+		</target>
+	<!-- sub tasks -->
+		<target name="init">
+			<!-- Create the time stamp -->
+			<tstamp />
+			<!-- Create the build directory structure used by compile -->
+			<delete dir="${target.dir}" />
+			<mkdir dir="${target.dir}" />
+			<mkdir dir="${build.dir}" />
+		</target>
+	<target name="build_jar" depends="compile">
+			<delete>
+				<fileset dir="${build.dir}" includes="**/*" />
+			</delete>
+			<tstamp />
+			<jar taskname="build_jar" jarfile="${build.dir}/securityManager.jar">
+				<fileset dir="${target.dir}">
+					<include name="**/*" />
+				</fileset>
+				<manifest>
+					<attribute name="Built-At-Time" value="${TODAY} ${TSTAMP}" />
+				</manifest>
+			</jar>
+
+			<antcall target="build_code_zip" />
+		</target>
+	<target name="build_code_zip" depends="compile">
+			<zip destfile="${build.dir}/securityManager-src.zip">
+				<fileset dir="${src.dir}" includes="**/*" />
+			</zip>
+		</target>
+
+</project>
