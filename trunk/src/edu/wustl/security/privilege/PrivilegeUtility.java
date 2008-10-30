@@ -2,7 +2,7 @@
  * Utility class for methods related to CSM.
  */
 
-package edu.wustl.common.security;
+package edu.wustl.security.privilege;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,6 +16,11 @@ import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
+import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.manager.ISecurityManager;
+import edu.wustl.security.manager.SecurityManager;
+import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.domainobjects.Application;
@@ -43,7 +48,6 @@ import gov.nih.nci.security.exceptions.CSTransactionException;
  */
 public class PrivilegeUtility
 {
-
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -52,9 +56,16 @@ public class PrivilegeUtility
 	/**
 	 * instance of SecurityManager.
 	 */
-	private static SecurityManager securityManager = SecurityManager
-			.getInstance(PrivilegeUtility.class);
-
+	private static ISecurityManager securityManager = null;
+	  public PrivilegeUtility() 
+	  {
+	    	try 
+	    	{
+				securityManager = SecurityManagerFactory.getSecurityManager(PrivilegeUtility.class);
+			} catch (SMException e) {
+				e.printStackTrace();
+			}
+	    }
 	/**
 	 * This method creates protection elements corresponding to protection
 	 * objects passed and associates them with static as well as dynamic
@@ -241,7 +252,7 @@ public class PrivilegeUtility
 	{
 		ProtectionGroup protectionGroup;
 		protectionGroup = new ProtectionGroup();
-		protectionGroup.setApplication(getApplication(SecurityManager.APPLICATION_CONTEXT_NAME));
+		protectionGroup.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 		protectionGroup.setProtectionGroupName(userGroupRoleProtectionGroupBean
 				.getProtectionGroupName());
 		return protectionGroup;
@@ -274,7 +285,7 @@ public class PrivilegeUtility
 			throws CSException
 	{
 		Group group = new Group();
-		group.setApplication(getApplication(SecurityManager.APPLICATION_CONTEXT_NAME));
+		group.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 		group.setGroupName(userGroupRoleProtectionGroupBean.getGroupName());
 		return group;
 	}
@@ -339,7 +350,7 @@ public class PrivilegeUtility
 		try
 		{
 			protectionElement
-					.setApplication(getApplication(SecurityManager.APPLICATION_CONTEXT_NAME));
+					.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 			protectionElement.setProtectionElementDescription(protectionObject.getClass().getName()
 					+ " object");
 			protectionElement.setProtectionElementName(protectionObject.getObjectId());
@@ -379,7 +390,7 @@ public class PrivilegeUtility
 	 */
 	public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
-		return securityManager.getObjects(searchCriteria);
+		return ProvisionManager.getObjects(searchCriteria);
 	}
 	/**
 	 * @param protectionElement protectionElement
@@ -467,7 +478,7 @@ public class PrivilegeUtility
 	 */
 	public UserProvisioningManager getUserProvisioningManager() throws CSException
 	{
-		return securityManager.getUserProvisioningManager();
+		return ProvisionManager.getUserProvisioningManager();
 	}
 
 	/**
@@ -478,7 +489,7 @@ public class PrivilegeUtility
 	 */
 	protected AuthorizationManager getAuthorizationManager() throws CSException
 	{
-		return securityManager.getAuthorizationManager();
+		return ProvisionManager.getAuthorizationManager();
 	}
 
 	/**
@@ -530,7 +541,7 @@ public class PrivilegeUtility
 		//Search for role by the name roleName
 		Role role = new Role();
 		role.setName(roleName);
-		role.setApplication(getApplication(SecurityManager.APPLICATION_CONTEXT_NAME));
+		role.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 		RoleSearchCriteria roleSearchCriteria = new RoleSearchCriteria(role);
 		List<Role> list;
 		try

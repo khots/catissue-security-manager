@@ -5,11 +5,12 @@
  * Window - Preferences - Java - Code Style - Code Templates
  */
 
-package edu.wustl.common.security;
+package edu.wustl.security.impl;
 
 import org.hibernate.SessionFactory;
 
-import edu.wustl.common.security.dao.AuthorizationDAOImpl;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.system.ApplicationSessionFactory;
 
 /**
@@ -42,11 +43,11 @@ public class UserProvisioningManagerImpl
 		/** Modified by amit_doshi
 		 *  code reviewer abhijit_naik 
 		 */
-		super(SecurityManager.APPLICATION_CONTEXT_NAME);
+		super(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME);
 		SessionFactory sf = ApplicationSessionFactory
-				.getSessionFactory(SecurityManager.APPLICATION_CONTEXT_NAME);
+				.getSessionFactory(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME);
 		super.setAuthorizationDAO(new AuthorizationDAOImpl(sf,
-				SecurityManager.APPLICATION_CONTEXT_NAME));
+				SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 	}
 
 }

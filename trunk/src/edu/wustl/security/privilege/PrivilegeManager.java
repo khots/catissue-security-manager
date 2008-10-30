@@ -4,7 +4,7 @@
  * Instances of PrivilegeCache can be accessed from the instance of PrivilegeCacheManager
  */
 
-package edu.wustl.common.security;
+package edu.wustl.security.privilege;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +30,9 @@ import org.xml.sax.SAXException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.global.Constants;
+import edu.wustl.security.global.Constants;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
@@ -454,7 +456,7 @@ public final class PrivilegeManager
 			role.setName(roleName);
 			role.setDesc("Dynamically created role");
 			role.setApplication(privilegeUtility
-					.getApplication(SecurityManager.APPLICATION_CONTEXT_NAME));
+					.getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 			Set<Privilege> privilegeList = new HashSet<Privilege>();
 			for (String privilegeId : privileges)
 			{

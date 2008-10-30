@@ -1,4 +1,4 @@
-package edu.wustl.global;
+package edu.wustl.security.global;
 
 import java.util.HashMap;
 
@@ -43,6 +43,7 @@ public class Constants
 	public static final String REGISTRATION = "REGISTRATION";
 	public static final String READ_DENIED = "READ_DENIED";
 	public static final String allowOperation = "allowOperation";
+	public static final String BIRTH_DATE_TAG_NAME = "IS_BIRTH_DATE";
 }
 
 

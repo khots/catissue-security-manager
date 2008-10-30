@@ -1,4 +1,4 @@
-package edu.wustl.global;
+package edu.wustl.security.global;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,11 +13,11 @@ import java.util.Properties;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.security.PrivilegeType;
 import edu.wustl.common.util.dbmanager.DAOException;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.privilege.PrivilegeType;
 
 public class Utility {
 	/**
@@ -94,7 +94,23 @@ public class Utility {
 		}
 		return pType;
 	}
-
+	/**
+	 * 
+	 * @param tagKeyValueMap
+	 * @return
+	 */
+	 public static boolean getIsBirthDate(Map<String, String> tagKeyValueMap)
+	    {    
+		 boolean isBirthDate = false;
+	       if(tagKeyValueMap.containsKey(edu.wustl.security.global.Constants.BIRTH_DATE_TAG_NAME)) {  
+	    	   String tagValue = tagKeyValueMap.get(edu.wustl.security.global.Constants.BIRTH_DATE_TAG_NAME);
+	            if (tagValue.equalsIgnoreCase(Constants.TRUE))
+	            {
+	            	isBirthDate =  true;
+	            }
+	        }
+	        return isBirthDate;
+	    }
 	
 
 	/* Added By Rukhsana
@@ -147,4 +163,5 @@ public class Utility {
 		}
 
 	}*/
+	
 }
