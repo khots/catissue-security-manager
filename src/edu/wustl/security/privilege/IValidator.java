@@ -1,5 +1,5 @@
 
-package edu.wustl.common.security;
+package edu.wustl.security.privilege;
 
 import edu.wustl.common.beans.SessionDataBean;
 

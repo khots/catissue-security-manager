@@ -3,7 +3,7 @@
  * An instance of PrivilegeCache will be created for every user who logs in.
  */
 
-package edu.wustl.common.security;
+package edu.wustl.security.privilege;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -22,7 +22,8 @@ import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.global.Constants;
+import edu.wustl.security.global.Constants;
+import edu.wustl.security.locator.PrivilegeLocator;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;

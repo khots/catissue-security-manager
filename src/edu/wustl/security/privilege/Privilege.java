@@ -1,4 +1,4 @@
-package edu.wustl.common.security;
+package edu.wustl.security.privilege;
 
 /**
  * This class is for Privilege.

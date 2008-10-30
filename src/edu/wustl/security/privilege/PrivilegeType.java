@@ -2,9 +2,9 @@
  * 
  */
 
-package edu.wustl.common.security;
+package edu.wustl.security.privilege;
 
-import edu.wustl.global.Constants;
+import edu.wustl.security.global.Constants;
 
 /**
  * Enumeration that will contains different types of class level privileges. 
