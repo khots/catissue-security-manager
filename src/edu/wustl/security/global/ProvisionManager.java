@@ -37,7 +37,7 @@ public class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public static UserProvisioningManager getUserProvisioningManager() throws CSException
+	public static final UserProvisioningManager getUserProvisioningManager() throws CSException
 	{
 		return (UserProvisioningManager) getAuthorizationManager();
 	}
@@ -49,7 +49,7 @@ public class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public static AuthenticationManager getAuthenticationManager() throws CSException
+	public static final AuthenticationManager getAuthenticationManager() throws CSException
 	{
 		if (authenticationManager == null)
 		{
@@ -67,7 +67,7 @@ public class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public static AuthorizationManager getAuthorizationManager() throws CSException
+	public static final AuthorizationManager getAuthorizationManager() throws CSException
 	{
 
 		if (authorizationManager == null)
@@ -85,7 +85,7 @@ public class ProvisionManager
 	* @throws CSException 
 	* @throws SMException 
 	*/
-	public static String getGroupID(String groupName) throws CSException, SMException
+	public static final String getGroupID(String groupName) throws CSException, SMException
 	{
 		List list;
 		String groupId=null;
@@ -132,7 +132,7 @@ public class ProvisionManager
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
 	 * @throws CSException
 	 */
-	public static List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
+	public static final List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
 		if (null == searchCriteria)
 		{
