@@ -3,7 +3,7 @@ package edu.wustl.security.global;
 import java.util.HashMap;
 
 /**
- * This class is specific to constants used in SecurityManager files.
+ * Class specific to constants used in SecurityManager.
  *  
  * @author deepti_shelar
  * */

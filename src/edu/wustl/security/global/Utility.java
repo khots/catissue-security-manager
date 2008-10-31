@@ -1,14 +1,8 @@
 package edu.wustl.security.global;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
@@ -18,7 +12,11 @@ import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.privilege.PrivilegeType;
-
+/**
+ * Utility methods required in SecurityManager
+ * @author deepti_shelar
+ *
+ */
 public class Utility {
 	/**
 	 * logger -Generic Logger

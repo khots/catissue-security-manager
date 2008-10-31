@@ -10,7 +10,6 @@ package edu.wustl.security.impl;
 import org.hibernate.SessionFactory;
 
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
-import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.system.ApplicationSessionFactory;
 
 /**

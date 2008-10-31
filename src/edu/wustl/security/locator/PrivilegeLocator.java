@@ -17,8 +17,6 @@ import edu.wustl.security.privilege.Privilege;
  */
 public class PrivilegeLocator
 {
-	
-	
 	/**
 	 * File name for privilege configuration.
 	 */

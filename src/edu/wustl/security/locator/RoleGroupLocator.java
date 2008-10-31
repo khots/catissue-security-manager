@@ -16,11 +16,10 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.manager.SecurityManager;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
- * 
+ * Reads SMRoleGroupConf.xml anad loads a map of bean objects having details of Role and group
  * @author deepti_shelar
  *
  */
