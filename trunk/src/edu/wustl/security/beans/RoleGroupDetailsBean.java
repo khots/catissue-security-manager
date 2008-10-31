@@ -1,6 +1,10 @@
 package edu.wustl.security.beans;
 
-
+/**
+ * A bean object to store role and group details.
+ * @author deepti_shelar
+ *
+ */
 public class RoleGroupDetailsBean {
 	String roleName;
 	String roleType;
@@ -84,7 +88,12 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param obj the object to be compared.
 	 * @return true if any of the following attributes of both object matches:
-	 * 			- id
+	 * 			- roleId
+	 *          - roleName
+	 *          - groupName
+	 *          - groupId
+	 *          - roleType
+	 *          - groupType
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

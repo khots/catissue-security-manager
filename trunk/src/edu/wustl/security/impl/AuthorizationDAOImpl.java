@@ -7,17 +7,6 @@
 
 package edu.wustl.security.impl;
 
-import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
-import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
-import gov.nih.nci.security.authorization.domainobjects.Privilege;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
-import gov.nih.nci.security.authorization.domainobjects.User;
-import gov.nih.nci.security.exceptions.CSConfigurationException;
-import gov.nih.nci.security.exceptions.CSException;
-import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
-import gov.nih.nci.security.exceptions.CSTransactionException;
-import gov.nih.nci.security.util.StringUtilities;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,6 +25,17 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
+import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
+import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
+import gov.nih.nci.security.authorization.domainobjects.Privilege;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.User;
+import gov.nih.nci.security.exceptions.CSConfigurationException;
+import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
+import gov.nih.nci.security.exceptions.CSTransactionException;
+import gov.nih.nci.security.util.StringUtilities;
 
 /**
  * @author aarti_sharma
@@ -68,7 +68,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 	public Collection getPrivilegeMap(String userName, Collection pEs) throws CSException
 	{
-		ArrayList result = new ArrayList();
+		ArrayList<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
 		ResultSet resulSet = null;
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
@@ -106,7 +106,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				while (iterator.hasNext())
 				{
 					ProtectionElement pElement = (ProtectionElement) iterator.next();
-					ArrayList privs = new ArrayList();
+					ArrayList<Privilege> privs = new ArrayList<Privilege>();
 					if (pElement.getObjectId() != null)
 					{
 						if (pElement.getAttribute()== null)

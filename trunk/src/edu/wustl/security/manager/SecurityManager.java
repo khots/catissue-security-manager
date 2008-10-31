@@ -78,7 +78,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	
+
 
 	private Class requestingClass = null;
 
@@ -100,7 +100,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	protected static String securityDataPrefix = CLASS_NAME;
 
 
-	
+
 
 	/**
 	 * @param class1
@@ -163,27 +163,27 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 		return applicationName;
 	}
-*/
-	
+	 */
+
 	/*private void initializeConstants()
 	{
-		
+
 		try
 		{
-			
-			 * Here 
-			 * Constants.ADMINISTRATOR_ROLE = roleTYpe
-			 * Constants.ADMINISTRATOR_GROUP_ID = group type
-			 * Constants.ROLE_ADMINISTRATOR = role_name
-			 * public static final String ADMINISTRATOR_GROUP = "ADMINISTRATOR_GROUP"; = groupName
-			 * 
-			 
+
+	 * Here 
+	 * Constants.ADMINISTRATOR_ROLE = roleTYpe
+	 * Constants.ADMINISTRATOR_GROUP_ID = group type
+	 * Constants.ROLE_ADMINISTRATOR = role_name
+	 * public static final String ADMINISTRATOR_GROUP = "ADMINISTRATOR_GROUP"; = groupName
+	 * 
+
 			rolegroupNamevsId.put(Constants.ADMINISTRATOR_ROLE,ProvisionManager.getRoleID(Constants.ROLE_ADMINISTRATOR));
 			rolegroupNamevsId.put(Constants.PUBLIC_ROLE, ProvisionManager.getRoleID(Constants.SCIENTIST));
 			rolegroupNamevsId.put(Constants.TECHNICIAN_ROLE, ProvisionManager.getRoleID(Constants.TECHNICIAN));
 			rolegroupNamevsId.put(Constants.SUPER_ADMINISTRATOR_ROLE,ProvisionManager.getRoleID(Constants.ROLE_SUPER_ADMINISTRATOR));
 			rolegroupNamevsId.put(Constants.SUPERVISOR_ROLE, ProvisionManager.getRoleID(Constants.SUPERVISOR));
-			
+
 			rolegroupNamevsId.put(Constants.ADMINISTRATOR_GROUP_ID, ProvisionManager.getGroupID(ADMINISTRATOR_GROUP));
 			rolegroupNamevsId.put(Constants.PUBLIC_GROUP_ID, ProvisionManager.getGroupID(PUBLIC_GROUP));
 			rolegroupNamevsId.put(Constants.TECHNICIAN_GROUP_ID, ProvisionManager.getGroupID(TECHNICIAN_GROUP));
@@ -200,9 +200,9 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 	}
 
-	*/
+	 */
 
-	
+
 
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
@@ -223,7 +223,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			StringBuffer mesg=new StringBuffer("Authentication fails for user")
-				.append(loginName).append("requestingClass:").append(requestingClass);
+			.append(loginName).append("requestingClass:").append(requestingClass);
 			logger.debug(mesg.toString());
 			throw new SMException(mesg.toString(), exception);
 		}
@@ -448,7 +448,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getRoleGroupDetailsMap();
 		RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
 		sampleBean.setRoleId(roleID);
-		
+
 		RoleGroupDetailsBean requiredBean = roleGroupDetailsMap.get(sampleBean);
 		if(requiredBean == null)
 		{
@@ -456,12 +456,12 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		else
 		{
-		/*	roleName = requiredBean.getRoleName();
+			/*	roleName = requiredBean.getRoleName();
 			groupType = requiredBean.getGroupType();
-		*/	roleGroupId = requiredBean.getGroupId();
+			 */	roleGroupId = requiredBean.getGroupId();
 		}
 		return roleGroupId;
-		
+
 		/*if (roleID.equals(rolegroupNamevsId.get(Constants.ADMINISTRATOR_ROLE)))
 		{
 			roleName=Constants.ADMINISTRATOR_ROLE;
@@ -520,7 +520,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @throws CSObjectNotFoundException
 	 */
 	private Role getRole(Set groups, UserProvisioningManager userProvisioningManager)
-			throws CSObjectNotFoundException
+	throws CSObjectNotFoundException
 	{
 		Role role = null;
 		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getRoleGroupDetailsMap();
@@ -530,7 +530,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 			Group group = (Group) it.next();
 			if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME))
 			{
-				
+
 				RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
 				sampleBean.setGroupName(group.getGroupName());
 				RoleGroupDetailsBean requiredBean = roleGroupDetailsMap.get(sampleBean);
@@ -686,7 +686,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 			throw new SMException(exception.getMessage(), exception);
 		}
 	}
-*/
+	  */
 	/**
 	 * @throws SMException
 	 *  
@@ -706,16 +706,11 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 	}
 
-	
+
 
 	public void assignUserToGroup(String userGroupname, String userId) throws SMException
 	{
-		if (userId == null || userGroupname == null)
-		{
-			logger.debug(" Null or insufficient Parameters passed");
-			throw new SMException("Null or insufficient Parameters passed");
-		}
-
+		checkForSufficientParamaters(userGroupname, userId);
 		try
 		{
 			Group group = getUserGroup(userGroupname);
@@ -736,15 +731,24 @@ public class SecurityManager implements Permissions,ISecurityManager
 			throw new SMException(mess, exception);
 		}
 	}
-
-	public void removeUserFromGroup(String userGroupname, String userId) throws SMException
-	{
+	/**
+	 * 
+	 * @param userGroupname
+	 * @param userId
+	 * @throws SMException
+	 */
+	private void checkForSufficientParamaters(String userGroupname,
+			String userId) throws SMException {
 		if (userId == null || userGroupname == null)
 		{
 			logger.debug(" Null or insufficient Parameters passed");
 			throw new SMException("Null or insufficient Parameters passed");
 		}
+	}
 
+	public void removeUserFromGroup(String userGroupname, String userId) throws SMException
+	{
+		checkForSufficientParamaters(userGroupname, userId);
 		try
 		{
 			UserProvisioningManager userProvisioningManager = ProvisionManager.getUserProvisioningManager();
@@ -816,7 +820,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 					consolidatedGroupIds.add(String.valueOf(group.getGroupId()));
 				}
 			}
-			 //Consolidating all the Groups
+			//Consolidating all the Groups
 			for (int i = 0; i < groupIds.length; i++)
 			{
 				consolidatedGroupIds.add(groupIds[i]);
@@ -827,7 +831,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 			{
 				finalUserGroupIds[i] = (String) it.next();
 			}
-			 //Setting groups for user and updating it
+			//Setting groups for user and updating it
 			userProvisioningManager.assignGroupsToUser(userId, finalUserGroupIds);
 		}
 		catch (CSException exception)
@@ -839,7 +843,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	}
 
 	public boolean isAuthorized(String userName, String objectId, String privilegeName)
-			throws SMException
+	throws SMException
 	{
 		try
 		{
@@ -854,7 +858,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 	public boolean checkPermission(String userName, String objectType, String objectIdentifier,
 			String privilegeName) throws SMException
-	{
+			{
 		boolean isAuthorized=true;
 		if (Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.ISCHECKPERMISSION)))
 		{
@@ -870,7 +874,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 			}
 		}
 		return isAuthorized;
-	}
+			}
 
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
@@ -882,7 +886,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 *         SMException
 	 */
 	public String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf)
-			throws SMException
+	throws SMException
 	{
 		Set protectionGroups;
 		ProtectionGroup protectionGroup;
@@ -909,8 +913,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mess= new StringBuffer("Unable to get protection group by name")
-								.append(nameConsistingOf).append(" for Protection Element ")
-								.append(protectionElementName).toString();
+			.append(nameConsistingOf).append(" for Protection Element ")
+			.append(protectionElementName).toString();
 			logger.debug(mess, exception);
 			throw new SMException(mess,exception);
 		}
@@ -996,7 +1000,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	private Set<NameValueBean> getObjectsForAssignPrivilege(Collection privilegeMap, String objectType,
 			String privilegeName) throws SMException
-	{
+			{
 		Set<NameValueBean> objects = new HashSet<NameValueBean>();
 		NameValueBean nameValueBean;
 		ObjectPrivilegeMap objectPrivilegeMap;
@@ -1033,7 +1037,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 
 		return objects;
-	}
+			}
 
 	/**
 	 * This method returns name value beans of the object ids for types
@@ -1049,7 +1053,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	public Set<NameValueBean> getObjectsForAssignPrivilege(String userID, String[] objectTypes,
 			String[] privilegeNames) throws SMException
-	{
+			{
 		Set<NameValueBean> objects=null;
 
 		try
@@ -1073,7 +1077,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		return objects;
 
-	}
+			}
 
 	/**
 	 * @param objectTypes
@@ -1084,7 +1088,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	private Set<NameValueBean> getAssignedPrivilege(String[] objectTypes, String[] privilegeNames,
 			User user) throws CSException
-	{
+			{
 		Set<NameValueBean> objects = new HashSet<NameValueBean>();
 		Collection privilegeMap;
 		List list;
@@ -1117,9 +1121,9 @@ public class SecurityManager implements Permissions,ISecurityManager
 			}
 		}
 		return objects;
-	}
+			}
 
-	
+
 
 	/**
 	 * Checks whether an object type has any identified data associated with

@@ -16,7 +16,11 @@ import gov.nih.nci.security.dao.GroupSearchCriteria;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.dao.SearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
-
+/**
+ * Class to provide required objects from csm apis.
+ * @author deepti_shelar
+ *
+ */
 public class ProvisionManager 
 {
 	/**

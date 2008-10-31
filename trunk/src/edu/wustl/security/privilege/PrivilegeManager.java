@@ -32,7 +32,6 @@ import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.global.Constants;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
-import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;

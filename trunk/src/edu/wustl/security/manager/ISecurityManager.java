@@ -12,7 +12,6 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 /**
  * Interface for SecurityManager.
  * @author deepti_shelar
- *
  */
 public interface ISecurityManager {
 	

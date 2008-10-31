@@ -19,7 +19,6 @@ import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
-import edu.wustl.security.manager.SecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.UserProvisioningManager;

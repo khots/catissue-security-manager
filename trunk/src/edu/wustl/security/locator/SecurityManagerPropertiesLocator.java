@@ -8,7 +8,11 @@ import edu.wustl.common.util.dbmanager.DBUtil;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.manager.SecurityManager;
-
+/**
+ * Reads the SecurityManager.properties file and loads properties to be referred by SecurityManager.
+ * @author deepti_shelar
+ *
+ */
 public class SecurityManagerPropertiesLocator {
 
 	/**
