@@ -38,8 +38,9 @@ public class RoleGroupLocator
 	private static Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
 	private static List<String> roleIdList = new ArrayList<String>();
 	private static List<String> groupIdList = new ArrayList<String>();
+	
 	/**
-	 * 
+	 * This will be called from SecurityManagerFactory when anyone creates an instance of SecurityManager.
 	 */
 	public static void init()
 	{
@@ -48,7 +49,7 @@ public class RoleGroupLocator
 		createRoleGroupBeans(roleList);
 	}
 	/**
-	 * 
+	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml
 	 * @param roleList
 	 */
 	private static void createRoleGroupBeans(NodeList roleList) {
@@ -62,7 +63,7 @@ public class RoleGroupLocator
 		}
 	}
 	/**
-	 * 
+	 * Creates a bean object for role and group details.
 	 * @param role
 	 */
 	private static void createRoleGroupBean(Node role) {

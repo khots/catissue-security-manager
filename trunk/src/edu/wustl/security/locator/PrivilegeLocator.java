@@ -12,7 +12,7 @@ import edu.wustl.common.util.global.XMLParserUtility;
 import edu.wustl.security.privilege.Privilege;
 
 /**
- * This classes load all privileges from xml file.
+ * This class loada all privileges from xml file.
  * @author ravi_kumar
  */
 public class PrivilegeLocator
