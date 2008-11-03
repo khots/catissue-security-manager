@@ -99,111 +99,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 	protected static String securityDataPrefix = CLASS_NAME;
 
-
-
-
-	/**
-	 * @param class1
-	 *//*
-	public SecurityManager(Class class1)
-	{
-		super();
-		requestingClass = class1;
-		if (!initialized)
-		{
-			getApplicationContextName();
-			initializeConstants();
-		}
-	}*/
-
-	/**
-	 * @param class1
-	 * @return
-	 *//*
-	public static final SecurityManager getInstance(Class class1)
-	{
-		Class className = null;
-		SecurityManager securityManager=null;
-		try
-		{
-			String SECURITY_MANAGER_CLASS=SECURITY_MANAGER_PROP.getProperty(Constants.SECURITY_MANAGER_CLASSNAME);
-			if (SECURITY_MANAGER_CLASS != null)
-			{
-				className = Class.forName(SECURITY_MANAGER_CLASS);
-			}
-			if (className != null)
-			{
-				Constructor[] cons = className.getConstructors();
-				securityManager= (SecurityManager) cons[0].newInstance(class1);
-			}
-		}
-		catch (Exception exception)
-		{
-			logger.warn("Error in creating SecurityManager instance",exception);
-		}
-
-		if(null==securityManager)
-		{
-			securityManager= new SecurityManager(class1);
-		}
-		return securityManager;
-	}*/
-
-	/*private static String getApplicationContextName()
-	{
-		String applicationName = "";
-		try
-		{
-			SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME = applicationName;
-		}
-		catch (Exception exception)
-		{
-			logger.warn("Error in getting application context name",exception);
-		}
-
-		return applicationName;
-	}
-	 */
-
-	/*private void initializeConstants()
-	{
-
-		try
-		{
-
-	 * Here 
-	 * Constants.ADMINISTRATOR_ROLE = roleTYpe
-	 * Constants.ADMINISTRATOR_GROUP_ID = group type
-	 * Constants.ROLE_ADMINISTRATOR = role_name
-	 * public static final String ADMINISTRATOR_GROUP = "ADMINISTRATOR_GROUP"; = groupName
-	 * 
-
-			rolegroupNamevsId.put(Constants.ADMINISTRATOR_ROLE,ProvisionManager.getRoleID(Constants.ROLE_ADMINISTRATOR));
-			rolegroupNamevsId.put(Constants.PUBLIC_ROLE, ProvisionManager.getRoleID(Constants.SCIENTIST));
-			rolegroupNamevsId.put(Constants.TECHNICIAN_ROLE, ProvisionManager.getRoleID(Constants.TECHNICIAN));
-			rolegroupNamevsId.put(Constants.SUPER_ADMINISTRATOR_ROLE,ProvisionManager.getRoleID(Constants.ROLE_SUPER_ADMINISTRATOR));
-			rolegroupNamevsId.put(Constants.SUPERVISOR_ROLE, ProvisionManager.getRoleID(Constants.SUPERVISOR));
-
-			rolegroupNamevsId.put(Constants.ADMINISTRATOR_GROUP_ID, ProvisionManager.getGroupID(ADMINISTRATOR_GROUP));
-			rolegroupNamevsId.put(Constants.PUBLIC_GROUP_ID, ProvisionManager.getGroupID(PUBLIC_GROUP));
-			rolegroupNamevsId.put(Constants.TECHNICIAN_GROUP_ID, ProvisionManager.getGroupID(TECHNICIAN_GROUP));
-			rolegroupNamevsId.put(Constants.SUPERVISOR_GROUP_ID, ProvisionManager.getGroupID(SUPERVISOR_GROUP));
-			rolegroupNamevsId.put(Constants.SUPER_ADMINISTRATOR_GROUP_ID,ProvisionManager.getRoleID(SUPER_ADMINISTRATOR_GROUP));
-		}
-		catch (CSException exception)
-		{
-			logger.warn("Error in initializing rolegroupNamevsId map",exception);
-		}
-		catch (SMException exception)
-		{
-			logger.warn("Error in initializing rolegroupNamevsId map",exception);
-		}
-	}
-
-	 */
-
-
-
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
 	 * @param requestingClass
@@ -277,62 +172,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 	}
 
-	/**
-	 * This method returns array of CSM user id of all users who are administrators
-	 * @return
-	 * @throws SMException
-	 *//*
-	public Long[] getAllAdministrators() throws SMException
-	{
-		Long[] userId;
-		try
-		{
-			Group group = new Group();
-			group.setGroupName(ADMINISTRATOR_GROUP);
-			GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
-			List list = getObjects(groupSearchCriteria);
-			group = (Group) list.get(0);
-			Set<User> users = group.getUsers();
-			userId = new Long[users.size()];
-			Iterator<User> iterator = users.iterator();
-			for (int i = 0; i < users.size(); i++)
-			{
-				userId[i] = ((User) iterator.next()).getUserId();
-			}
-		}
-		catch (CSException exception)
-		{
-			logger.debug("Unable to get users: Exception: " + exception.getMessage());
-			throw new SMException(exception.getMessage(), exception);
-		}
-		return userId;
-	}*/
-
-	/**
-	 * This method checks whether a user exists in the database or not
-	 *
-	 * @param loginName
-	 *            Login name of the user
-	 * @return TRUE is returned if a user exists else FALSE is returned
-	 * @throws SMException
-	 *//*
-	public boolean userExists(String loginName) throws SMException
-	{
-		boolean userExists = true;
-		try
-		{
-			if (getUser(loginName) == null)
-			{
-				userExists = false;
-			}
-		}
-		catch (SMException exception)
-		{
-			logger.debug("Unable to get user :"+loginName);
-			throw exception;
-		}
-		return userExists;
-	}*/
+	
+	
 
 	public void removeUser(String userId) throws SMException
 	{
@@ -370,17 +211,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 			for (String roleId : roleIdList) {
 				roles.add(userProvisioningManager.getRoleById(roleId));
 			}
-			/*roles.add(userProvisioningManager.getRoleById(rolegroupNamevsId
-					.get(Constants.SUPER_ADMINISTRATOR_ROLE)));
-			roles.add(userProvisioningManager.getRoleById(rolegroupNamevsId
-					.get(Constants.ADMINISTRATOR_ROLE)));
-			roles.add(userProvisioningManager.getRoleById(rolegroupNamevsId
-					.get(Constants.SUPERVISOR_ROLE)));
-			roles.add(userProvisioningManager.getRoleById(rolegroupNamevsId
-					.get(Constants.TECHNICIAN_ROLE)));
-			roles.add(userProvisioningManager.getRoleById(rolegroupNamevsId
-					.get(Constants.PUBLIC_ROLE)));*/
-
 		}
 		catch (CSException exception)
 		{
@@ -410,15 +240,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 			for (String grpId : allGroupIds) {
 				userProvisioningManager.removeUserFromGroup(grpId, userId);
 			}
-			/*userProvisioningManager.removeUserFromGroup(rolegroupNamevsId
-					.get(Constants.ADMINISTRATOR_GROUP_ID), userId);
-			userProvisioningManager.removeUserFromGroup(rolegroupNamevsId
-					.get(Constants.SUPERVISOR_GROUP_ID), userId);
-			userProvisioningManager.removeUserFromGroup(rolegroupNamevsId
-					.get(Constants.TECHNICIAN_GROUP_ID), userId);
-			userProvisioningManager.removeUserFromGroup(rolegroupNamevsId
-					.get(Constants.PUBLIC_GROUP_ID), userId);*/
-
 			//Add user to corresponding group
 			String groupId = getGroupIdForRole(roleID);
 			if (groupId == null)
@@ -456,41 +277,9 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		else
 		{
-			/*	roleName = requiredBean.getRoleName();
-			groupType = requiredBean.getGroupType();
-			 */	roleGroupId = requiredBean.getGroupId();
+			roleGroupId = requiredBean.getGroupId();
 		}
 		return roleGroupId;
-
-		/*if (roleID.equals(rolegroupNamevsId.get(Constants.ADMINISTRATOR_ROLE)))
-		{
-			roleName=Constants.ADMINISTRATOR_ROLE;
-			groupType=Constants.ADMINISTRATOR_GROUP_ID;
-		}
-		else if (roleID.equals(rolegroupNamevsId.get(Constants.SUPERVISOR_ROLE)))
-		{
-			roleName=Constants.SUPERVISOR_ROLE;
-			groupType=Constants.SUPERVISOR_GROUP_ID;
-		}
-		else if (roleID.equals(rolegroupNamevsId.get(Constants.TECHNICIAN_ROLE)))
-		{
-			roleName=Constants.TECHNICIAN_ROLE;
-			groupType=Constants.TECHNICIAN_GROUP_ID;
-		}
-		else if (roleID.equals(rolegroupNamevsId.get(Constants.PUBLIC_ROLE)))
-		{
-			roleName=Constants.PUBLIC_ROLE;
-			groupType=Constants.PUBLIC_GROUP_ID;
-		}
-		else
-		{
-			logger.debug("role corresponds to no group");
-		}*/
-		/*if(groupType!=null)
-		{
-			roleGroupId=rolegroupNamevsId.get(groupType);
-			logger.info("role corresponds to "+roleName);
-		}*/
 	}
 
 	public Role getUserRole(long userID) throws SMException
@@ -536,30 +325,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 				RoleGroupDetailsBean requiredBean = roleGroupDetailsMap.get(sampleBean);
 				String roleId = requiredBean.getRoleId();
 				role = userProvisioningManager.getRoleById(roleId);
-				/*if (group.getGroupName().equals(ADMINISTRATOR_GROUP))
-				{
-					role = userProvisioningManager.getRoleById(rolegroupNamevsId
-							.get(Constants.ADMINISTRATOR_ROLE));
-					break;
-				}
-				else if (group.getGroupName().equals(SUPERVISOR_GROUP))
-				{
-					role = userProvisioningManager.getRoleById(rolegroupNamevsId
-							.get(Constants.SUPERVISOR_ROLE));
-					break;
-				}
-				else if (group.getGroupName().equals(TECHNICIAN_GROUP))
-				{
-					role = userProvisioningManager.getRoleById(rolegroupNamevsId
-							.get(Constants.TECHNICIAN_ROLE));
-					break;
-				}
-				else if (group.getGroupName().equals(PUBLIC_GROUP))
-				{
-					role = userProvisioningManager.getRoleById(rolegroupNamevsId
-							.get(Constants.PUBLIC_ROLE));
-					break;
-				}*/
 			}
 		}
 		return role;
@@ -664,29 +429,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 	}
 
-	/**
-	 * Returns list of the User objects for the passed email address.
-	 *
-	 * @param emailAddress -Email Address for which users need to be searched
-	 * @return List Returns list of the User objects for the passed email address.
-	 * @throws SMException if there is any exception while querying the database
-	 *//*
-	public List getUsersByEmail(String emailAddress) throws SMException
-	{
-		try
-		{
-			User user = new User();
-			user.setEmailId(emailAddress);
-			SearchCriteria searchCriteria = new UserSearchCriteria(user);
-			return ProvisionManager.getUserProvisioningManager().getObjects(searchCriteria);
-		}
-		catch (CSException exception)
-		{
-			logger.debug("Unable to get users by emailAddress for email:"+emailAddress,exception);
-			throw new SMException(exception.getMessage(), exception);
-		}
-	}
-	  */
 	/**
 	 * @throws SMException
 	 *  
@@ -1123,8 +865,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 		return objects;
 			}
 
-
-
 	/**
 	 * Checks whether an object type has any identified data associated with
 	 * it or not.
@@ -1142,59 +882,4 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		return hasIdentifiedData;
 	}
-
-	/*public static String getSecurityDataPrefix()
-	{
-		return securityDataPrefix;
-	}
-
-	public static void setSecurityDataPrefix(String securityDataPrefix)
-	{
-		SecurityManager.securityDataPrefix = securityDataPrefix;
-	}*/
-
-	/**
-	 * Description: This method checks user's privilege on identified data.
-	 * Name : Aarti Sharma
-	 * Reviewer: Sachin Lale
-	 * Bug ID: 4111
-	 * Patch ID: 4111_2
-	 * See also: 4111_1
-	 * @param userId User's Identifier
-	 * @return true if user has privilege on identified data else false
-	 * @throws SMException
-	 *//*
-	public boolean hasIdentifiedDataAccess(Long userId) throws SMException
-	{
-		boolean hasIdentifiedDataAccess = false;
-		try
-		{
-			//Get user's role
-			Role role = getUserRole(userId.longValue());
-			UserProvisioningManager userProvisioningManager = ProvisionManager.getUserProvisioningManager();
-
-			//Get privileges the user has based on his role
-			Set<Privilege> privileges = userProvisioningManager.getPrivileges(String.valueOf(role.getId()));
-			Iterator<Privilege> privIterator = privileges.iterator();
-			Privilege privilege;
-
-			// If user has Identified data access set hasIdentifiedDataAccess true
-			for (int i = 0; i < privileges.size(); i++)
-			{
-				privilege = (Privilege) privIterator.next();
-				if (privilege.getName().equals(Permissions.IDENTIFIED_DATA_ACCESS))
-				{
-					hasIdentifiedDataAccess = true;
-					break;
-				}
-			}
-		}
-		catch (CSException exception)
-		{
-			logger.debug("Exception in hasIdentifiedDataAccess method",exception);
-			throw new SMException(exception.getMessage(), exception);
-		}
-		return hasIdentifiedDataAccess;
-
-	}*/
 }
