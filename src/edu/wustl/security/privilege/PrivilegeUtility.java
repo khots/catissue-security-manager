@@ -1,5 +1,5 @@
 /**
- * Utility class for methods related to CSM.
+ * Utility class for methods related to CSM 
  */
 
 package edu.wustl.security.privilege;
@@ -40,31 +40,31 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
- * Utility class for methods related to CSM.
- *
+ * Utility class for methods related to CSM 
+ * 
  * @author ravindra_jain
  *
  */
 public class PrivilegeUtility
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(PrivilegeUtility.class);
-
 	/**
 	 * instance of SecurityManager.
 	 */
 	private static ISecurityManager securityManager = null;
-	  public PrivilegeUtility() 
-	  {
-	    	try 
-	    	{
-				securityManager = SecurityManagerFactory.getSecurityManager(PrivilegeUtility.class);
-			} catch (SMException e) {
-				e.printStackTrace();
-			}
-	    }
+	public PrivilegeUtility() 
+	{
+		try 
+		{
+			securityManager = SecurityManagerFactory.getSecurityManager(PrivilegeUtility.class);
+		} catch (SMException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * This method creates protection elements corresponding to protection
 	 * objects passed and associates them with static as well as dynamic
@@ -77,7 +77,7 @@ public class PrivilegeUtility
 	 *            Set of AbstractDomainObject instances
 	 * @param dynamicGroups
 	 *            Array of dynamic group names
-	 * @throws SMException SMException
+	 * @throws SMException
 	 */
 	public void insertAuthorizationData(List authorizationData, Set protectionObjects,
 			String[] dynamicGroups) throws SMException
@@ -99,7 +99,7 @@ public class PrivilegeUtility
 		}
 		catch (CSException exception)
 		{
-			String mess = "The Security Service encountered a fatal exception.";
+			String mess="The Security Service encountered a fatal exception.";
 			logger.fatal(mess, exception);
 			throw new SMException(mess, exception);
 		}
@@ -110,13 +110,13 @@ public class PrivilegeUtility
 	 * passed and associate them with respective static groups they should be
 	 * added to depending on their class name if the corresponding protection
 	 * element does not already exist.
-	 *@throws CSException CSException
-	 * @param protectionObjects Set of AbstractDomainObject instances
+	 *
+	 * @param protectionObjects
 	 * @return @throws
 	 *         CSException
 	 */
-	private Set createProtectionElementsFromProtectionObjects(
-			Set<AbstractDomainObject> protectionObjects) throws CSException
+	private Set createProtectionElementsFromProtectionObjects(Set<AbstractDomainObject> protectionObjects)
+			throws CSException
 	{
 		ProtectionElement protectionElement;
 		Set<ProtectionElement> protectionElements = new HashSet<ProtectionElement>();
@@ -149,12 +149,12 @@ public class PrivilegeUtility
 	 * one does not exist. Finally user group and protection group are
 	 * associated with each other by the role they need to be associated with.
 	 * If no role exists by the name an exception is thrown and the
-	 * corresponding mapping is not created.
+	 * corresponding mapping is not created
 	 *
-	 * @param authorizationData  Vector of SecurityDataBean objects
-	 * @param protectionElements Set of AbstractDomainObject instances
-	 * @throws CSException CSException
-	 * @throws SMException SMException
+	 * @param authorizationData
+	 * @param protectionElements
+	 * @throws CSException
+	 * @throws SMException
 	 */
 	private void createUserGroupRoleProtectionGroup(List authorizationData, Set protectionElements)
 			throws CSException, SMException
@@ -162,7 +162,7 @@ public class PrivilegeUtility
 		ProtectionGroup protectionGroup = null;
 		SecurityDataBean userGroupRoleProtectionGroupBean;
 		String[] roleIds = null;
-		Group group = null;
+		Group group=null;
 		UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
 		if (authorizationData != null)
 		{
@@ -171,25 +171,26 @@ public class PrivilegeUtility
 
 				try
 				{
-					userGroupRoleProtectionGroupBean = (SecurityDataBean) authorizationData.get(i);
+					userGroupRoleProtectionGroupBean =
+						(SecurityDataBean) authorizationData.get(i);
 					group = getNewGroupObject(userGroupRoleProtectionGroupBean);
-					group = getGroupObject(group);
-					assignGroupToUsersInUserGroup(userGroupRoleProtectionGroupBean, group);
-					protectionGroup = getNewProtectionGroupObj(userGroupRoleProtectionGroupBean);
-					protectionGroup = addProtElementToGroup(protectionGroup, protectionElements);
+					group=getGroupObject(group);
+					assignGroupToUsersInUserGroup(userGroupRoleProtectionGroupBean,group);
+					protectionGroup = getNewProtectionGroupObj(
+										userGroupRoleProtectionGroupBean);
+					protectionGroup= addProtElementToGroup(protectionGroup,protectionElements);
 					roleIds = new String[1];
 					roleIds[0] = getRoleId(userGroupRoleProtectionGroupBean);
-					userProvisioningManager.assignGroupRoleToProtectionGroup(String
-							.valueOf(protectionGroup.getProtectionGroupId()), String.valueOf(group
-							.getGroupId()), roleIds);
+					userProvisioningManager.assignGroupRoleToProtectionGroup(
+							String.valueOf(protectionGroup.getProtectionGroupId()),
+							String.valueOf(group.getGroupId()), roleIds);
 				}
 				catch (CSTransactionException ex)
 				{
-					StringBuffer mess = new StringBuffer(
-							"Error occured Assigned Group Role To Protection Group ")
-							.append(protectionGroup.getProtectionGroupId())
-							.append(' ')
-							.append(group.getGroupId()).append(' ').append(roleIds);
+					StringBuffer mess= new StringBuffer
+					("Error occured Assigned Group Role To Protection Group ")
+					.append(protectionGroup.getProtectionGroupId()).append(' ')
+					.append(group.getGroupId()).append(' ').append(roleIds);
 					throw new SMException(mess.toString(), ex);
 				}
 			}
@@ -197,14 +198,12 @@ public class PrivilegeUtility
 	}
 
 	/**
-	 * This method gets role id.
-	 * @param userGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean
-	 * @return role id.
-	 * @throws SMException SMException
-	 * @throws CSException CSException
+	 * @param userGroupRoleProtectionGroupBean
+	 * @return
+	 * @throws SMException
+	 * @throws CSException
 	 */
-	private String getRoleId(SecurityDataBean userGroupRoleProtectionGroupBean) throws SMException,
-			CSException
+	private String getRoleId(SecurityDataBean userGroupRoleProtectionGroupBean) throws SMException, CSException
 	{
 		Role role = new Role();
 		role.setName(userGroupRoleProtectionGroupBean.getRoleName());
@@ -212,21 +211,21 @@ public class PrivilegeUtility
 		List list = getObjects(roleSearchCriteria);
 		return String.valueOf(((Role) list.get(0)).getId());
 	}
-
 	/**
 	 * If Protection group already exists add protection elements to the group
-	 * If the protection group does not already exist create the protection group
+	 * If the protection group does not already exist create the protection group 
 	 * and add protection elements to it.
-	 * @param protectionGroup Protection group
-	 * @param protectionElements protection elements
-	 * @return ProtectionGroup
-	 * @throws CSException CSException
+	 * @param protectionGroup
+	 * @param protectionElements
+	 * @return
+	 * @throws CSException
 	 */
-	private ProtectionGroup addProtElementToGroup(ProtectionGroup protectionGroup,
-			Set protectionElements) throws CSException
+	private ProtectionGroup addProtElementToGroup(ProtectionGroup protectionGroup,Set protectionElements)
+				throws CSException
 	{
-		ProtectionGroup protGroup = protectionGroup;
-		ProtectionGroupSearchCriteria searchCriteria = new ProtectionGroupSearchCriteria(protGroup);
+		ProtectionGroup protGroup=protectionGroup;
+		ProtectionGroupSearchCriteria searchCriteria = new ProtectionGroupSearchCriteria(
+				protGroup);
 		UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
 		List<ProtectionGroup> list = userProvisioningManager.getObjects(searchCriteria);
 		if (null == list || list.size() <= 0)
@@ -236,31 +235,32 @@ public class PrivilegeUtility
 		}
 		else
 		{
-			protGroup = (ProtectionGroup) list.get(0);
+		protGroup = (ProtectionGroup) list.get(0);
 		}
 		return protGroup;
 	}
-
 	/**
-	 * @param userGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean
-	 * @return ProtectionGroup
-	 * @throws CSException CSException
+	 * @param userGroupRoleProtectionGroupBean
+	 * @return
+	 * @throws CSException
 	 */
 	private ProtectionGroup getNewProtectionGroupObj(
 			SecurityDataBean userGroupRoleProtectionGroupBean) throws CSException
 	{
 		ProtectionGroup protectionGroup;
 		protectionGroup = new ProtectionGroup();
-		protectionGroup.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+		protectionGroup
+				.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
 		protectionGroup.setProtectionGroupName(userGroupRoleProtectionGroupBean
 				.getProtectionGroupName());
 		return protectionGroup;
 	}
 
 	/**
-	 * @param userGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean
-	 * @param group group
-	 * @throws SMException SMException
+	 * @param userGroupRoleProtectionGroupBean
+	 * @param group
+	 * @return
+	 * @throws SMException
 	 */
 	private void assignGroupToUsersInUserGroup(SecurityDataBean userGroupRoleProtectionGroupBean,
 			Group group) throws SMException
@@ -270,15 +270,15 @@ public class PrivilegeUtility
 		for (Iterator it = userGroup.iterator(); it.hasNext();)
 		{
 			user = (User) it.next();
-			assignAdditionalGroupsToUser(String.valueOf(user.getUserId()), new String[]{String
-					.valueOf(group.getGroupId())});
+			assignAdditionalGroupsToUser(String.valueOf(user.getUserId()),
+					new String[]{String.valueOf(group.getGroupId())});
 		}
 	}
 
 	/**
-	 * @param userGroupRoleProtectionGroupBean userGroupRoleProtectionGroupBean
-	 * @return group
-	 * @throws CSException CSException
+	 * @param userGroupRoleProtectionGroupBean
+	 * @return
+	 * @throws CSException
 	 */
 	private Group getNewGroupObject(SecurityDataBean userGroupRoleProtectionGroupBean)
 			throws CSException
@@ -289,13 +289,6 @@ public class PrivilegeUtility
 		return group;
 	}
 
-	/**
-	 * This method gets group object.
-	 * @param group group object
-	 * @return group
-	 * @throws CSException CSException
-	 * @throws SMException SMException
-	 */
 	private Group getGroupObject(Group group) throws CSException, SMException
 	{
 		GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
@@ -313,12 +306,11 @@ public class PrivilegeUtility
 	 * This method assigns Protection Elements passed to the Protection group
 	 * names passed.
 	 *
-	 * @param protectionElements set of protectionElements
-	 * @param groups Protection groups
+	 * @param protectionElements
+	 * @param groups
 	 * @throws CSException
 	 */
-	private void assignProtectionElementsToGroups(Set<ProtectionElement> protectionElements,
-			String[] groups)
+	private void assignProtectionElementsToGroups(Set<ProtectionElement> protectionElements, String[] groups)
 	{
 		ProtectionElement protectionElement;
 		Iterator<ProtectionElement> iterator;
@@ -336,11 +328,10 @@ public class PrivilegeUtility
 	}
 
 	/**
-	 * This method populate Protection Element.
-	 * @param protectionElement protectionElement
-	 * @param protectionObject protectionObject
-	 * @param userProvisioningManager userProvisioningManager
-	 * @throws CSException CSException
+	 * @param protectionElement
+	 * @param protectionObject
+	 * @return
+	 * @throws CSException
 	 */
 	private void populateProtectionElement(ProtectionElement protectionElement,
 			AbstractDomainObject protectionObject, UserProvisioningManager userProvisioningManager)
@@ -362,38 +353,39 @@ public class PrivilegeUtility
 		}
 		catch (CSTransactionException ex)
 		{
-			String mess = "Error occured while creating Potection Element "
-					+ protectionElement.getProtectionElementName();
-			logger.warn(mess, ex);
+			String mess="Error occured while creating Potection Element "
+				+ protectionElement.getProtectionElementName();
+			logger.warn(mess,ex);
 			throw new CSException(mess, ex);
 		}
 
 	}
 
-	/**
-	 * This method assign Additional Groups To User.
-	 * @param userId user Id
-	 * @param groupIds group Ids
-	 * @throws SMException SMException
-	 */
 	public void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException
 	{
 		securityManager.assignAdditionalGroupsToUser(userId, groupIds);
 	}
+
 	/**
 	 * Returns list of objects corresponding to the searchCriteria passed.
-	 * @param searchCriteria searchCriteria
+	 *
+	 * @param searchCriteria
 	 * @return List of resultant objects
-	 * @throws SMException if searchCriteria passed is null or if search results in no results
-	 * @throws CSException CSException
+	 * @throws SMException
+	 *             if searchCriteria passed is null or if search results in no
+	 *             results
+	 * @throws CSException
 	 */
 	public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
-		return ProvisionManager.getObjects(searchCriteria);
+		return ProvisionManager.getObjects(searchCriteria) ;
 	}
+
 	/**
-	 * @param protectionElement protectionElement
-	 * @param groupsName groupsName
+	 * @param protectionElement
+	 * @param userProvisioningManager
+	 * @param dynamicGroups
+	 * @param i
 	 * @throws CSException
 	 */
 	private void assignProtectionElementToGroup(ProtectionElement protectionElement,
@@ -407,20 +399,20 @@ public class PrivilegeUtility
 		}
 		catch (CSException e)
 		{
-			StringBuffer mess = new StringBuffer(
-					"The Security Service encountered an error while associating protection group:")
-					.append(groupsName).append(" to protectionElement").append(
-							protectionElement.getProtectionElementName());
+			StringBuffer mess=new StringBuffer
+			("The Security Service encountered an error while associating protection group:")
+			.append(groupsName).append(" to protectionElement")
+			.append(protectionElement.getProtectionElementName());
 			logger.error(mess.toString());
 		}
 	}
 
 	/**
-	 * This method set protection groups.
-	 * @param protectionElement protectionElement.
-	 * @param staticGroups staticGroups
+	 * @param protectionElement
+	 * @param staticGroups
 	 * @param protectionGroups
-	 * @throws CSException CSException
+	 * @return
+	 * @throws CSException
 	 */
 	private void setProtectGroups(ProtectionElement protectionElement, String[] staticGroups)
 			throws CSException
@@ -445,19 +437,13 @@ public class PrivilegeUtility
 				catch (SMException sme)
 				{
 					logger.warn("Error occured while retrieving " + staticGroups[i]
-							+ "  From Database: ", sme);
+							+ "  From Database: ",sme);
 				}
 			}
 			protectionElement.setProtectionGroups(protectionGroups);
 		}
 	}
 
-	/**
-	 * This method gets application.
-	 * @param applicationName application Name
-	 * @return application
-	 * @throws CSException CSException
-	 */
 	public Application getApplication(String applicationName) throws CSException
 	{
 		Application application = new Application();
@@ -471,7 +457,7 @@ public class PrivilegeUtility
 
 	/**
 	 * Returns the UserProvisioningManager singleton object.
-	 * @throws CSException CSException
+	 * 
 	 * @return @throws
 	 *         CSException
 	 */
@@ -481,7 +467,7 @@ public class PrivilegeUtility
 	}
 
 	/**
-	 * Returns the Authorization Manager for the caTISSUE Core. This method follows
+	 * Returns the Authorization Manager for the caTISSUE Core. This method follows 
 	 * the singleton pattern so that only one AuthorizationManager is created.
 	 * @return AuthorizationManager
 	 * @throws CSException common security exception
@@ -497,7 +483,6 @@ public class PrivilegeUtility
 	 *
 	 * @param loginName
 	 *            Login name of the user
-	 * @throws SMException SMException
 	 * @return @throws
 	 *         SMException
 	 */
@@ -523,11 +508,11 @@ public class PrivilegeUtility
 	/**
 	 * This method returns role corresponding to the rolename passed.
 	 *
-	 * @param roleName roleName
+	 * @param privilegeName
+	 * @param list
 	 * @return @throws
 	 *         CSException
-	 * @throws SMException SMException
-	 * @throws CSException CSException
+	 * @throws SMException
 	 */
 	public Role getRole(String roleName) throws CSException, SMException
 	{
@@ -541,7 +526,7 @@ public class PrivilegeUtility
 		Role role = new Role();
 		role.setName(roleName);
 		role.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
-		RoleSearchCriteria roleSearchCriteria = new RoleSearchCriteria(role);
+		RoleSearchCriteria roleSearchCriteria= new RoleSearchCriteria(role);
 		List<Role> list;
 		try
 		{
@@ -556,13 +541,8 @@ public class PrivilegeUtility
 		return role;
 	}
 
-	/**
-	 * This method gets role privileges.
-	 * @param roleId role Id
-	 * @return set of privilege
-	 * @throws CSException CSException
-	 */
-	public Set<Privilege> getRolePrivileges(String roleId) throws CSException
+	public Set<Privilege> getRolePrivileges(String roleId) throws CSObjectNotFoundException,
+			CSException
 	{
 		return getUserProvisioningManager().getPrivileges(roleId);
 	}
@@ -570,13 +550,15 @@ public class PrivilegeUtility
 	/**
 	 * This method returns protection group corresponding to the naem passed. In
 	 * case it does not exist it creates one and returns that.
-	 *
-	 * @param protectionGroupName protection Group Name
-	 * @return throws CSException
-	 * @throws CSException CSException
-	 * @throws SMException SMException
+	 * 
+	 * @param protectionGroupName
+	 * @return @throws
+	 *         CSException
+	 * @throws CSTransactionException
+	 * @throws SMException
 	 */
-	public ProtectionGroup getProtectionGroup(String protectionGroupName) throws CSException, SMException
+	public ProtectionGroup getProtectionGroup(String protectionGroupName) throws CSException,
+			CSTransactionException, SMException
 	{
 		if (protectionGroupName == null)
 		{
@@ -610,12 +592,11 @@ public class PrivilegeUtility
 	/**
 	 * This method assigns additional protection Elements identified by
 	 * protectionElementIds to the protection Group identified by
-	 * protectionGroupName.
-	 *
-	 * @param objectType objectType
-	 * @param protectionGroupName protection Group Name
-	 * @param objectIds object Ids
-	 * @throws SMException SMException
+	 * protectionGroupName
+	 * 
+	 * @param protectionGroupName
+	 * @param objectIds
+	 * @throws SMException
 	 */
 	public void assignProtectionElements(String protectionGroupName, Class objectType,
 			Long[] objectIds) throws SMException
@@ -625,8 +606,8 @@ public class PrivilegeUtility
 			if (protectionGroupName == null || objectType == null || objectIds == null)
 			{
 				logger.debug(" One of the parameters is null");
-				throw new SMException("Could not assign Protection elements to protection group."
-						+ " One or more parameters are null");
+				throw new SMException("Could not assign Protection elements to protection group." +
+						" One or more parameters are null");
 			}
 
 			UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
@@ -634,19 +615,18 @@ public class PrivilegeUtility
 			{
 				try
 				{
-					userProvisioningManager.assignProtectionElement(protectionGroupName, objectType
-							.getName()
-							+ "_" + objectIds[i]);
+					userProvisioningManager.assignProtectionElement
+					(protectionGroupName, objectType.getName()+ "_" + objectIds[i]);
 				}
 				catch (CSTransactionException txex) //thrown when association
 				{
-					logger.debug("Exception:" + txex.getMessage(), txex);
+					logger.debug("Exception:" + txex.getMessage(),txex);
 				}
 			}
 		}
 		catch (CSException csex)
 		{
-			String mess = "Could not assign Protection elements to protection group";
+			String mess="Could not assign Protection elements to protection group";
 			logger.debug(mess, csex);
 			throw new SMException(mess, csex);
 		}
@@ -654,13 +634,12 @@ public class PrivilegeUtility
 
 	/**
 	 * This method assigns user identified by userId, roles identified by roles
-	 * on protectionGroup.
+	 * on protectionGroup
 	 *
 	 * @param userId user id
 	 * @param roles roles
 	 * @param protectionGroup operation
-	 * @param assignOperation assignOperation
-	 * @throws SMException SMException
+	 * @throws SMException
 	 */
 	public void assignUserRoleToProtectionGroup(Long userId, Set roles,
 			ProtectionGroup protectionGroup, boolean assignOperation) throws SMException
@@ -689,11 +668,11 @@ public class PrivilegeUtility
 
 	/**
 	 * get all the roles that user has on this protection group.
-	 * @param userId user Id
-	 * @param protectionGroup protection Group
-	 * @param userProvisioningManager userProvisioningManager
-	 * @return aggregatedRoles
-	 * @throws CSObjectNotFoundException CSObjectNotFoundException
+	 * @param userId
+	 * @param protectionGroup
+	 * @param userProvisioningManager
+	 * @return
+	 * @throws CSObjectNotFoundException
 	 */
 	private Set getAllRolesOnProtGroup(Long userId, ProtectionGroup protectionGroup,
 			UserProvisioningManager userProvisioningManager) throws CSObjectNotFoundException
@@ -702,33 +681,9 @@ public class PrivilegeUtility
 		return getAggregatedRoles(protectionGroup, protectionGroupRoleContextSet);
 	}
 
-	
 	/**
-	 * This method gets Aggregated Roles.
-	 * @param protectionGroup protection Group
-	 * @param protectionGroupRoleContextSet protection Group Role Context Set
-	 * @return aggregatedRoles
-	 */
-	private Set getAggregatedRoles(ProtectionGroup protectionGroup,
-			Set protectionGroupRoleContextSet)
-	{
-		Set aggregatedRoles = new HashSet();
-		Iterator iterator = protectionGroupRoleContextSet.iterator();
-		while (iterator.hasNext())
-		{
-			ProtectionGroupRoleContext protectionGroupRoleContext = (ProtectionGroupRoleContext) iterator.next();
-			if (protectionGroupRoleContext.getProtectionGroup().getProtectionGroupId().equals(
-					protectionGroup.getProtectionGroupId()))
-			{
-				aggregatedRoles.addAll(protectionGroupRoleContext.getRoles());
-				break;
-			}
-		}
-		return aggregatedRoles;
-	}
-	/**
-	 * This method returns array of role id.
-	 * @param aggregatedRoles Set of roles
+	 * This method returns array of rile id.
+	 * @param aggregatedRoles Set of roles 
 	 * @return array of role ids
 	 */
 	private String[] getRoleIds(Set<Role> aggregatedRoles)
@@ -748,7 +703,7 @@ public class PrivilegeUtility
 	 * @param roles roles.
 	 * @param assignOperation operation
 	 * @param aggrRoles list of roles
-	 * @return aggregatedRoles
+	 * @return
 	 */
 	private Set addRemoveRoles(Set roles, boolean assignOperation, Set aggrRoles)
 	{
@@ -768,12 +723,6 @@ public class PrivilegeUtility
 		return aggregatedRoles;
 	}
 
-	/**
-	 * This method removes roles.
-	 * @param fromSet from Set
-	 * @param toSet to Set
-	 * @return differnceRoles
-	 */
 	private Set removeRoles(Set<Role> fromSet, Set<Role> toSet)
 	{
 		Set<Role> differnceRoles = new HashSet<Role>();
@@ -797,18 +746,17 @@ public class PrivilegeUtility
 	}
 
 	/**
-	 * Assign Protection Elements.
-	 * @param protectionGroupName protection Group Name
-	 * @param objectType object Type
-	 * @param objectIds array of object Ids
-	 * @throws SMException SMException
+	 * @param protectionGroupName
+	 * @param objectType
+	 * @param objectIds
+	 * @throws SMException
 	 */
 	public void deAssignProtectionElements(String protectionGroupName, Class objectType,
 			Long[] objectIds) throws SMException
 	{
 		if (protectionGroupName == null || objectType == null || objectIds == null)
 		{
-			String mess = "Cannot disassign protection elements. One of the parameters is null.";
+			String mess="Cannot disassign protection elements. One of the parameters is null.";
 			logger.debug(mess);
 			throw new SMException(mess);
 		}
@@ -830,17 +778,12 @@ public class PrivilegeUtility
 		}
 		catch (CSException csex)
 		{
-			String mess = "Could not deassign Protection elements to protection group";
+			String mess="Could not deassign Protection elements to protection group";
 			logger.debug(mess, csex);
-			throw new SMException(mess, csex);
+			throw new SMException(mess,csex);
 		}
 	}
 
-	/**
-	 * This method gets group id for role.
-	 * @param roleID role Id
-	 * @return group id for role.
-	 */
 	public String getGroupIdForRole(String roleID)
 	{
 		return securityManager.getGroupIdForRole(roleID);
@@ -848,20 +791,19 @@ public class PrivilegeUtility
 
 	/**
 	 * This method assigns user group identified by groupId, roles identified by
-	 * roles on protectionGroup.
+	 * roles on protectionGroup
 	 *
-	 * @param groupId group Id
-	 * @param roles roles
-	 * @param protectionGroup protection Group
-	 * @param assignOperation Operation
-	 * @throws SMException SMException
+	 * @param groupId
+	 * @param roles
+	 * @param protectionGroup
+	 * @throws SMException
 	 */
 	public void assignGroupRoleToProtectionGroup(Long groupId, Set roles,
 			ProtectionGroup protectionGroup, boolean assignOperation) throws SMException
 	{
 		if (groupId == null || roles == null || protectionGroup == null)
 		{
-			String mess = "One or more parameters are null";
+			String mess="One or more parameters are null";
 			logger.debug(mess);
 			throw new SMException(mess);
 		}
@@ -883,7 +825,7 @@ public class PrivilegeUtility
 			}
 			if (protectionGroupRoleContext != null)
 			{
-				aggregatedRoles = getAggregatedRoles(protectionGroup, protectionGroupRoleContextSet);
+				aggregatedRoles=getAggregatedRoles(protectionGroup, protectionGroupRoleContextSet);
 			}
 			aggregatedRoles = addRemoveRoles(roles, assignOperation, aggregatedRoles);
 			String[] roleIds = getRoleIds(aggregatedRoles);
@@ -898,28 +840,43 @@ public class PrivilegeUtility
 		}
 	}
 
-	
-
 	/**
-	 * This method gets Privilege by Id.
-	 * @param privilegeId privilege Id
-	 * @return Privilege
-	 * @throws CSException CSException
+	 * @param protectionGroup
+	 * @param protectionGroupRoleContextSet
+	 * @param aggregatedRoles
 	 */
+	private Set getAggregatedRoles(ProtectionGroup protectionGroup,Set protectionGroupRoleContextSet)
+	{
+		ProtectionGroupRoleContext protectionGroupRoleContext;
+		Set aggregatedRoles = new HashSet();
+		Iterator iterator = protectionGroupRoleContextSet.iterator();
+		while (iterator.hasNext())
+		{
+			protectionGroupRoleContext = (ProtectionGroupRoleContext) iterator.next();
+			if (protectionGroupRoleContext.getProtectionGroup().getProtectionGroupId()
+					.equals(protectionGroup.getProtectionGroupId()))
+			{
+				aggregatedRoles.addAll(protectionGroupRoleContext.getRoles());
+				break;
+			}
+		}
+		return aggregatedRoles;
+	}
 	public Privilege getPrivilegeById(String privilegeId) throws CSException
 	{
 		return getUserProvisioningManager().getPrivilegeById(privilegeId);
 
 	}
-
+	
 	/**
 	 * Getting Appropriate Role, role name is generated as {privilegeName}_ONLY.
-	 * @param privilegeName privilege Name
-	 * @throws CSException CSException
-	 * @throws SMException SMException
-	 * @return Role Appropriate Role, role name
+	 * @param privilegeName
+	 * @param utility
+	 * @return Role
+	 * @throws CSException
+	 * @throws SMException
 	 */
-	public Role getRoleByPrivilege(String privilegeName) throws CSException, SMException
+	public Role getRoleByPrivilege(String privilegeName) throws CSException,SMException
 	{
 		String roleName;
 		if (privilegeName.equals(Permissions.READ))
@@ -931,7 +888,6 @@ public class PrivilegeUtility
 			roleName = privilegeName + "_ONLY";
 		}
 		return getRole(roleName);
-
 	}
 	public static String getProtectionGroupName(Class objectType, CSMGroupLocator locator) throws ClassNotFoundException {
 		String protGrName = null;
