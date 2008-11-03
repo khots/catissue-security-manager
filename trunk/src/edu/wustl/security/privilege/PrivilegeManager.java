@@ -28,9 +28,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import edu.wustl.common.security.exceptions.SMException;
-import edu.wustl.common.util.global.CSMGroupLocator;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.security.global.Constants;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
@@ -268,10 +267,9 @@ public final class PrivilegeManager
 	 * @param objectIds
 	 * @param roleId
 	 * @throws SMException
-	 * @throws ClassNotFoundException 
 	 */
 	private void assignPrivilegeToGroup(String privilegeName, Class objectType, Long[] objectIds,
-			String roleId, boolean assignOp) throws SMException, ClassNotFoundException
+			String roleId, boolean assignOp) throws SMException
 	{
 		boolean assignOperation = assignOp;
 		PrivilegeUtility utility = new PrivilegeUtility();
@@ -316,10 +314,18 @@ public final class PrivilegeManager
 					// In case of assign remove the READ_DENIED privilege of the group
 					// and in case of de-assign add the READ_DENIED privilege to the group.
 					assignOperation ^=assignOperation;
-					CSMGroupLocator locator = new CSMGroupLocator();
 					for (int i = 0; i < objectIds.length; i++)
 					{
-						protGrName = PrivilegeUtility.getProtectionGroupName(objectType,locator);
+						if (objectType.getName().equals(Constants.COLLECTION_PROTOCOL_CLASS_NAME))
+						{
+							protGrName = Constants
+									.getCollectionProtocolPGName(objectIds[i]);
+						}
+						else if (objectType.getName().equals(Constants.DISTRIBUTION_PROTOCOL_CLASS_NAME))
+						{
+							protGrName = Constants
+									.getDistributionProtocolPGName(objectIds[i]);
+						}
 						protectionGroup = utility.getProtectionGroup(protGrName);
 						utility.assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
 								protectionGroup, assignOperation);
@@ -333,8 +339,6 @@ public final class PrivilegeManager
 			}
 		}
 	}
-
-	
 	/**
 	 * This is a temporary method written for StorageContainer - special case
 	 * Used for StorageContainerBizLogic.isDeAssignable() method
