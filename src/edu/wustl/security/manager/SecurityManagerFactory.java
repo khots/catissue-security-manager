@@ -18,10 +18,10 @@ public class SecurityManagerFactory {
 	ISecurityManager securityManager=null;
 	public static ISecurityManager getSecurityManager(Class class1) throws SMException
 	{
-		SecurityManagerPropertiesLocator.init();
+		
 		Class className = null;
 		ISecurityManager securityManager=null;
-		String securityManagerClass = SecurityManagerPropertiesLocator.SECURITY_MANAGER_CLASS;
+		String securityManagerClass = SecurityManagerPropertiesLocator.getInstance().getSecurityMgrClassName();
 		if (securityManagerClass != null)
 		{
 			try {

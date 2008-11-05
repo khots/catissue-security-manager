@@ -317,7 +317,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		if (it.hasNext())
 		{
 			Group group = (Group) it.next();
-			if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME))
+			if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 			{
 
 				RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
@@ -356,7 +356,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 			while (it.hasNext())
 			{
 				group = (Group) it.next();
-				if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME))
+				if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 				{
 					if (group.getGroupName().equals(ADMINISTRATOR_GROUP))
 					{

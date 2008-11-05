@@ -42,11 +42,12 @@ public class UserProvisioningManagerImpl
 		/** Modified by amit_doshi
 		 *  code reviewer abhijit_naik 
 		 */
-		super(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME);
+	
+		super(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
+		String ctxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
 		SessionFactory sf = ApplicationSessionFactory
-				.getSessionFactory(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME);
-		super.setAuthorizationDAO(new AuthorizationDAOImpl(sf,
-				SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+				.getSessionFactory(ctxName);
+		super.setAuthorizationDAO(new AuthorizationDAOImpl(sf,ctxName));
 	}
 
 }

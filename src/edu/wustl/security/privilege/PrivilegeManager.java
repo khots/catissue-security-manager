@@ -459,7 +459,7 @@ public final class PrivilegeManager
 			role.setName(roleName);
 			role.setDesc("Dynamically created role");
 			role.setApplication(privilegeUtility
-					.getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+					.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 			Set<Privilege> privilegeList = new HashSet<Privilege>();
 			for (String privilegeId : privileges)
 			{

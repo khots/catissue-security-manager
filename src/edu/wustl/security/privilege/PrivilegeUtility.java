@@ -250,7 +250,7 @@ public class PrivilegeUtility
 		ProtectionGroup protectionGroup;
 		protectionGroup = new ProtectionGroup();
 		protectionGroup
-				.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+				.setApplication(getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		protectionGroup.setProtectionGroupName(userGroupRoleProtectionGroupBean
 				.getProtectionGroupName());
 		return protectionGroup;
@@ -284,7 +284,7 @@ public class PrivilegeUtility
 			throws CSException
 	{
 		Group group = new Group();
-		group.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+		group.setApplication(getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		group.setGroupName(userGroupRoleProtectionGroupBean.getGroupName());
 		return group;
 	}
@@ -340,7 +340,7 @@ public class PrivilegeUtility
 		try
 		{
 			protectionElement
-					.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+					.setApplication(getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 			protectionElement.setProtectionElementDescription(protectionObject.getClass().getName()
 					+ " object");
 			protectionElement.setProtectionElementName(protectionObject.getObjectId());
@@ -525,7 +525,7 @@ public class PrivilegeUtility
 		//Search for role by the name roleName
 		Role role = new Role();
 		role.setName(roleName);
-		role.setApplication(getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+		role.setApplication(getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		RoleSearchCriteria roleSearchCriteria= new RoleSearchCriteria(role);
 		List<Role> list;
 		try
