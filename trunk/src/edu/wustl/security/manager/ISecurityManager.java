@@ -27,7 +27,7 @@ public interface ISecurityManager {
 	public String getUserGroup(long userID) throws SMException;
 	public void modifyUser(User user) throws SMException;
 	public User getUserById(String userId) throws SMException;
-	public List getUsers() throws SMException;
+	public List<User> getUsers() throws SMException;
 	//public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException;
 	public void removeUserFromGroup(String userGroupname, String userId) throws SMException;
 	public void assignUserToGroup(String userGroupname, String userId) throws SMException;
