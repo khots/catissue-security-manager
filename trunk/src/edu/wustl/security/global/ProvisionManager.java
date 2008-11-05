@@ -54,7 +54,7 @@ public class ProvisionManager
 		if (authenticationManager == null)
 		{
 			authenticationManager = SecurityServiceProvider
-					.getAuthenticationManager(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME);
+					.getAuthenticationManager(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
 		}
 		return authenticationManager;
 	}
@@ -73,7 +73,7 @@ public class ProvisionManager
 		if (authorizationManager == null)
 		{
 			authorizationManager = SecurityServiceProvider
-					.getAuthorizationManager(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME);
+					.getAuthorizationManager(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
 		}
 
 		return authorizationManager;
@@ -93,7 +93,7 @@ public class ProvisionManager
 		group.setGroupName(groupName);
 		UserProvisioningManager userProvisioningManager=getUserProvisioningManager();
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
-		group.setApplication(userProvisioningManager.getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+		group.setApplication(userProvisioningManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		list = getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
@@ -116,7 +116,7 @@ public class ProvisionManager
 		role.setName(roleName);
 		SearchCriteria searchCriteria = new RoleSearchCriteria(role);
 		UserProvisioningManager userProvisioningManager= getUserProvisioningManager();
-		role.setApplication(userProvisioningManager.getApplication(SecurityManagerPropertiesLocator.APPLICATION_CONTEXT_NAME));
+		role.setApplication(userProvisioningManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		List list = getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
