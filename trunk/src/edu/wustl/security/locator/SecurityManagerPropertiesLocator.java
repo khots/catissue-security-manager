@@ -20,12 +20,20 @@ public final class SecurityManagerPropertiesLocator {
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	 
+	/**
+	 * property names from SecurityManager.properties file 
+	 */
 	private  String applicationCtxName = null;	
 	private  String securityMgrClassName = null;
 	
+	/**
+	 * Instantiating the class whenever loaded for the first time. The same instance will be returned whenever getInstance is called. 
+	 */
 	private static SecurityManagerPropertiesLocator singleObj = new SecurityManagerPropertiesLocator();
 	
+	/**
+	 * Making the class singleton.
+	 */
 	private SecurityManagerPropertiesLocator() 
 	{
 		Properties SECURITY_MANAGER_PROP;
@@ -44,7 +52,10 @@ public final class SecurityManagerPropertiesLocator {
 			logger.fatal("Not able to initialize Security Manager Properties.", exception);
 		}
 	}
-	
+	/**
+	 * Singleton class, will return the single object every time.
+	 * @return SecurityManagerPropertiesLocator instance
+	 */
 	public static SecurityManagerPropertiesLocator getInstance()
 	{
 		return singleObj;
