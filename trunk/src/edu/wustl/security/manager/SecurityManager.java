@@ -207,7 +207,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		try
 		{
 			userProvisioningManager = ProvisionManager.getUserProvisioningManager();
-			List<String> roleIdList = RoleGroupLocator.getAllRoleIds();
+			List<String> roleIdList = RoleGroupLocator.getInstance().getAllRoleIds();
 			for (String roleId : roleIdList) {
 				roles.add(userProvisioningManager.getRoleById(roleId));
 			}
@@ -236,7 +236,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 			//Remove user from any other role if he is assigned some
 			String userId = String.valueOf(user.getUserId());
-			List<String> allGroupIds = RoleGroupLocator.getAllGroupIds();
+			List<String> allGroupIds = RoleGroupLocator.getInstance().getAllGroupIds();
 			for (String grpId : allGroupIds) {
 				userProvisioningManager.removeUserFromGroup(grpId, userId);
 			}
@@ -266,7 +266,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		/*String roleName=null;
 		String groupType=null;*/
 		String roleGroupId=null;
-		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getRoleGroupDetailsMap();
+		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getInstance().getRoleGroupDetailsMap();
 		RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
 		sampleBean.setRoleId(roleID);
 
@@ -312,7 +312,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	throws CSObjectNotFoundException
 	{
 		Role role = null;
-		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getRoleGroupDetailsMap();
+		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getInstance().getRoleGroupDetailsMap();
 		Iterator<Group> it = groups.iterator();
 		if (it.hasNext())
 		{

@@ -35,24 +35,35 @@ public class RoleGroupLocator
 	 */
 	private static final String ROLE_GROUP_CONF_FILE="SMRoleGroupConf.xml";
 	private static final String ELE_ROLE="Role";
-	private static Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
-	private static List<String> roleIdList = new ArrayList<String>();
-	private static List<String> groupIdList = new ArrayList<String>();
+	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
+	private List<String> roleIdList = new ArrayList<String>();
+	private List<String> groupIdList = new ArrayList<String>();
+	/**
+	 * Instantiating the class whenever loaded for the first time. The same instance will be returned whenever getInstance is called. 
+	 */
+	public static RoleGroupLocator roleGroupLocator = new RoleGroupLocator();
 	
 	/**
-	 * This will be called from SecurityManagerFactory when anyone creates an instance of SecurityManager.
+	 * Making the class singleton.
 	 */
-	public static void init()
-	{
+	private RoleGroupLocator() {
 		Document doc = XMLParserUtility.getDocument(ROLE_GROUP_CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		createRoleGroupBeans(roleList);
 	}
 	/**
+	 * Singleton class, will return the single object every time.
+	 * @return RoleGroupLocator instance
+	 */
+	public static RoleGroupLocator getInstance()
+	{
+		return roleGroupLocator;
+	}
+	/**
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml
 	 * @param roleList
 	 */
-	private static void createRoleGroupBeans(NodeList roleList) {
+	private void createRoleGroupBeans(NodeList roleList) {
 		for (int s = 0; s < roleList.getLength(); s++)
 		{
 			Node role = roleList.item(s);
@@ -66,7 +77,7 @@ public class RoleGroupLocator
 	 * Creates a bean object for role and group details.
 	 * @param role
 	 */
-	private static void createRoleGroupBean(Node role) {
+	private void createRoleGroupBean(Node role) {
 		try 
 		{
 			Element roleElement = (Element) role;
@@ -98,20 +109,20 @@ public class RoleGroupLocator
 	/**
 	 * @return the roleGroupDetailsMap
 	 */
-	public static Map<RoleGroupDetailsBean, RoleGroupDetailsBean> getRoleGroupDetailsMap() {
+	public Map<RoleGroupDetailsBean, RoleGroupDetailsBean> getRoleGroupDetailsMap() {
 		return roleGroupDetailsMap;
 	}
 	/**
 	 * @return the roleGroupDetailsMap
 	 */
-	public static List<String> getAllRoleIds() {
+	public List<String> getAllRoleIds() {
 		
 		return roleIdList;
 	}
 	/**
 	 * @return the roleGroupDetailsMap
 	 */
-	public static List<String> getAllGroupIds() {
+	public List<String> getAllGroupIds() {
 		
 		return roleIdList;
 	}
