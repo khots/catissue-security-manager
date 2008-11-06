@@ -27,7 +27,6 @@ public class SecurityManagerFactory {
 			try {
 				className = Class.forName(securityManagerClass);
 				securityManager = (ISecurityManager)className.newInstance();
-				RoleGroupLocator.init();
 			} catch (ClassNotFoundException e) {
 				String message = "Expected SecurityManager class name is not provided in properties file";
 				logger.error(message);
