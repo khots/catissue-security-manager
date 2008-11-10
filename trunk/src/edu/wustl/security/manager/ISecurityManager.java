@@ -24,7 +24,7 @@ public interface ISecurityManager {
 	public void assignRoleToUser(String userID, String roleID) throws SMException;
 	public String getGroupIdForRole(String roleID);
 	public Role getUserRole(long userID) throws SMException;
-	public String getUserGroup(long userID) throws SMException;
+	public String getRoleName(long userID) throws SMException;
 	public void modifyUser(User user) throws SMException;
 	public User getUserById(String userId) throws SMException;
 	public List<User> getUsers() throws SMException;
