@@ -1,5 +1,7 @@
 package edu.wustl.security.beans;
 
+import edu.wustl.security.locator.RoleGroupLocator;
+
 
 /**
  * A bean object to store role and group details.
@@ -119,11 +121,41 @@ public class RoleGroupDetailsBean {
 	}
 	/**
 	 * 
-	 */
+	 *//*
 	public int hashCode()
 	{
 		int hashCode = 0;
+		if(this.groupId != null)
+		{
+			hashCode = this.groupId.hashCode();
+		} else if(this.groupName != null)
+		{
+			hashCode = this.groupName.hashCode();
+		} else if(this.groupType != null)
+		{
+			hashCode = this.groupType.hashCode();
+		} else if(this.roleId != null)
+		{
+			hashCode = this.roleId.hashCode();
+		} else if(this.roleName != null)
+		{
+			hashCode = this.roleName.hashCode();
+		} else if(this.roleType != null)
+		{
+			hashCode = this.roleType.hashCode();
+		} 
 		return hashCode;
+	}*/
+	public int hashCode()
+	{
+		int hash = 7;
+		hash = 31 * hash + (null == roleId ? 0 : roleId.hashCode());
+		hash = 31 * hash + (null == roleName ? 0 : roleName.hashCode());
+		hash = 31 * hash + (null == roleType ? 0 : roleType.hashCode());
+		hash = 31 * hash + (null == groupId ? 0 : groupId.hashCode());
+		hash = 31 * hash + (null == groupName ? 0 : groupName.hashCode());
+		hash = 31 * hash + (null == groupType ? 0 : groupType.hashCode());
+		return hash;
 	}
 	/**
 	 * 
@@ -136,5 +168,13 @@ public class RoleGroupDetailsBean {
 		"roleId=" + this.getRoleId() +":\n"+
 		"roleName=" + this.getRoleName() +":\n"+
 		"roleType=" + this.getRoleType();
+	}
+	public static void main(String ar[])
+	{
+		RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
+		sampleBean.setGroupName("ADMINISTRATOR_GROUP");
+		RoleGroupDetailsBean requiredBean = RoleGroupLocator.getInstance().getRoleGroupDetailsMap().get(sampleBean);
+		String role = requiredBean.getRoleName();
+
 	}
 }
