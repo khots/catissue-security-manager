@@ -39,7 +39,7 @@ public interface ISecurityManager {
 	public String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf)
 	throws SMException;
 	public String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
-	public List<NameValueBean> getPrivilegesForAssignPrivilege(String roleName);
+	//public List<NameValueBean> getPrivilegesForAssignPrivilege(String roleName); : Not used anymore , shd be removed as AssignPrivilege in suite is removed
 	public Set<NameValueBean> getObjectsForAssignPrivilege(String userID, String[] objectTypes,
 			String[] privilegeNames) throws SMException;
 	//public AuthorizationManager getAuthorizationManager() throws CSException;

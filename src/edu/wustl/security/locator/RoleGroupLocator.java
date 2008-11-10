@@ -2,8 +2,10 @@ package edu.wustl.security.locator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,6 +52,26 @@ public class RoleGroupLocator
 		Document doc = XMLParserUtility.getDocument(ROLE_GROUP_CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		createRoleGroupBeans(roleList);
+		/*System.out.println(" inside roleGrpLocator .........");
+		System.out.println("roleIdList lenghth "+roleIdList.size());
+		for (String id : roleIdList) {
+			System.out.println(" role id "+id);	
+		}
+		System.out.println("groupIdList lenghth "+groupIdList.size());
+		for (String id : groupIdList) {
+			System.out.println(" grp id "+id);	
+		}
+		System.out.println("roleGroupDetailsMap lenghth "+roleGroupDetailsMap.size());
+		*/
+		Set<RoleGroupDetailsBean> keySet = roleGroupDetailsMap.keySet();
+		Iterator<RoleGroupDetailsBean> iterator = keySet.iterator();
+		{
+			while(iterator.hasNext())
+			{
+				RoleGroupDetailsBean next = iterator.next();
+				System.out.println("RoleGroupDetailsBean   "+next.toString());
+			}
+		}
 	}
 	/**
 	 * Singleton class, will return the single object every time.
@@ -124,6 +146,6 @@ public class RoleGroupLocator
 	 */
 	public List<String> getAllGroupIds() {
 		
-		return roleIdList;
+		return groupIdList;
 	}
 }

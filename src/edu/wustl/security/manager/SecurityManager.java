@@ -99,6 +99,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 	protected static String securityDataPrefix = CLASS_NAME;
 
+	
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
 	 * @param requestingClass
@@ -271,6 +272,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		sampleBean.setRoleId(roleID);
 
 		RoleGroupDetailsBean requiredBean = roleGroupDetailsMap.get(sampleBean);
+		System.out.println("requiredBean    : "+requiredBean);
 		if(requiredBean == null)
 		{
 			logger.debug("role corresponds to no group");
@@ -290,7 +292,9 @@ public class SecurityManager implements Permissions,ISecurityManager
 		try
 		{
 			userProvisioningManager = ProvisionManager.getUserProvisioningManager();
+			System.out.println("inside getUserRole :userProvisioningManager :"+userProvisioningManager);
 			groups = userProvisioningManager.getGroups(String.valueOf(userID));
+			System.out.println("groups "+groups);
 			role = getRole(groups, userProvisioningManager);
 		}
 		catch (CSException exception)
@@ -311,20 +315,26 @@ public class SecurityManager implements Permissions,ISecurityManager
 	private Role getRole(Set groups, UserProvisioningManager userProvisioningManager)
 	throws CSObjectNotFoundException
 	{
+		System.out.println("getrole ");
 		Role role = null;
 		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getInstance().getRoleGroupDetailsMap();
 		Iterator<Group> it = groups.iterator();
 		if (it.hasNext())
 		{
 			Group group = (Group) it.next();
+			System.out.println("grp name :"+group.getName());
 			if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 			{
-
 				RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
+				System.out.println("group.getGroupName()   "+group.getGroupName());
 				sampleBean.setGroupName(group.getGroupName());
+				System.out.println("sampleBean  "+sampleBean);
 				RoleGroupDetailsBean requiredBean = roleGroupDetailsMap.get(sampleBean);
+				System.out.println("requiredBean  "+requiredBean);
 				String roleId = requiredBean.getRoleId();
+				System.out.println("roleId  "+roleId);
 				role = userProvisioningManager.getRoleById(roleId);
+				System.out.println("ROle.......******* "+role.getName());
 			}
 		}
 		return role;
@@ -358,6 +368,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 				group = (Group) it.next();
 				if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 				{
+					System.out.println("here "+group.getGroupName());
 					if (group.getGroupName().equals(ADMINISTRATOR_GROUP))
 					{
 						role=Roles.ADMINISTRATOR;
@@ -538,6 +549,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 	public void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException
 	{
+		System.out.println("in assignAdditionalGroupsToUser");
 		if (userId == null || groupIds == null || groupIds.length < 1)
 		{
 			String mesg=" Null or insufficient Parameters passed";
@@ -553,26 +565,32 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			userProvisioningManager = ProvisionManager.getUserProvisioningManager();
 			consolidatedGroups = userProvisioningManager.getGroups(userId);
+			
 			if (null != consolidatedGroups)
 			{
 				Iterator it = consolidatedGroups.iterator();
 				while (it.hasNext())
 				{
 					group = (Group) it.next();
+					System.out.println("group.getGroupName()  "+group.getGroupName());
 					consolidatedGroupIds.add(String.valueOf(group.getGroupId()));
 				}
 			}
+			System.out.println("consolidatedGroupIds   "+consolidatedGroupIds);
+			System.out.println("groupIds   "+groupIds);
 			//Consolidating all the Groups
 			for (int i = 0; i < groupIds.length; i++)
 			{
 				consolidatedGroupIds.add(groupIds[i]);
 			}
+			System.out.println("consolidatedGroupIds again  "+consolidatedGroupIds);
 			finalUserGroupIds = new String[consolidatedGroupIds.size()];
 			Iterator it = consolidatedGroupIds.iterator();
 			for (int i = 0; it.hasNext(); i++)
 			{
 				finalUserGroupIds[i] = (String) it.next();
 			}
+			System.out.println("finalUserGroupIds   "+finalUserGroupIds);
 			//Setting groups for user and updating it
 			userProvisioningManager.assignGroupsToUser(userId, finalUserGroupIds);
 		}
@@ -712,7 +730,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * 
 	 * @param roleName role name of user logged in
 	 * @return
-	 */
+	 *//*
 	public List<NameValueBean> getPrivilegesForAssignPrivilege(String roleName)
 	{
 		List<NameValueBean> privileges = new Vector();
@@ -727,7 +745,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		return privileges;
 	}
-
+*/
 	/**
 	 * This method returns NameValueBeans for all the objects of type objectType
 	 * on which user with identifier userID has privilege ASSIGN_ <

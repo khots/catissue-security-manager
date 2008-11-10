@@ -23,60 +23,7 @@ public class Utility {
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(Utility.class);
 
-	public static List getCPIdsList(String objName, Long identifier,
-			SessionDataBean sessionDataBean)
-	{
-		List cpIdsList = new ArrayList();
-		List<Long> idList=null;
-		if (objName != null && !objName.equalsIgnoreCase(Variables.mainProtocolObject))
-		{
-			String cpQuery  = "";
-			//get cpQuery from locator
-			/*String cpQuery = CsmCacheManager.getQueryStringForCP(objName, Integer.valueOf(identifier
-					.toString()));
-			*/JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-			try
-			{
-				jdbcDao.openSession(sessionDataBean);
-
-				List<List<Long>> list = null;
-				list = jdbcDao.executeQuery(cpQuery, sessionDataBean, false, null);
-				if (list != null && !list.isEmpty())
-				{
-					for (List<Long> list1 : list)
-					{
-						cpIdsList.add(Long.valueOf(list1.get(0).toString()));
-					}
-				}
-				idList=cpIdsList;
-			}
-			catch (DAOException daoException)
-			{
-				logger.debug("DAOException in getCPIdsList");
-			}
-			catch(ClassNotFoundException cnfException)
-			{
-				logger.debug("ClassNotFoundException in getCPIdsList");
-			}
-			finally
-			{
-				try
-				{
-					jdbcDao.closeSession();
-				}
-				catch (DAOException e)
-				{
-					logger.debug("Not able to close JDBCDAO connection");
-				}
-			}
-		}
-		else
-		{
-			cpIdsList.add(identifier);
-			idList=cpIdsList;
-		}
-		return idList;
-	}
+	
 	/**
 	 * TO get the PrivilegeType of an Entity.
 	 * @param tagKeyValueMap The reference to Entity.
