@@ -27,6 +27,7 @@ public class SecurityManagerFactory {
 			try {
 				className = Class.forName(securityManagerClass);
 				securityManager = (ISecurityManager)className.newInstance();
+				System.out.println("securityManager after newINstance " +securityManager);
 			} catch (ClassNotFoundException e) {
 				String message = "Expected SecurityManager class name is not provided in properties file";
 				logger.error(message);
@@ -40,6 +41,9 @@ public class SecurityManagerFactory {
 				logger.error(message);
 				throw new SMException("Illegal access to the class "+className,e);
 			}
+		}else
+		{
+			throw new SMException("Could not get the className "+className);
 		}
 		return securityManager;
 	}

@@ -1,5 +1,6 @@
 package edu.wustl.security.beans;
 
+
 /**
  * A bean object to store role and group details.
  * @author deepti_shelar
@@ -103,16 +104,37 @@ public class RoleGroupDetailsBean {
 		if((object!=null) && object instanceof RoleGroupDetailsBean)
 		{
 			RoleGroupDetailsBean bean = (RoleGroupDetailsBean)object;
-			if(this.getGroupId() == bean.getGroupId() ||
-					this.getRoleId() == bean.getRoleId() ||
-					this.getGroupName() == bean.getGroupName() ||
-					this.getRoleName() == bean.getRoleName() ||
-					this.getRoleType() == bean.getRoleType() ||  
-					this.getGroupType() == bean.getGroupType() )
+			if(
+				bean.getGroupId() != null ? bean.getGroupId().equals(this.getGroupId()) : false ||
+				bean.getGroupName() != null ? bean.getGroupName().equals(this.getGroupName()) : false ||
+				bean.getGroupType() != null ? bean.getGroupType().equals(this.getGroupType()) : false ||
+				bean.getRoleId() != null ? bean.getRoleId().equals(this.getRoleId()) : false ||
+				bean.getRoleName() != null ? bean.getRoleName().equals(this.getRoleName()) : false ||
+				bean.getRoleType() != null ? bean.getRoleType().equals(this.getRoleType()) : false)
 			{
-				equals = true;
+				return true;
 			}
 		}
 		return equals;
+	}
+	/**
+	 * 
+	 */
+	public int hashCode()
+	{
+		int hashCode = 0;
+		return hashCode;
+	}
+	/**
+	 * 
+	 */
+	public String toString()
+	{
+		return "groupId=" + this.getGroupId()+ ":\n" + 
+		"groupName=" + this.getGroupName() +":\n" +
+		"groupType=" + this.getGroupType() +":\n" +
+		"roleId=" + this.getRoleId() +":\n"+
+		"roleName=" + this.getRoleName() +":\n"+
+		"roleType=" + this.getRoleType();
 	}
 }
