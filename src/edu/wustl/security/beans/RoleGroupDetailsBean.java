@@ -148,14 +148,15 @@ public class RoleGroupDetailsBean {
 	}*/
 	public int hashCode()
 	{
-		int hash = 7;
+		/*int hash = 7;
 		hash = 31 * hash + (null == roleId ? 0 : roleId.hashCode());
 		hash = 31 * hash + (null == roleName ? 0 : roleName.hashCode());
 		hash = 31 * hash + (null == roleType ? 0 : roleType.hashCode());
 		hash = 31 * hash + (null == groupId ? 0 : groupId.hashCode());
 		hash = 31 * hash + (null == groupName ? 0 : groupName.hashCode());
 		hash = 31 * hash + (null == groupType ? 0 : groupType.hashCode());
-		return hash;
+		return hash;*/
+		return 1;
 	}
 	/**
 	 * 
