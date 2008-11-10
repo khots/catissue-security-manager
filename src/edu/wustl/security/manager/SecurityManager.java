@@ -351,44 +351,23 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @return Role Name
 	 * @throws SMException
 	 */
-	public String getUserGroup(long userID) throws SMException
+	public String getRoleName(long userID) throws SMException
 	{
 		String role=TextConstants.EMPTY_STRING;
-		Set groups;
-		UserProvisioningManager userProvisioningManager = null;
-		Iterator it;
-		Group group;
 		try
 		{
-			userProvisioningManager = ProvisionManager.getUserProvisioningManager();
-			groups = userProvisioningManager.getGroups(String.valueOf(userID));
-			it = groups.iterator();
+			UserProvisioningManager userProvisioningManager = ProvisionManager.getUserProvisioningManager();
+			Set groups = userProvisioningManager.getGroups(String.valueOf(userID));
+			Iterator it = groups.iterator();
 			while (it.hasNext())
 			{
-				group = (Group) it.next();
+				Group group = (Group) it.next();
 				if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 				{
-					System.out.println("here "+group.getGroupName());
-					if (group.getGroupName().equals(ADMINISTRATOR_GROUP))
-					{
-						role=Roles.ADMINISTRATOR;
-						break;
-					}
-					else if (group.getGroupName().equals(SUPERVISOR_GROUP))
-					{
-						role=Roles.SUPERVISOR;
-						break;
-					}
-					else if (group.getGroupName().equals(TECHNICIAN_GROUP))
-					{
-						role=Roles.TECHNICIAN;
-						break;
-					}
-					else if (group.getGroupName().equals(PUBLIC_GROUP))
-					{
-						role=Roles.SCIENTIST;
-						break;
-					}
+					RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
+					sampleBean.setGroupName(group.getGroupName());
+					RoleGroupDetailsBean requiredBean = RoleGroupLocator.getInstance().getRoleGroupDetailsMap().get(sampleBean);
+					role = requiredBean.getRoleName();
 				}
 			}
 		}
