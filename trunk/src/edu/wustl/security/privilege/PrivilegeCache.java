@@ -17,12 +17,13 @@ import java.util.Map.Entry;
 
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.PrivilegeLocator;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
@@ -60,7 +61,7 @@ public class PrivilegeCache
 	 * @param loginName login name of the user who has logged in.
 	 * @throws Exception generic exception
 	 */
-	public PrivilegeCache(String loginName) throws Exception
+	public PrivilegeCache(String loginName)
 	{
 		privilegeMap = new HashMap<String, BitSet>();
 		this.loginName = loginName;
@@ -79,7 +80,7 @@ public class PrivilegeCache
 	 *
 	 * @throws Exception generic exception
 	 */
-	private void initialize() throws Exception
+	private void initialize()
 	{
 		for (String className : PrivilegeManager.getInstance().getClasses())
 		{
@@ -317,7 +318,7 @@ public class PrivilegeCache
 	 *
 	 * @throws Exception generic exception
 	 */
-	public void refresh() throws Exception
+	public void refresh() 
 	{
 		initialize();
 	}
@@ -329,7 +330,7 @@ public class PrivilegeCache
 	 */
 	private int getBitNumber(String privilegeName)
 	{
-		return PrivilegeLocator.getPrivilegeByName(privilegeName).getBitNumber();		
+		return PrivilegeLocator.getInstance().getPrivilegeByName(privilegeName).getBitNumber();		
 	}
 
 	/**
@@ -367,7 +368,7 @@ public class PrivilegeCache
 	 * @throws Exception generic exception
 	 */
 	public void updateUserPrivilege(String privilegeName, Class objectType, Long[] objectIds,
-			Long userId, boolean assignOperation) throws Exception
+			Long userId, boolean assignOperation) throws SMException,ClassNotFoundException
 	{
 		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 		Collection<PrivilegeCache> listOfPrivCaches = null;
@@ -463,7 +464,11 @@ public class PrivilegeCache
 			}
 			catch (CSException csex)
 			{
-				throw new SMException(csex);
+				logger.debug("Exception in method assignPrivilegeToUser", csex);
+				String mess = "Exception in method assignPrivilegeToUser";
+				ErrorKey ek = ErrorKey.getDefaultErrorKey();
+				ek.setErrorMessage(mess);
+				throw new SMException(ek,csex,null);
 			}
 		}
 	}
@@ -507,7 +512,7 @@ public class PrivilegeCache
 			if (value.get(i))
 			{
 				NameValueBean nmv = new NameValueBean();
-				nmv.setName(PrivilegeLocator.getPrivilegeByBit(i).getPrivilegeName());
+				nmv.setName(PrivilegeLocator.getInstance().getPrivilegeByBit(i).getPrivilegeName());
 
 				switch (i)
 				{

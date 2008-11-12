@@ -2,8 +2,9 @@ package edu.wustl.security.global;
 
 import java.util.List;
 
-import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.AuthenticationManager;
@@ -21,23 +22,33 @@ import gov.nih.nci.security.exceptions.CSException;
  * @author deepti_shelar
  *
  */
-public class ProvisionManager 
+public final class ProvisionManager 
 {
+	static ProvisionManager provManager = new ProvisionManager();
+	private ProvisionManager()
+	{
+		
+	}
+	public  static ProvisionManager getInstance()
+	{
+		return provManager;
+	}
+	
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	protected  org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	private static AuthenticationManager authenticationManager = null;
+	private  AuthenticationManager authenticationManager = null;
 
-	private static AuthorizationManager authorizationManager = null;
+	private  AuthorizationManager authorizationManager = null;
 	/**
 	 * Returns the UserProvisioningManager singleton object.
 	 *
 	 * @return
 	 * @throws	CSException
 	 */
-	public static final UserProvisioningManager getUserProvisioningManager() throws CSException
+	public  final UserProvisioningManager getUserProvisioningManager() throws CSException
 	{
 		return (UserProvisioningManager) getAuthorizationManager();
 	}
@@ -49,7 +60,7 @@ public class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public static final AuthenticationManager getAuthenticationManager() throws CSException
+	public  final AuthenticationManager getAuthenticationManager() throws CSException
 	{
 		if (authenticationManager == null)
 		{
@@ -67,7 +78,7 @@ public class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public static final AuthorizationManager getAuthorizationManager() throws CSException
+	public  final AuthorizationManager getAuthorizationManager() throws CSException
 	{
 
 		if (authorizationManager == null)
@@ -85,15 +96,15 @@ public class ProvisionManager
 	* @throws CSException 
 	* @throws SMException 
 	*/
-	public static final String getGroupID(String groupName) throws CSException, SMException
+	public  final String getGroupID(String groupName) throws CSException, SMException
 	{
 		List list;
 		String groupId=null;
 		Group group = new Group();
 		group.setGroupName(groupName);
-		UserProvisioningManager userProvisioningManager=getUserProvisioningManager();
+		UserProvisioningManager upManager=getUserProvisioningManager();
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
-		group.setApplication(userProvisioningManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
+		group.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		list = getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
@@ -109,14 +120,14 @@ public class ProvisionManager
 	 * @param roleName
 	 * @return
 	 */
-	public static final String getRoleID(String roleName) throws CSException, SMException
+	public  final String getRoleID(String roleName) throws CSException, SMException
 	{
 		String roleId=null;
 		Role role = new Role();
 		role.setName(roleName);
 		SearchCriteria searchCriteria = new RoleSearchCriteria(role);
-		UserProvisioningManager userProvisioningManager= getUserProvisioningManager();
-		role.setApplication(userProvisioningManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
+		UserProvisioningManager upManager= getUserProvisioningManager();
+		role.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
 		List list = getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
@@ -132,12 +143,15 @@ public class ProvisionManager
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
 	 * @throws CSException
 	 */
-	public static final List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
+	public  final List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
 		if (null == searchCriteria)
 		{
 			logger.debug("searchCriteria is null");
-			throw new SMException("Null Parameters passed");
+			String mesg = "searchCriteria is null";
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mesg);
+			throw new SMException(defaultErrorKey,null,null);	
 		}
 		UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
 		List list = userProvisioningManager.getObjects(searchCriteria);

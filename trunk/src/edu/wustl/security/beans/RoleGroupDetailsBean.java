@@ -107,17 +107,25 @@ public class RoleGroupDetailsBean {
 		{
 			RoleGroupDetailsBean bean = (RoleGroupDetailsBean)object;
 			if(
-				bean.getGroupId() != null ? bean.getGroupId().equals(this.getGroupId()) : false ||
-				bean.getGroupName() != null ? bean.getGroupName().equals(this.getGroupName()) : false ||
-				bean.getGroupType() != null ? bean.getGroupType().equals(this.getGroupType()) : false ||
-				bean.getRoleId() != null ? bean.getRoleId().equals(this.getRoleId()) : false ||
-				bean.getRoleName() != null ? bean.getRoleName().equals(this.getRoleName()) : false ||
-				bean.getRoleType() != null ? bean.getRoleType().equals(this.getRoleType()) : false)
+				isObjectEqual(bean.getGroupId(),this.getGroupId()) ||
+				isObjectEqual(bean.getGroupName(),this.getGroupName()) ||
+				isObjectEqual(bean.getGroupType(),this.getGroupType()) ||
+				isObjectEqual(bean.getRoleId(),this.getRoleId()) ||
+				isObjectEqual(bean.getRoleName(),this.getRoleName()) ||
+				isObjectEqual(bean.getRoleType(),this.getRoleType())
+				)
 			{
-				return true;
+				equals = true;
 			}
 		}
 		return equals;
+	}
+	
+	private boolean isObjectEqual(Object src, Object target)
+	{
+		boolean isEqual = 
+			(src == null ? false : src.equals(target));
+		return isEqual;
 	}
 	/**
 	 * 
@@ -169,13 +177,5 @@ public class RoleGroupDetailsBean {
 		"roleId=" + this.getRoleId() +":\n"+
 		"roleName=" + this.getRoleName() +":\n"+
 		"roleType=" + this.getRoleType();
-	}
-	public static void main(String ar[])
-	{
-		RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
-		sampleBean.setGroupName("ADMINISTRATOR_GROUP");
-		RoleGroupDetailsBean requiredBean = RoleGroupLocator.getInstance().getRoleGroupDetailsMap().get(sampleBean);
-		String role = requiredBean.getRoleName();
-
 	}
 }

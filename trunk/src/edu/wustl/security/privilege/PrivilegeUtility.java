@@ -10,12 +10,13 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
@@ -62,7 +63,7 @@ public class PrivilegeUtility
 		{
 			securityManager = SecurityManagerFactory.getSecurityManager(PrivilegeUtility.class);
 		} catch (SMException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 	}
 	/**
@@ -82,26 +83,28 @@ public class PrivilegeUtility
 	public void insertAuthorizationData(List authorizationData, Set protectionObjects,
 			String[] dynamicGroups) throws SMException
 	{
-		Set protectionElements;
+		Set protElems;
 		try
 		{
 			//Create protection elements corresponding to all protection
-			protectionElements = createProtectionElementsFromProtectionObjects(protectionObjects);
+			protElems = createProtectionElementsFromProtectionObjects(protectionObjects);
 
 			//Create user group role protection group and their mappings if
 			if (authorizationData != null)
 			{
-				createUserGroupRoleProtectionGroup(authorizationData, protectionElements);
+				createUserGroupRoleProtectionGroup(authorizationData, protElems);
 			}
 
 			//Assigning protection elements to dynamic groups
-			assignProtectionElementsToGroups(protectionElements, dynamicGroups);
+			assignProtectionElementsToGroups(protElems, dynamicGroups);
 		}
 		catch (CSException exception)
 		{
 			String mess="The Security Service encountered a fatal exception.";
 			logger.fatal(mess, exception);
-			throw new SMException(mess, exception);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, exception,null);
 		}
 	}
 
@@ -118,22 +121,22 @@ public class PrivilegeUtility
 	private Set createProtectionElementsFromProtectionObjects(Set<AbstractDomainObject> protectionObjects)
 			throws CSException
 	{
-		ProtectionElement protectionElement;
+		ProtectionElement protElems;
 		Set<ProtectionElement> protectionElements = new HashSet<ProtectionElement>();
 		AbstractDomainObject protectionObject;
 		Iterator<AbstractDomainObject> iterator;
-		UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+		UserProvisioningManager upManager = getUserProvisioningManager();
 
 		if (protectionObjects != null)
 		{
 			for (iterator = protectionObjects.iterator(); iterator.hasNext();)
 			{
-				protectionElement = new ProtectionElement();
+				protElems = new ProtectionElement();
 				protectionObject = (AbstractDomainObject) iterator.next();
-				protectionElement.setObjectId(protectionObject.getObjectId());
-				populateProtectionElement(protectionElement, protectionObject,
-						userProvisioningManager);
-				protectionElements.add(protectionElement);
+				protElems.setObjectId(protectionObject.getObjectId());
+				populateProtectionElement(protElems, protectionObject,
+						upManager);
+				protectionElements.add(protElems);
 			}
 		}
 		return protectionElements;
@@ -152,18 +155,18 @@ public class PrivilegeUtility
 	 * corresponding mapping is not created
 	 *
 	 * @param authorizationData
-	 * @param protectionElements
+	 * @param protElems
 	 * @throws CSException
 	 * @throws SMException
 	 */
-	private void createUserGroupRoleProtectionGroup(List authorizationData, Set protectionElements)
+	private void createUserGroupRoleProtectionGroup(List authorizationData, Set protElems)
 			throws CSException, SMException
 	{
 		ProtectionGroup protectionGroup = null;
-		SecurityDataBean userGroupRoleProtectionGroupBean;
+		SecurityDataBean bean;
 		String[] roleIds = null;
 		Group group=null;
-		UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
+		UserProvisioningManager upManager = getUserProvisioningManager();
 		if (authorizationData != null)
 		{
 			for (int i = 0; i < authorizationData.size(); i++)
@@ -171,17 +174,17 @@ public class PrivilegeUtility
 
 				try
 				{
-					userGroupRoleProtectionGroupBean =
+					bean =
 						(SecurityDataBean) authorizationData.get(i);
-					group = getNewGroupObject(userGroupRoleProtectionGroupBean);
+					group = getNewGroupObject(bean);
 					group=getGroupObject(group);
-					assignGroupToUsersInUserGroup(userGroupRoleProtectionGroupBean,group);
+					assignGroupToUsersInUserGroup(bean,group);
 					protectionGroup = getNewProtectionGroupObj(
-										userGroupRoleProtectionGroupBean);
-					protectionGroup= addProtElementToGroup(protectionGroup,protectionElements);
+										bean);
+					protectionGroup= addProtElementToGroup(protectionGroup,protElems);
 					roleIds = new String[1];
-					roleIds[0] = getRoleId(userGroupRoleProtectionGroupBean);
-					userProvisioningManager.assignGroupRoleToProtectionGroup(
+					roleIds[0] = getRoleId(bean);
+					upManager.assignGroupRoleToProtectionGroup(
 							String.valueOf(protectionGroup.getProtectionGroupId()),
 							String.valueOf(group.getGroupId()), roleIds);
 				}
@@ -191,7 +194,9 @@ public class PrivilegeUtility
 					("Error occured Assigned Group Role To Protection Group ")
 					.append(protectionGroup.getProtectionGroupId()).append(' ')
 					.append(group.getGroupId()).append(' ').append(roleIds);
-					throw new SMException(mess.toString(), ex);
+					ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+					defaultErrorKey.setErrorMessage(mess.toString());
+					throw new SMException(defaultErrorKey, ex,null);
 				}
 			}
 		}
@@ -378,7 +383,7 @@ public class PrivilegeUtility
 	 */
 	public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
-		return ProvisionManager.getObjects(searchCriteria) ;
+		return ProvisionManager.getInstance().getInstance().getObjects(searchCriteria) ;
 	}
 
 	/**
@@ -463,7 +468,7 @@ public class PrivilegeUtility
 	 */
 	public UserProvisioningManager getUserProvisioningManager() throws CSException
 	{
-		return ProvisionManager.getUserProvisioningManager();
+		return ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
 	}
 
 	/**
@@ -474,7 +479,7 @@ public class PrivilegeUtility
 	 */
 	protected AuthorizationManager getAuthorizationManager() throws CSException
 	{
-		return ProvisionManager.getAuthorizationManager();
+		return ProvisionManager.getInstance().getInstance().getAuthorizationManager();
 	}
 
 	/**
@@ -519,7 +524,9 @@ public class PrivilegeUtility
 		if (roleName == null)
 		{
 			logger.debug("Role name passed is null");
-			throw new SMException("Role name passed is null");
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage("Role name passed is null");
+			throw new SMException(defaultErrorKey, null,null);
 		}
 
 		//Search for role by the name roleName
@@ -535,7 +542,9 @@ public class PrivilegeUtility
 		catch (SMException e)
 		{
 			logger.debug("Role not found by name " + roleName);
-			throw new SMException("Role not found by name " + roleName, e);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage("Role not found by name " + roleName);
+			throw new SMException(defaultErrorKey, null,null);
 		}
 		role = (Role) list.get(0);
 		return role;
@@ -563,7 +572,9 @@ public class PrivilegeUtility
 		if (protectionGroupName == null)
 		{
 			logger.debug("protectionGroupName passed is null");
-			throw new SMException("No protectionGroup of name null");
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage("No protectionGroup of name null " );
+			throw new SMException(defaultErrorKey, null,null);
 		}
 
 		//Search for Protection Group of the name passed
@@ -606,8 +617,10 @@ public class PrivilegeUtility
 			if (protectionGroupName == null || objectType == null || objectIds == null)
 			{
 				logger.debug(" One of the parameters is null");
-				throw new SMException("Could not assign Protection elements to protection group." +
-						" One or more parameters are null");
+				ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+				defaultErrorKey.setErrorMessage("Could not assign Protection elements to protection group." +
+						" One or more parameters are null " );
+				throw new SMException(defaultErrorKey, null,null);
 			}
 
 			UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
@@ -628,7 +641,9 @@ public class PrivilegeUtility
 		{
 			String mess="Could not assign Protection elements to protection group";
 			logger.debug(mess, csex);
-			throw new SMException(mess, csex);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, csex,null);
 		}
 	}
 
@@ -647,7 +662,9 @@ public class PrivilegeUtility
 		if (userId == null || roles == null || protectionGroup == null)
 		{
 			logger.debug("One or more parameters are null");
-			throw new SMException("Could not assign user role to protection group");
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage("Could not assign user role to protection group");
+			throw new SMException(defaultErrorKey, null,null);
 		}
 		try
 		{
@@ -662,7 +679,9 @@ public class PrivilegeUtility
 		catch (CSException csex)
 		{
 			logger.debug("Could not assign user role to protection group", csex);
-			throw new SMException("Could not assign user role to protection group", csex);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage("Could not assign user role to protection group");
+			throw new SMException(defaultErrorKey, csex,null);
 		}
 	}
 
@@ -758,7 +777,9 @@ public class PrivilegeUtility
 		{
 			String mess="Cannot disassign protection elements. One of the parameters is null.";
 			logger.debug(mess);
-			throw new SMException(mess);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, null,null);
 		}
 		try
 		{
@@ -780,7 +801,9 @@ public class PrivilegeUtility
 		{
 			String mess="Could not deassign Protection elements to protection group";
 			logger.debug(mess, csex);
-			throw new SMException(mess,csex);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, csex,null);
 		}
 	}
 
@@ -805,7 +828,9 @@ public class PrivilegeUtility
 		{
 			String mess="One or more parameters are null";
 			logger.debug(mess);
-			throw new SMException(mess);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, null,null);
 		}
 		Set protectionGroupRoleContextSet = null;
 		ProtectionGroupRoleContext protectionGroupRoleContext = null;
@@ -836,7 +861,9 @@ public class PrivilegeUtility
 		catch (CSException csex)
 		{
 			logger.debug("Could not assign user role to protection group", csex);
-			throw new SMException("Could not assign user role to protection group", csex);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage("Could not assign user role to protection group");
+			throw new SMException(defaultErrorKey, csex,null);
 		}
 	}
 

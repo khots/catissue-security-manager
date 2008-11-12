@@ -10,6 +10,7 @@ package edu.wustl.security.impl;
 import org.hibernate.SessionFactory;
 
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.system.ApplicationSessionFactory;
 
 /**
@@ -25,9 +26,10 @@ public class UserProvisioningManagerImpl
 
 	/**
 	 * @param arg0
+	 * @throws CSConfigurationException 
 	 * @throws Exception
 	 */
-	public UserProvisioningManagerImpl(String arg0) throws Exception
+	public UserProvisioningManagerImpl(String arg0) throws CSConfigurationException  
 	{
 		super(arg0);
 
@@ -35,9 +37,10 @@ public class UserProvisioningManagerImpl
 
 	/**
 	 * @param arg0
+	 * @throws CSConfigurationException 
 	 * @throws Exception
 	 */
-	public UserProvisioningManagerImpl() throws Exception
+	public UserProvisioningManagerImpl() throws CSConfigurationException 
 	{
 		/** Modified by amit_doshi
 		 *  code reviewer abhijit_naik 

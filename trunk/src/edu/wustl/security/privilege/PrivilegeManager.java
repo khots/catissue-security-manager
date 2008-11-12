@@ -27,9 +27,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
@@ -40,6 +41,7 @@ import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
@@ -121,9 +123,11 @@ public final class PrivilegeManager
 	 *
 	 * @param groupName
 	 * @return
+	 * @throws CSException 
+	 * @throws CSObjectNotFoundException 
 	 * @throws Exception
 	 */
-	public List<PrivilegeCache> getPrivilegeCaches(String groupName) throws Exception
+	public List<PrivilegeCache> getPrivilegeCaches(String groupName) throws CSObjectNotFoundException, CSException  
 	{
 		List<PrivilegeCache> listOfPrivCaches = new ArrayList<PrivilegeCache>();
 
@@ -148,7 +152,7 @@ public final class PrivilegeManager
 	 * @return
 	 * @throws Exception
 	 */
-	public Collection<PrivilegeCache> getPrivilegeCaches() throws Exception
+	public Collection<PrivilegeCache> getPrivilegeCaches() 
 	{
 		return privilegeCaches.values();
 	}
@@ -228,10 +232,13 @@ public final class PrivilegeManager
 	 * @param objectIds
 	 * @param roleId
 	 * @param assignOperation
+	 * @throws CSException 
+	 * @throws CSObjectNotFoundException 
+	 * @throws SMException 
 	 * @throws Exception
 	 */
 	public void updateGroupPrivilege(String privilegeName, Class objectType, Long[] objectIds,
-			String roleId, boolean assignOperation) throws Exception
+			String roleId, boolean assignOperation) throws CSObjectNotFoundException, CSException, SMException
 	{
 		PrivilegeUtility utility = new PrivilegeUtility();
 		Collection<PrivilegeCache> listOfPrivCaches = null;
@@ -335,7 +342,10 @@ public final class PrivilegeManager
 			catch (CSException csex)
 			{
 				logger.debug("Exception in method assignPrivilegeToGroup", csex);
-				throw new SMException(csex);
+				String mess = "Exception in method assignPrivilegeToGroup";
+				ErrorKey ek = ErrorKey.getDefaultErrorKey();
+				ek.setErrorMessage(mess);
+				throw new SMException(ek,csex,null);
 			}
 		}
 	}
@@ -347,9 +357,11 @@ public final class PrivilegeManager
 	 * @param objectId
 	 * @param privilegeName
 	 * @return
+	 * @throws CSException 
+	 * @throws CSObjectNotFoundException 
 	 */
-	public boolean hasGroupPrivilege(String roleId, String objectId, String privilegeName)
-			throws Exception
+	public boolean hasGroupPrivilege(String roleId, String objectId, String privilegeName) throws CSObjectNotFoundException, CSException
+			
 	{
 		boolean hasGroupPriv=true;
 		PrivilegeUtility utility = new PrivilegeUtility();
