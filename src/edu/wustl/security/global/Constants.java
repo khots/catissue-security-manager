@@ -14,8 +14,8 @@ public class Constants
 	public static final int INSECURE_RETRIEVE = 0;
 	public static final String hashedOut = "##";
 	public static final boolean PRIVILEGE_ASSIGN = true;
-	public static final String COLLECTION_PROTOCOL_CLASS_NAME = "edu.wustl.catissuecore.domain.CollectionProtocol";//CollectionProtocol.class.getName();
-	public static final String DISTRIBUTION_PROTOCOL_CLASS_NAME = "edu.wustl.catissuecore.domain.DistributionProtocol";//DistributionProtocol.class.getName();
+	public static final String CP_CLASS_NAME = "edu.wustl.catissuecore.domain.CollectionProtocol";//CollectionProtocol.class.getName();
+	public static final String DP_CLASS_NAME = "edu.wustl.catissuecore.domain.DistributionProtocol";//DistributionProtocol.class.getName();
 	public static final  HashMap<String, String[]> 
 	STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES = new HashMap<String, String[]>();
 	public static final String SUPER_ADMINISTRATOR_ROLE = "SUPER_ADMINISTRATOR_ROLE";

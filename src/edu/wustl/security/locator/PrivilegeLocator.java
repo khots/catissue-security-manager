@@ -15,52 +15,58 @@ import edu.wustl.security.privilege.Privilege;
  * This class loada all privileges from xml file.
  * @author ravi_kumar
  */
-public class PrivilegeLocator
+public final class PrivilegeLocator
 {
+	static PrivilegeLocator locator = new PrivilegeLocator();
+	private PrivilegeLocator()
+	{
+		init();
+	}
+	public static PrivilegeLocator getInstance()
+	{
+		return locator;
+	}
 	/**
 	 * File name for privilege configuration.
 	 */
-	private static final String PRIV_CONF_FILE="PrivilegeConf.xml";
+	private  final String PRIV_CONF_FILE="PrivilegeConf.xml";
 
 	/**
 	 * Element name for 'privilege'.
 	 */
-	private static final String ELE_PRIVILEGE="privilege";
+	private  final String ELE_PRIVILEGE="privilege";
 
 	/**
 	 * Element name for 'bit-number'.
 	 */
-	private static final String ELE_BIT_NUM="bit-number";
+	private  final String ELE_BIT_NUM="bit-number";
 
 	/**
 	 * Element name for 'role-name'.
 	 */
-	private static final String ELE_ROLE_NAME="role-name";
+	private  final String ELE_ROLE_NAME="role-name";
 
 	/**
 	 * Attribute name for 'name'.
 	 */
-	private static final String ATTR_NAME="name";
+	private  final String ATTR_NAME="name";
 
 	/**
 	 * Map of privilege Name and Privilege Object.
 	 */
-	static private Map<String,Privilege> namePrivMap;
+	 private Map<String,Privilege> namePrivMap;
 
 	/**
 	 * Map of bit-number and Privilege Object.
 	 */
-	static private Map<Integer,Privilege> bitPrivMap;
+	 private Map<Integer,Privilege> bitPrivMap;
 	
-	static{		
-		init();
-	}
 	/**
 	 * This method returns Privilege object by privilege name.
 	 * @param name Privilege Name
 	 * @return Privilege object.
 	 */
-	static public Privilege getPrivilegeByName(String name)
+	public Privilege getPrivilegeByName(String name)
 	{
 		return namePrivMap.get(name);
 	}
@@ -70,7 +76,7 @@ public class PrivilegeLocator
 	 * @param bit bit number associated with privilege.
 	 * @return Privilege object.
 	 */
-	static public Privilege getPrivilegeByBit(Integer bit)
+	 public Privilege getPrivilegeByBit(Integer bit)
 	{
 		return bitPrivMap.get(bit);
 	}
@@ -78,7 +84,7 @@ public class PrivilegeLocator
 	/**
 	 * This method load the Privileges into map.
 	 */
-	static public void init()
+	 public void init()
 	{
 		Document doc = XMLParserUtility.getDocument(PRIV_CONF_FILE);
 		NodeList privNodeLst = doc.getElementsByTagName(ELE_PRIVILEGE);
@@ -88,7 +94,7 @@ public class PrivilegeLocator
 	/**
 	 * @param privNodeLst this method populate xml data to maps.
 	 */
-	static private void populateMaps(NodeList privNodeLst)
+	 private void populateMaps(NodeList privNodeLst)
 	{
 		Node privNode;
 		namePrivMap= new HashMap<String, Privilege>();
@@ -106,7 +112,7 @@ public class PrivilegeLocator
 	/**
 	 * @param privNode Node- xml privilege node
 	 */
-	static private void addNewPrivilegeToMap(Node privNode)
+	 private void addNewPrivilegeToMap(Node privNode)
 	{
 	    String privName;
 		int bitNumber;

@@ -1,15 +1,8 @@
 package edu.wustl.security.global;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.util.dbmanager.DAOException;
 import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.privilege.PrivilegeType;
 /**
@@ -17,19 +10,26 @@ import edu.wustl.security.privilege.PrivilegeType;
  * @author deepti_shelar
  *
  */
-public class Utility {
+public final class Utility {
 	/**
 	 * logger -Generic Logger
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(Utility.class);
 
-	
+	static Utility util = new Utility();;
+	private Utility()
+	{
+		
+	}
+	public static Utility getInstance()
+	{
+		return util;
+	}
 	/**
 	 * TO get the PrivilegeType of an Entity.
 	 * @param tagKeyValueMap The reference to Entity.
 	 * @return appropriate PrivilegeType of the given Entity.
 	 */
-	public static PrivilegeType getPrivilegeType(Map<String, String> tagKeyValueMap)
+	public  PrivilegeType getPrivilegeType(Map<String, String> tagKeyValueMap)
 	{
 		PrivilegeType pType = PrivilegeType.ClassLevel;
 		if(tagKeyValueMap.containsKey(Constants.PRIVILEGE_TAG_NAME))
@@ -44,7 +44,7 @@ public class Utility {
 	 * @param tagKeyValueMap
 	 * @return
 	 */
-	 public static boolean getIsBirthDate(Map<String, String> tagKeyValueMap)
+	 public  boolean getIsBirthDate(Map<String, String> tagKeyValueMap)
 	    {    
 		 boolean isBirthDate = false;
 	       if(tagKeyValueMap.containsKey(edu.wustl.security.global.Constants.BIRTH_DATE_TAG_NAME)) {  

@@ -28,6 +28,7 @@ import org.hibernate.Transaction;
 
 import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
+import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -66,7 +67,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 	}
 
-	public Collection getPrivilegeMap(String userName, Collection pEs) throws CSException
+	public ArrayList<ObjectPrivilegeMap> getPrivilegeMap(String userName, Collection pEs) throws CSException
 	{
 		ArrayList<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
 		ResultSet resulSet = null;
@@ -208,15 +209,15 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	public Set getGroups(String userId) throws CSObjectNotFoundException
 	{
 		Session session = null;
-		Set groups = new HashSet();
+		Set<Group> groups = new HashSet<Group>();
 		try
 		{
 			session = HibernateSessionFactoryHelper.getAuditSession(sessionFact);
 
 			User user = (User) this.getObjectByPrimaryKey(session, User.class, Long.valueOf(userId));
 			groups = user.getGroups();
-			List list = new ArrayList();
-			Iterator toSortIterator = groups.iterator();
+			List<Group> list = new ArrayList<Group>();
+			Iterator<Group> toSortIterator = groups.iterator();
 			while (toSortIterator.hasNext())
 			{
 				list.add(toSortIterator.next());

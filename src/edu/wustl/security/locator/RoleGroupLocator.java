@@ -12,10 +12,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.global.XMLParserUtility;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.exceptions.CSException;
@@ -25,7 +25,7 @@ import gov.nih.nci.security.exceptions.CSException;
  * @author deepti_shelar
  *
  */
-public class RoleGroupLocator
+public final class RoleGroupLocator
 {
 	/**
 	 * logger Logger - Generic logger.
@@ -35,7 +35,7 @@ public class RoleGroupLocator
 	/**
 	 * File name for privilege configuration.
 	 */
-	private static final String ROLE_GROUP_CONF_FILE="SMRoleGroupConf.xml";
+	private static final String CONF_FILE = "SMRoleGroupConf.xml";
 	private static final String ELE_ROLE="Role";
 	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
 	private List<String> roleIdList = new ArrayList<String>();
@@ -49,7 +49,7 @@ public class RoleGroupLocator
 	 * Making the class singleton.
 	 */
 	private RoleGroupLocator() {
-		Document doc = XMLParserUtility.getDocument(ROLE_GROUP_CONF_FILE);
+		Document doc = XMLParserUtility.getDocument(CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		createRoleGroupBeans(roleList);
 		/*System.out.println(" inside roleGrpLocator .........");
@@ -63,7 +63,7 @@ public class RoleGroupLocator
 		}
 		System.out.println("roleGroupDetailsMap lenghth "+roleGroupDetailsMap.size());
 		*/
-		Set<RoleGroupDetailsBean> keySet = roleGroupDetailsMap.keySet();
+		/*Set<RoleGroupDetailsBean> keySet = roleGroupDetailsMap.keySet();
 		Iterator<RoleGroupDetailsBean> iterator = keySet.iterator();
 		{
 			while(iterator.hasNext())
@@ -71,7 +71,7 @@ public class RoleGroupLocator
 				RoleGroupDetailsBean next = iterator.next();
 				System.out.println("RoleGroupDetailsBean   "+next.toString());
 			}
-		}
+		}*/
 	}
 	/**
 	 * Singleton class, will return the single object every time.
@@ -108,8 +108,8 @@ public class RoleGroupLocator
 			String groupName = XMLParserUtility.getElementValue(roleElement,"GroupName");
 			String groupType = XMLParserUtility.getElementValue(roleElement,"GroupType");
 
-			String roleId = ProvisionManager.getRoleID(roleName);
-			String groupId = ProvisionManager.getGroupID(groupName);
+			String roleId = ProvisionManager.getInstance().getRoleID(roleName);
+			String groupId = ProvisionManager.getInstance().getGroupID(groupName);
 			RoleGroupDetailsBean bean = new RoleGroupDetailsBean();
 			bean.setGroupType(groupType);
 			bean.setRoleName(roleName);

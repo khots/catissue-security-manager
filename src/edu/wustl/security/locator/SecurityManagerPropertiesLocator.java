@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import edu.wustl.common.util.dbmanager.DBUtil;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.manager.SecurityManager;
@@ -23,8 +22,8 @@ public final class SecurityManagerPropertiesLocator {
 	/**
 	 * property names from SecurityManager.properties file 
 	 */
-	private  String applicationCtxName = null;	
-	private  String securityMgrClassName = null;
+	private  String appCtxName = null;	
+	private  String className = null;
 	
 	/**
 	 * Instantiating the class whenever loaded for the first time. The same instance will be returned whenever getInstance is called. 
@@ -44,8 +43,8 @@ public final class SecurityManagerPropertiesLocator {
 		{
 			SECURITY_MANAGER_PROP.load(inputStream);
 			inputStream.close();
-			applicationCtxName = SECURITY_MANAGER_PROP.getProperty(Constants.APPLN_CONTEXT_NAME);
-			securityMgrClassName = SECURITY_MANAGER_PROP.getProperty(Constants.SECURITY_MANAGER_CLASSNAME);
+			appCtxName = SECURITY_MANAGER_PROP.getProperty(Constants.APPLN_CONTEXT_NAME);
+			className = SECURITY_MANAGER_PROP.getProperty(Constants.SECURITY_MANAGER_CLASSNAME);
 		}
 		catch (IOException exception)
 		{
@@ -62,17 +61,17 @@ public final class SecurityManagerPropertiesLocator {
 	}
 
 	/**
-	 * @return the applicationCtxName
+	 * @return the appCtxName
 	 */
 	public String getApplicationCtxName() {
-		return applicationCtxName;
+		return appCtxName;
 	}
 
 	/**
-	 * @return the securityMgrClassName
+	 * @return the className
 	 */
 	public String getSecurityMgrClassName() {
-		return securityMgrClassName;
+		return className;
 	}
 
 	
