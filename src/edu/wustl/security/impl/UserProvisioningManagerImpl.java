@@ -48,9 +48,9 @@ public class UserProvisioningManagerImpl
 	
 		super(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
 		String ctxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
-		SessionFactory sf = ApplicationSessionFactory
+		SessionFactory sFactory = ApplicationSessionFactory
 				.getSessionFactory(ctxName);
-		super.setAuthorizationDAO(new AuthorizationDAOImpl(sf,ctxName));
+		super.setAuthorizationDAO(new AuthorizationDAOImpl(sFactory,ctxName));
 	}
 
 }

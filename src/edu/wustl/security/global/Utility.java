@@ -3,7 +3,6 @@ package edu.wustl.security.global;
 import java.util.Map;
 
 import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.privilege.PrivilegeType;
 /**
  * Utility methods required in SecurityManager
@@ -15,7 +14,7 @@ public final class Utility {
 	 * logger -Generic Logger
 	 */
 
-	static Utility util = new Utility();;
+	private static Utility util = new Utility();;
 	private Utility()
 	{
 		
@@ -29,7 +28,7 @@ public final class Utility {
 	 * @param tagKeyValueMap The reference to Entity.
 	 * @return appropriate PrivilegeType of the given Entity.
 	 */
-	public  PrivilegeType getPrivilegeType(Map<String, String> tagKeyValueMap)
+	public  PrivilegeType getPrivilegeType(final Map<String, String> tagKeyValueMap)
 	{
 		PrivilegeType pType = PrivilegeType.ClassLevel;
 		if(tagKeyValueMap.containsKey(Constants.PRIVILEGE_TAG_NAME))
@@ -44,7 +43,7 @@ public final class Utility {
 	 * @param tagKeyValueMap
 	 * @return
 	 */
-	 public  boolean getIsBirthDate(Map<String, String> tagKeyValueMap)
+	 public  boolean getIsBirthDate(final Map<String, String> tagKeyValueMap)
 	    {    
 		 boolean isBirthDate = false;
 	       if(tagKeyValueMap.containsKey(edu.wustl.security.global.Constants.BDATE_TAG_NAME)) {  
