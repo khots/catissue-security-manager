@@ -80,7 +80,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	public static HashMap<String, String> rolegroupNamevsId = new HashMap<String, String>();
 
 	public static final String ADMIN_GROUP = "ADMIN_GROUP";
-	public static final String SUPER_ADMINISTRATOR_GROUP = "SUPER_ADMINISTRATOR_GROUP";
+	public static final String SUPER_ADMIN_GROUP = "SUPER_ADMIN_GROUP";
 	public static final String SUPERVISOR_GROUP = "SUPERVISOR_GROUP";
 	public static final String TECHNICIAN_GROUP = "TECHNICIAN_GROUP";
 	public static final String PUBLIC_GROUP = "PUBLIC_GROUP";
@@ -101,12 +101,13 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @return
 	 * @throws CSException
 	 */
-	public boolean login(String loginName, String password) throws SMException
+	
+	public boolean login(final String loginName,final String password) throws SMException
 	{
 		boolean loginSuccess = false;
 		try
 		{
-			AuthenticationManager authMngr = ProvisionManager.getInstance().getInstance().getAuthenticationManager();
+			AuthenticationManager authMngr = ProvisionManager.getInstance().getAuthenticationManager();
 			loginSuccess = authMngr.login(loginName, password);
 		}
 		catch (CSException exception)
@@ -133,7 +134,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getInstance().getUserProvisioningManager().createUser(user);
+			ProvisionManager.getInstance().getUserProvisioningManager().createUser(user);
 		}
 		catch (CSTransactionException exception)
 		{
@@ -162,7 +163,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			return ProvisionManager.getInstance().getInstance().getAuthorizationManager().getUser(loginName);
+			return ProvisionManager.getInstance().getAuthorizationManager().getUser(loginName);
 		}
 		catch (CSException exception)
 		{
@@ -182,7 +183,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getInstance().getUserProvisioningManager().removeUser(userId);
+			ProvisionManager.getInstance().getUserProvisioningManager().removeUser(userId);
 		}
 		catch (CSTransactionException ex)
 		{
@@ -215,7 +216,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		UserProvisioningManager upManager = null;
 		try
 		{
-			upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			upManager = ProvisionManager.getInstance().getUserProvisioningManager();
 			List<String> roleIdList = RoleGroupLocator.getInstance().getAllRoleIds();
 			for (String roleId : roleIdList) {
 				roles.add(upManager.getRoleById(roleId));
@@ -244,7 +245,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			UserProvisioningManager upManager = ProvisionManager.getInstance().getUserProvisioningManager();
 			User user = upManager.getUserById(userID);
 
 			//Remove user from any other role if he is assigned some
@@ -305,7 +306,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		Role role = null;
 		try
 		{
-			upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			upManager = ProvisionManager.getInstance().getUserProvisioningManager();
 			groups = upManager.getGroups(String.valueOf(userID));
 			role = getRole(groups, upManager);
 		}
@@ -338,7 +339,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		String role=TextConstants.EMPTY_STRING;
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			UserProvisioningManager upManager = ProvisionManager.getInstance().getUserProvisioningManager();
 			Set groups = upManager.getGroups(String.valueOf(userID));
 			Iterator iter = groups.iterator();
 			while (iter.hasNext())
@@ -375,7 +376,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getInstance().getInstance().getInstance().getUserProvisioningManager().modifyUser(user);
+			ProvisionManager.getInstance().getInstance().getInstance().getUserProvisioningManager().modifyUser(user);
 		}
 		catch (CSException exception)
 		{
@@ -397,7 +398,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			return ProvisionManager.getInstance().getInstance().getUserProvisioningManager().getUserById(userId);
+			return ProvisionManager.getInstance().getUserProvisioningManager().getUserById(userId);
 		}
 		catch (CSException exception)
 		{
@@ -419,7 +420,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			User user = new User();
 			SearchCriteria searchCriteria = new UserSearchCriteria(user);
-			return ProvisionManager.getInstance().getInstance().getUserProvisioningManager().getObjects(searchCriteria);
+			return ProvisionManager.getInstance().getUserProvisioningManager().getObjects(searchCriteria);
 		}
 		catch (CSException exception)
 		{
@@ -465,7 +466,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		checkForSufficientParamaters(userGroupname, userId);
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			UserProvisioningManager upManager = ProvisionManager.getInstance().getUserProvisioningManager();
 			Group group = getUserGroup(userGroupname);
 			if (group == null)
 			{
@@ -497,35 +498,35 @@ public class SecurityManager implements Permissions,ISecurityManager
 			defaultErrorKey.setErrorMessage(mesg);
 			throw new SMException(defaultErrorKey,null,null);	
 		}
-		Set consolidatedGroupIds = new HashSet();
-		Set consolidatedGroups;
+		Set conGrpIds = new HashSet();
+		Set conGrps;
 		String[] finalUserGroupIds;
 		UserProvisioningManager upManager;
 		Group group = null;
 		try
 		{
-			upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
-			consolidatedGroups = upManager.getGroups(userId);
+			upManager = ProvisionManager.getInstance().getUserProvisioningManager();
+			conGrps = upManager.getGroups(userId);
 			
-			if (null != consolidatedGroups)
+			if (null != conGrps)
 			{
-				Iterator it = consolidatedGroups.iterator();
-				while (it.hasNext())
+				Iterator iter = conGrps.iterator();
+				while (iter.hasNext())
 				{
-					group = (Group) it.next();
-					consolidatedGroupIds.add(String.valueOf(group.getGroupId()));
+					group = (Group) iter.next();
+					conGrpIds.add(String.valueOf(group.getGroupId()));
 				}
 			}
 			//Consolidating all the Groups
 			for (int i = 0; i < groupIds.length; i++)
 			{
-				consolidatedGroupIds.add(groupIds[i]);
+				conGrpIds.add(groupIds[i]);
 			}
-			finalUserGroupIds = new String[consolidatedGroupIds.size()];
-			Iterator it = consolidatedGroupIds.iterator();
-			for (int i = 0; it.hasNext(); i++)
+			finalUserGroupIds = new String[conGrpIds.size()];
+			Iterator iter = conGrpIds.iterator();
+			for (int i = 0; iter.hasNext(); i++)
 			{
-				finalUserGroupIds[i] = (String) it.next();
+				finalUserGroupIds[i] = (String) iter.next();
 			}
 			//Setting groups for user and updating it
 			upManager.assignGroupsToUser(userId, finalUserGroupIds);
@@ -545,7 +546,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			return ProvisionManager.getInstance().getInstance().getAuthorizationManager().checkPermission(userName, objectId,privilegeName);
+			return ProvisionManager.getInstance().getAuthorizationManager().checkPermission(userName, objectId,privilegeName);
 		}
 		catch (CSException e)
 		{
@@ -565,7 +566,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			try
 			{
-				isAuthorized = ProvisionManager.getInstance().getInstance().getAuthorizationManager().checkPermission(userName,
+				isAuthorized = ProvisionManager.getInstance().getAuthorizationManager().checkPermission(userName,
 						objectType + "_" + objectIdentifier, privilegeName);
 			}
 			catch (CSException exception)
@@ -596,17 +597,17 @@ public class SecurityManager implements Permissions,ISecurityManager
 		ProtectionGroup protectionGroup;
 		ProtectionElement protectionElement;
 		String name = null;
-		String protectionElementName = obj.getObjectId();
+		String protElemName = obj.getObjectId();
 		try
 		{
-			AuthorizationManager authManager = ProvisionManager.getInstance().getInstance().getAuthorizationManager();
-			protectionElement = authManager.getProtectionElement(protectionElementName);
+			AuthorizationManager authManager = ProvisionManager.getInstance().getAuthorizationManager();
+			protectionElement = authManager.getProtectionElement(protElemName);
 			protectionGroups = authManager.getProtectionGroups(protectionElement
 					.getProtectionElementId().toString());
-			Iterator<ProtectionGroup> it = protectionGroups.iterator();
-			while (it.hasNext())
+			Iterator<ProtectionGroup> iter = protectionGroups.iterator();
+			while (iter.hasNext())
 			{
-				protectionGroup = (ProtectionGroup) it.next();
+				protectionGroup = (ProtectionGroup) iter.next();
 				name = protectionGroup.getProtectionGroupName();
 				if (name.indexOf(nameConsistingOf) != -1)
 				{
@@ -618,7 +619,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			String mess= new StringBuffer("Unable to get protection group by name")
 			.append(nameConsistingOf).append(" for Protection Element ")
-			.append(protectionElementName).toString();
+			.append(protElemName).toString();
 			logger.debug(mess, exception);
 			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
 			defaultErrorKey.setErrorMessage(mess);
@@ -639,30 +640,30 @@ public class SecurityManager implements Permissions,ISecurityManager
 	public String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException
 	{
 		Set protectionGroups;
-		Iterator it;
+		Iterator iter;
 		ProtectionGroup protectionGroup;
 		ProtectionElement protectionElement;
 		String[] names = null;
-		String protectionElementName = obj.getObjectId();
+		String protElemName = obj.getObjectId();
 		try
 		{
-			AuthorizationManager authManager = ProvisionManager.getInstance().getInstance().getAuthorizationManager();
-			protectionElement = authManager.getProtectionElement(protectionElementName);
+			AuthorizationManager authManager = ProvisionManager.getInstance().getAuthorizationManager();
+			protectionElement = authManager.getProtectionElement(protElemName);
 			protectionGroups = authManager.getProtectionGroups(protectionElement
 					.getProtectionElementId().toString());
-			it = protectionGroups.iterator();
+			iter = protectionGroups.iterator();
 			names = new String[protectionGroups.size()];
-			int i = 0;
-			while (it.hasNext())
+			int cnt = 0;
+			while (iter.hasNext())
 			{
-				protectionGroup = (ProtectionGroup) it.next();
-				names[i++] = protectionGroup.getProtectionGroupName();
+				protectionGroup = (ProtectionGroup) iter.next();
+				names[cnt++] = protectionGroup.getProtectionGroupName();
 
 			}
 		}
 		catch (CSException exception)
 		{
-			String mess="Unable to get protection group for Protection Element "+ protectionElementName;
+			String mess="Unable to get protection group for Protection Element "+ protElemName;
 			logger.debug(mess,exception);
 			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
 			defaultErrorKey.setErrorMessage(mess);
@@ -802,7 +803,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		List list;
 		ProtectionElement protectionElement;
 		ProtectionElementSearchCriteria protectionElementSearchCriteria;
-		AuthorizationManager authorizationManager = ProvisionManager.getInstance().getInstance().getAuthorizationManager();
+		AuthorizationManager authorizationManager = ProvisionManager.getInstance().getAuthorizationManager();
 		for (int i = 0; i < objectTypes.length; i++)
 		{
 			for (int j = 0; j < privilegeNames.length; j++)
@@ -812,7 +813,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 					protectionElement = new ProtectionElement();
 					protectionElement.setObjectId(objectTypes[i] + "_*");
 					protectionElementSearchCriteria=new ProtectionElementSearchCriteria(protectionElement);
-					list = ProvisionManager.getInstance().getInstance().getObjects(protectionElementSearchCriteria);
+					list = ProvisionManager.getInstance().getObjects(protectionElementSearchCriteria);
 					privilegeMap=authorizationManager.getPrivilegeMap(user.getLoginName(),list);
 					for (int k = 0; k < list.size(); k++)
 					{
@@ -859,10 +860,10 @@ public class SecurityManager implements Permissions,ISecurityManager
 	throws CSObjectNotFoundException
 	{
 		Role role = null;
-		Iterator<Group> it = groups.iterator();
-		if (it.hasNext())
+		Iterator<Group> iter = groups.iterator();
+		if (iter.hasNext())
 		{
-			Group group = (Group) it.next();
+			Group group = (Group) iter.next();
 			if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 			{
 				RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
@@ -909,7 +910,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		group.setGroupName(userGroupname);
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
 		Group userGrp = null;
-		List list = ProvisionManager.getInstance().getInstance().getObjects(searchCriteria);
+		List list = ProvisionManager.getInstance().getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
 			userGrp = (Group) list.get(0);

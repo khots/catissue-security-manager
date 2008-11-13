@@ -66,10 +66,10 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		this.sessionFact = sessionFact;
 
 	}
-
-	public ArrayList<ObjectPrivilegeMap> getPrivilegeMap(String userName, Collection pEs) throws CSException
+	
+	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs) throws CSException
 	{
-		ArrayList<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
+		List<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
 		ResultSet resulSet = null;
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
@@ -164,8 +164,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 	//changes to load the object and then delete it
 	//else it throws exception
-	public void removeProtectionElementsFromProtectionGroup(String protectionGroupId,
-			String[] protectionEleIds) throws CSTransactionException
+	public void removeProtectionElementsFromProtectionGroup(final String protectionGroupId,
+			final String[] protectionEleIds) throws CSTransactionException
 	{
 		Session session = null;
 		Transaction transaction = null;
@@ -206,7 +206,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 	}
 
-	public Set getGroups(String userId) throws CSObjectNotFoundException
+	public Set getGroups(final String userId) throws CSObjectNotFoundException
 	{
 		Session session = null;
 		Set<Group> groups = new HashSet<Group>();
@@ -247,7 +247,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 	}
 
-	private Object getObjectByPrimaryKey(Session session, Class objectType, Long primaryKey)
+	private Object getObjectByPrimaryKey(final Session session, final Class objectType, final Long primaryKey)
 			throws HibernateException, CSObjectNotFoundException
 	{
 
@@ -269,32 +269,34 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		return obj;
 	}
 	
-	private void generateQuery(StringBuffer stbr,String attributeVal)
+	private void generateQuery(StringBuffer stbr,final String attributeVal)
 	{
-		stbr.append("select distinct(p.privilege_name)");
-		stbr.append(" from csm_protection_group pg,");
-		stbr.append(" csm_protection_element pe,");
-		stbr.append(" csm_pg_pe pgpe,");
-		stbr.append(" csm_user_group_role_pg ugrpg,");
-		stbr.append(" csm_user u,");
-		stbr.append(" csm_group g,");
-		stbr.append(" csm_user_group ug,");
-		stbr.append(" csm_role_privilege rp,");
-		stbr.append(" csm_privilege p ");
-		stbr.append(" where pgpe.protection_group_id = pg.protection_group_id");
-		stbr.append(" and pgpe.protection_element_id = pe.protection_element_id");
-		stbr.append(" and pe.object_id= ?");
+		String str = "select distinct(p.privilege_name)" +
+		" from csm_protection_group pg," +
+		" csm_protection_element pe,"+
+		" csm_pg_pe pgpe,"+
+		" csm_user_group_role_pg ugrpg,"+
+		" csm_user u,"+
+		" csm_group g,"+
+		" csm_user_group ug,"+
+		" csm_role_privilege rp,"+
+		" csm_privilege p "+
+		" where pgpe.protection_group_id = pg.protection_group_id"+
+		" and pgpe.protection_element_id = pe.protection_element_id"+
+		" and pe.object_id= ?"+
 
-		stbr.append(" and pe.attribute ").append(attributeVal);
-		stbr.append(" and pg.protection_group_id = ugrpg.protection_group_id ");
-		stbr.append(" and (( ugrpg.group_id = g.group_id");
-		stbr.append(" and ug.group_id= g.group_id");
-		stbr.append("       and ug.user_id = u.user_id)");
-		stbr.append("       or ");
-		stbr.append("     (ugrpg.user_id = u.user_id))");
-		stbr.append(" and u.login_name=?");
-		stbr.append(" and ugrpg.role_id = rp.role_id ");
-		stbr.append(" and rp.privilege_id = p.privilege_id");
+		" and pe.attribute " + attributeVal +
+		" and pg.protection_group_id = ugrpg.protection_group_id "+
+		" and (( ugrpg.group_id = g.group_id"+
+		" and ug.group_id= g.group_id"+
+		"       and ug.user_id = u.user_id)"+
+		"       or "+
+		"     (ugrpg.user_id = u.user_id))"+
+		" and u.login_name=?"+
+		" and ugrpg.role_id = rp.role_id "+
+		" and rp.privilege_id = p.privilege_id";
+		
+		stbr.append(str);
 	}
 
 }
