@@ -35,10 +35,9 @@ public final class SecurityManagerPropertiesLocator {
 	 */
 	private SecurityManagerPropertiesLocator() 
 	{
-		Properties SM_PROP;
 		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader().getResourceAsStream(
 				Constants.SM_PROP_FILE);
-		SM_PROP = new Properties();
+		Properties SM_PROP = new Properties();
 		try
 		{
 			SM_PROP.load(inputStream);

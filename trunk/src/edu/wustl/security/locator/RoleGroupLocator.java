@@ -2,10 +2,8 @@ package edu.wustl.security.locator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -43,12 +41,13 @@ public final class RoleGroupLocator
 	/**
 	 * Instantiating the class whenever loaded for the first time. The same instance will be returned whenever getInstance is called. 
 	 */
-	public static RoleGroupLocator roleGroupLocator = new RoleGroupLocator();
+	public static RoleGroupLocator locator = new RoleGroupLocator();
 	
 	/**
 	 * Making the class singleton.
 	 */
-	private RoleGroupLocator() {
+	private RoleGroupLocator() 
+	{
 		Document doc = XMLParserUtility.getDocument(CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		createRoleGroupBeans(roleList);
@@ -79,7 +78,7 @@ public final class RoleGroupLocator
 	 */
 	public static RoleGroupLocator getInstance()
 	{
-		return roleGroupLocator;
+		return locator;
 	}
 	/**
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml

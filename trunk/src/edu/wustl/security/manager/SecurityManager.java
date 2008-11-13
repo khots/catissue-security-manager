@@ -10,7 +10,6 @@
 package edu.wustl.security.manager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -76,9 +75,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 	private Class requestingClass = null;
 
-
-	public static HashMap<String, String> rolegroupNamevsId = new HashMap<String, String>();
-
 	public static final String ADMIN_GROUP = "ADMIN_GROUP";
 	public static final String SUPER_ADMIN_GROUP = "SUPER_ADMIN_GROUP";
 	public static final String SUPERVISOR_GROUP = "SUPERVISOR_GROUP";
@@ -91,8 +87,6 @@ public class SecurityManager implements Permissions,ISecurityManager
 
 	public static final String TABLE_ALIAS_NAME = "TABLE_ALIAS_NAME";
 
-
-	
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
 	 * @param requestingClass
@@ -154,12 +148,11 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * This method returns the User object from the database for the passed
 	 * User's Login Name. If no User is found then null is returned
 	 *
-	 * @param loginName
-	 *            Login name of the user
-	 * @return @throws
-	 *         SMException
+	 * @param loginName Login name of the user
+	 * @return User
+	 * @throws SMException
 	 */
-	public User getUser(String loginName) throws SMException
+	public User getUser(final String loginName) throws SMException
 	{
 		try
 		{
@@ -168,18 +161,17 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			logger.debug("Unable to get user: "+loginName,exception);
-			
 			String mesg = "Unable to get user: "+loginName;
 			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
 			defaultErrorKey.setErrorMessage(mesg);
 			throw new SMException(defaultErrorKey,exception,null);
 		}
 	}
-
 	
-	
-
-	public void removeUser(String userId) throws SMException
+	/**
+	 * 
+	 */
+	public void removeUser(final String userId) throws SMException
 	{
 		try
 		{
@@ -241,7 +233,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @param roleID -	The id of the Role which is to be assigned to the user
 	 * @throws SMException
 	 */
-	public void assignRoleToUser(String userID, String roleID) throws SMException
+	public void assignRoleToUser(final String userID, final String roleID) throws SMException
 	{
 		try
 		{
@@ -376,7 +368,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getInstance().getInstance().getUserProvisioningManager().modifyUser(user);
+			ProvisionManager.getInstance().getUserProvisioningManager().modifyUser(user);
 		}
 		catch (CSException exception)
 		{
@@ -384,7 +376,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 			String mesg = "Unable to modify user: Exception:  ";
 			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
 			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);		}
+			throw new SMException(defaultErrorKey,exception,null);
+		}
 	}
 
 	/**
@@ -487,42 +480,22 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 	}
 
-	
+	/**
+	 * Assigns additional groups to user
+	 * @param userId string userId
+	 * @param groupIds string[]
+	 * @throws SMException exception
+	 */
 	public void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException
 	{
-		if (userId == null || groupIds == null || groupIds.length < 1)
-		{
-			String mesg=" Null or insufficient Parameters passed";
-			logger.debug(mesg);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,null,null);	
-		}
-		Set conGrpIds = new HashSet();
-		Set conGrps;
-		String[] finalUserGroupIds;
-		UserProvisioningManager upManager;
+		checkForSufficientParams(userId, groupIds);
+		
 		Group group = null;
 		try
 		{
-			upManager = ProvisionManager.getInstance().getUserProvisioningManager();
-			conGrps = upManager.getGroups(userId);
-			
-			if (null != conGrps)
-			{
-				Iterator iter = conGrps.iterator();
-				while (iter.hasNext())
-				{
-					group = (Group) iter.next();
-					conGrpIds.add(String.valueOf(group.getGroupId()));
-				}
-			}
-			//Consolidating all the Groups
-			for (int i = 0; i < groupIds.length; i++)
-			{
-				conGrpIds.add(groupIds[i]);
-			}
-			finalUserGroupIds = new String[conGrpIds.size()];
+			UserProvisioningManager upManager = ProvisionManager.getInstance().getUserProvisioningManager();
+			Set conGrpIds = addAllGroups(userId, groupIds, upManager);
+			String[] finalUserGroupIds = new String[conGrpIds.size()];
 			Iterator iter = conGrpIds.iterator();
 			for (int i = 0; iter.hasNext(); i++)
 			{
@@ -541,6 +514,56 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 	}
 
+	/**
+	 * Adds existing and required groups together in a Set.
+	 * @param userId
+	 * @param groupIds
+	 * @param upManager
+	 * @return
+	 * @throws CSObjectNotFoundException
+	 */
+	private Set<String> addAllGroups(String userId, String[] groupIds,
+			UserProvisioningManager upManager) throws CSObjectNotFoundException {
+		Group group;
+		Set<Group> conGrps = upManager.getGroups(userId);
+		Set<String> conGrpIds = new HashSet<String>();	
+		if (null != conGrps)
+		{
+			Iterator<Group> iter = conGrps.iterator();
+			while (iter.hasNext())
+			{
+				group = iter.next();
+				Long groupId = group.getGroupId();
+				conGrpIds.add(String.valueOf(groupId));
+			}
+		}
+		//Consolidating all the Groups
+		for (int i = 0; i < groupIds.length; i++)
+		{
+			conGrpIds.add(groupIds[i]);
+		}
+		return conGrpIds;
+	}
+
+	/**
+	 * @param userId
+	 * @param groupIds
+	 * @throws SMException
+	 */
+	private void checkForSufficientParams(String userId, String[] groupIds)
+			throws SMException {
+		if (userId == null || groupIds == null || groupIds.length < 1)
+		{
+			String mesg=" Null or insufficient Parameters passed";
+			logger.debug(mesg);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mesg);
+			throw new SMException(defaultErrorKey,null,null);	
+		}
+	}
+	/**
+	 * 
+	 */
 	public boolean isAuthorized(String userName, String objectId, String privilegeName)
 	throws SMException
 	{
@@ -639,8 +662,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	public String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException
 	{
-		Set protectionGroups;
-		Iterator iter;
+		Set<ProtectionGroup> protectionGroups;
+		Iterator<ProtectionGroup> iter;
 		ProtectionGroup protectionGroup;
 		ProtectionElement protectionElement;
 		String[] names = null;
@@ -877,9 +900,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 	}
 	private RoleGroupDetailsBean getRequiredBean(RoleGroupDetailsBean sampleBean)
 	{
-		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = RoleGroupLocator.getInstance().getRoleGroupDetailsMap();	
-		RoleGroupDetailsBean requiredBean = roleGroupDetailsMap.get(sampleBean);
-		return requiredBean;
+		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = RoleGroupLocator.getInstance().getRoleGroupDetailsMap();	
+		return map.get(sampleBean);
 	}
 	/**
 	 * 

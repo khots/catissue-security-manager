@@ -61,7 +61,7 @@ public class PrivilegeCache
 	 * @param loginName login name of the user who has logged in.
 	 * @throws Exception generic exception
 	 */
-	public PrivilegeCache(String loginName)
+	public PrivilegeCache(final String loginName)
 	{
 		privilegeMap = new HashMap<String, BitSet>();
 		this.loginName = loginName;
@@ -101,7 +101,7 @@ public class PrivilegeCache
 	 * @param protEleObjId Protection Element Id
 	 * @return objPrivMap return objPrivMap.
 	 */
-	private Collection getObjectPrivilegeMap(String protEleObjId)
+	private Collection getObjectPrivilegeMap(final String protEleObjId)
 	{
 		Collection objPrivMap = new ArrayList();
 
@@ -140,7 +140,7 @@ public class PrivilegeCache
 	 * BitSet corresponding to the objectId accordingly.
 	 * @param objPrivMapCol objPrivMapCol.
 	 */
-	private void populatePrivileges(Collection<ObjectPrivilegeMap> objPrivMapCol)
+	private void populatePrivileges(final Collection<ObjectPrivilegeMap> objPrivMapCol)
 	{
 		// To populate the permissionMap
 		for (ObjectPrivilegeMap objectPrivilegeMap : objPrivMapCol)
