@@ -6,7 +6,7 @@ import edu.wustl.common.beans.SessionDataBean;
 public interface IValidator
 {
 
-	public boolean hasPrivilegeToView(SessionDataBean sessionDataBean, String baseObjectId,
+	boolean hasPrivilegeToView(SessionDataBean sessionDataBean, String baseObjectId,
 			String privilegeName);
 
 	boolean hasPrivilegeToViewGlobalParticipant(SessionDataBean sessionDataBean);

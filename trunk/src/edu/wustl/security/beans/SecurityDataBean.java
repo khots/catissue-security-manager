@@ -27,22 +27,22 @@ public class SecurityDataBean
 	private Set group;
 	private String roleName;
 	private String groupName;
-	private String protectionGroupName;
+	private String protGrpName;
 
 	/**
-	 * @return Returns the protectionGroupName.
+	 * @return Returns the protGrpName.
 	 */
-	public String getProtectionGroupName()
+	public String getProtGrpName()
 	{
-		return protectionGroupName;
+		return protGrpName;
 	}
 
 	/**
-	 * @param protectionGroupName The protectionGroupName to set.
+	 * @param protGrpName The protGrpName to set.
 	 */
-	public void setProtectionGroupName(String protectionGroupName)
+	public void setProtGrpName(final String protGrpName)
 	{
-		this.protectionGroupName = protectionGroupName;
+		this.protGrpName = protGrpName;
 	}
 	/**
 	 * @return Returns the roleName.
@@ -54,7 +54,7 @@ public class SecurityDataBean
 	/**
 	 * @param roleName The roleName to set.
 	 */
-	public void setRoleName(String roleName)
+	public void setRoleName(final String roleName)
 	{
 		this.roleName = roleName;
 	}
@@ -69,7 +69,7 @@ public class SecurityDataBean
 	/**
 	 * @param userGroup The userGroup to set.
 	 */
-	public void setGroup(Set group)
+	public void setGroup(final Set group)
 	{
 		this.group = group;
 	}
@@ -85,7 +85,7 @@ public class SecurityDataBean
 	/**
 	 * @param user The user to set.
 	 */
-	public void setUser(String user)
+	public void setUser(final String user)
 	{
 		this.user = user;
 	}
@@ -101,7 +101,7 @@ public class SecurityDataBean
 	/**
 	 * @param groupName The groupName to set.
 	 */
-	public void setGroupName(String groupName)
+	public void setGroupName(final String groupName)
 	{
 		this.groupName = groupName;
 	}
@@ -112,7 +112,7 @@ public class SecurityDataBean
 	public String toString()
 	{
 		return new String(" user:" + user + " groupName:" + groupName + " group:" + group.size()
-				+ " role:" + roleName + " protectionGroup:" + protectionGroupName);
+				+ " role:" + roleName + " protectionGroup:" + protGrpName);
 	}
 
 }

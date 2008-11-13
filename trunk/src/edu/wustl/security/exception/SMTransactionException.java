@@ -14,9 +14,9 @@ import edu.wustl.common.exception.ErrorKey;
 public class SMTransactionException extends SMException
 {
 
-	public SMTransactionException(ErrorKey errorKey, Throwable t,
-			String msgValues) {
-		super(errorKey, t, msgValues);
+	public SMTransactionException(final ErrorKey errorKey,final  Throwable throwable,
+			final String msgValues) {
+		super(errorKey, throwable, msgValues);
 	}
 
 	/**

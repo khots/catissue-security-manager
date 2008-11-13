@@ -1,6 +1,5 @@
 package edu.wustl.security.beans;
 
-import edu.wustl.security.locator.RoleGroupLocator;
 
 
 /**
@@ -9,12 +8,12 @@ import edu.wustl.security.locator.RoleGroupLocator;
  *
  */
 public class RoleGroupDetailsBean {
-	String roleName;
-	String roleType;
-	String groupType;
-	String groupName;
-	String roleId;
-	String groupId;
+	private String roleName;
+	private String roleType;
+	private String groupType;
+	private String groupName;
+	private String roleId;
+	private String groupId;
 
 	/**
 	 * @return the roleName
@@ -25,7 +24,7 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param roleName the roleName to set
 	 */
-	public void setRoleName(String roleName) {
+	public void setRoleName(final String roleName) {
 		this.roleName = roleName;
 	}
 	/**
@@ -37,7 +36,7 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param roleType the roleType to set
 	 */
-	public void setRoleType(String roleType) {
+	public void setRoleType(final String roleType) {
 		this.roleType = roleType;
 	}
 	/**
@@ -49,7 +48,7 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param groupType the groupType to set
 	 */
-	public void setGroupType(String groupType) {
+	public void setGroupType(final String groupType) {
 		this.groupType = groupType;
 	}
 	/**
@@ -61,7 +60,7 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param groupName the groupName to set
 	 */
-	public void setGroupName(String groupName) {
+	public void setGroupName(final String groupName) {
 		this.groupName = groupName;
 	}
 	/**
@@ -73,7 +72,7 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param roleId the roleId to set
 	 */
-	public void setRoleId(String roleId) {
+	public void setRoleId(final String roleId) {
 		this.roleId = roleId;
 	}
 	/**
@@ -85,7 +84,7 @@ public class RoleGroupDetailsBean {
 	/**
 	 * @param groupId the groupId to set
 	 */
-	public void setGroupId(String groupId) {
+	public void setGroupId(final String groupId) {
 		this.groupId = groupId;
 	}
 	/**
@@ -100,7 +99,7 @@ public class RoleGroupDetailsBean {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object object)
+	public boolean equals(final Object object)
 	{
 		boolean equals = false;
 		if((object!=null) && object instanceof RoleGroupDetailsBean)
@@ -121,11 +120,9 @@ public class RoleGroupDetailsBean {
 		return equals;
 	}
 	
-	private boolean isObjectEqual(Object src, Object target)
+	private boolean isObjectEqual(final Object src,final  Object target)
 	{
-		boolean isEqual = 
-			(src == null ? false : src.equals(target));
-		return isEqual;
+		return (src == null ? false : src.equals(target));
 	}
 	/**
 	 * 
@@ -171,11 +168,11 @@ public class RoleGroupDetailsBean {
 	 */
 	public String toString()
 	{
-		return "groupId=" + this.getGroupId()+ ":\n" + 
-		"groupName=" + this.getGroupName() +":\n" +
-		"groupType=" + this.getGroupType() +":\n" +
-		"roleId=" + this.getRoleId() +":\n"+
-		"roleName=" + this.getRoleName() +":\n"+
+		return "groupId=" + this.getGroupId()+ ":" + 
+		"groupName=" + this.getGroupName() +":" +
+		"groupType=" + this.getGroupType() +":" +
+		"roleId=" + this.getRoleId() +":"+
+		"roleName=" + this.getRoleName() +":"+
 		"roleType=" + this.getRoleType();
 	}
 }

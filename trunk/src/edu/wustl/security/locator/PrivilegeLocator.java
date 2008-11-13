@@ -17,7 +17,7 @@ import edu.wustl.security.privilege.Privilege;
  */
 public final class PrivilegeLocator
 {
-	static PrivilegeLocator locator = new PrivilegeLocator();
+	static private PrivilegeLocator locator = new PrivilegeLocator();
 	private PrivilegeLocator()
 	{
 		init();
@@ -29,44 +29,44 @@ public final class PrivilegeLocator
 	/**
 	 * File name for privilege configuration.
 	 */
-	private  final String PRIV_CONF_FILE="PrivilegeConf.xml";
+	private static final String PRIV_CONF_FILE="PrivilegeConf.xml";
 
 	/**
 	 * Element name for 'privilege'.
 	 */
-	private  final String ELE_PRIVILEGE="privilege";
+	private static final String ELE_PRIVILEGE="privilege";
 
 	/**
 	 * Element name for 'bit-number'.
 	 */
-	private  final String ELE_BIT_NUM="bit-number";
+	private static final String ELE_BIT_NUM="bit-number";
 
 	/**
 	 * Element name for 'role-name'.
 	 */
-	private  final String ELE_ROLE_NAME="role-name";
+	private static final String ELE_ROLE_NAME="role-name";
 
 	/**
 	 * Attribute name for 'name'.
 	 */
-	private  final String ATTR_NAME="name";
+	private static final String ATTR_NAME="name";
 
 	/**
 	 * Map of privilege Name and Privilege Object.
 	 */
-	 private Map<String,Privilege> namePrivMap;
+	 private static Map<String,Privilege> namePrivMap;
 
 	/**
 	 * Map of bit-number and Privilege Object.
 	 */
-	 private Map<Integer,Privilege> bitPrivMap;
+	 private static Map<Integer,Privilege> bitPrivMap;
 	
 	/**
 	 * This method returns Privilege object by privilege name.
 	 * @param name Privilege Name
 	 * @return Privilege object.
 	 */
-	public Privilege getPrivilegeByName(String name)
+	public Privilege getPrivilegeByName(final String name)
 	{
 		return namePrivMap.get(name);
 	}
@@ -76,7 +76,7 @@ public final class PrivilegeLocator
 	 * @param bit bit number associated with privilege.
 	 * @return Privilege object.
 	 */
-	 public Privilege getPrivilegeByBit(Integer bit)
+	 public Privilege getPrivilegeByBit(final Integer bit)
 	{
 		return bitPrivMap.get(bit);
 	}
@@ -94,7 +94,7 @@ public final class PrivilegeLocator
 	/**
 	 * @param privNodeLst this method populate xml data to maps.
 	 */
-	 private void populateMaps(NodeList privNodeLst)
+	 private void populateMaps(final NodeList privNodeLst)
 	{
 		Node privNode;
 		namePrivMap= new HashMap<String, Privilege>();
@@ -112,7 +112,7 @@ public final class PrivilegeLocator
 	/**
 	 * @param privNode Node- xml privilege node
 	 */
-	 private void addNewPrivilegeToMap(Node privNode)
+	 private void addNewPrivilegeToMap(final Node privNode)
 	{
 	    String privName;
 		int bitNumber;

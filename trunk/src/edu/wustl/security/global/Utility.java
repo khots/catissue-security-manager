@@ -47,8 +47,8 @@ public final class Utility {
 	 public  boolean getIsBirthDate(Map<String, String> tagKeyValueMap)
 	    {    
 		 boolean isBirthDate = false;
-	       if(tagKeyValueMap.containsKey(edu.wustl.security.global.Constants.BIRTH_DATE_TAG_NAME)) {  
-	    	   String tagValue = tagKeyValueMap.get(edu.wustl.security.global.Constants.BIRTH_DATE_TAG_NAME);
+	       if(tagKeyValueMap.containsKey(edu.wustl.security.global.Constants.BDATE_TAG_NAME)) {  
+	    	   String tagValue = tagKeyValueMap.get(edu.wustl.security.global.Constants.BDATE_TAG_NAME);
 	            if (tagValue.equalsIgnoreCase(Constants.TRUE))
 	            {
 	            	isBirthDate =  true;

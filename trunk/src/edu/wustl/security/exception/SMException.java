@@ -11,9 +11,9 @@ import edu.wustl.common.exception.ErrorKey;
 public class SMException extends ApplicationException
 {
 
-	public SMException(ErrorKey errorKey, Throwable t, String msgValues) {
+	public SMException(final ErrorKey errorKey, final Throwable throwable, final String msgValues) {
 		
-		super(errorKey, t, msgValues);
+		super(errorKey, throwable, msgValues);
 	}
 	
 	/**

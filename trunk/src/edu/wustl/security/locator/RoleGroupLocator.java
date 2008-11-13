@@ -37,7 +37,7 @@ public final class RoleGroupLocator
 	 */
 	private static final String CONF_FILE = "SMRoleGroupConf.xml";
 	private static final String ELE_ROLE="Role";
-	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGroupDetailsMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
+	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGrpMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
 	private List<String> roleIdList = new ArrayList<String>();
 	private List<String> groupIdList = new ArrayList<String>();
 	/**
@@ -61,9 +61,9 @@ public final class RoleGroupLocator
 		for (String id : groupIdList) {
 			System.out.println(" grp id "+id);	
 		}
-		System.out.println("roleGroupDetailsMap lenghth "+roleGroupDetailsMap.size());
+		System.out.println("roleGrpMap lenghth "+roleGrpMap.size());
 		*/
-		/*Set<RoleGroupDetailsBean> keySet = roleGroupDetailsMap.keySet();
+		/*Set<RoleGroupDetailsBean> keySet = roleGrpMap.keySet();
 		Iterator<RoleGroupDetailsBean> iterator = keySet.iterator();
 		{
 			while(iterator.hasNext())
@@ -119,7 +119,7 @@ public final class RoleGroupLocator
 			bean.setRoleId(roleId);
 			roleIdList.add(roleId);
 			groupIdList.add(groupId);
-			roleGroupDetailsMap.put(bean, bean);
+			roleGrpMap.put(bean, bean);
 		} catch (CSException e) {
 			logger.warn("Error in initializing rolegroupNamevsId map",e);
 			e.printStackTrace();
@@ -129,20 +129,20 @@ public final class RoleGroupLocator
 		}
 	}
 	/**
-	 * @return the roleGroupDetailsMap
+	 * @return the roleGrpMap
 	 */
 	public Map<RoleGroupDetailsBean, RoleGroupDetailsBean> getRoleGroupDetailsMap() {
-		return roleGroupDetailsMap;
+		return roleGrpMap;
 	}
 	/**
-	 * @return the roleGroupDetailsMap
+	 * @return the roleGrpMap
 	 */
 	public List<String> getAllRoleIds() {
 		
 		return roleIdList;
 	}
 	/**
-	 * @return the roleGroupDetailsMap
+	 * @return the roleGrpMap
 	 */
 	public List<String> getAllGroupIds() {
 		
