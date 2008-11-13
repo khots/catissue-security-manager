@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.global.Constants;
 import edu.wustl.security.manager.SecurityManager;
 /**
  * Reads the SecurityManager.properties file and loads properties to be referred by SecurityManager.
@@ -35,16 +35,16 @@ public final class SecurityManagerPropertiesLocator {
 	 */
 	private SecurityManagerPropertiesLocator() 
 	{
-		Properties SECURITY_MANAGER_PROP;
+		Properties SM_PROP;
 		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader().getResourceAsStream(
-				Constants.SECURITY_MANAGER_PROP_FILE);
-		SECURITY_MANAGER_PROP = new Properties();
+				Constants.SM_PROP_FILE);
+		SM_PROP = new Properties();
 		try
 		{
-			SECURITY_MANAGER_PROP.load(inputStream);
+			SM_PROP.load(inputStream);
 			inputStream.close();
-			appCtxName = SECURITY_MANAGER_PROP.getProperty(Constants.APPLN_CONTEXT_NAME);
-			className = SECURITY_MANAGER_PROP.getProperty(Constants.SECURITY_MANAGER_CLASSNAME);
+			appCtxName = SM_PROP.getProperty(Constants.APP_CTX_NAME);
+			className = SM_PROP.getProperty(Constants.SM_CLASSNAME);
 		}
 		catch (IOException exception)
 		{

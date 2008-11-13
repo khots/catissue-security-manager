@@ -466,9 +466,9 @@ public class PrivilegeCache
 			{
 				logger.debug("Exception in method assignPrivilegeToUser", csex);
 				String mess = "Exception in method assignPrivilegeToUser";
-				ErrorKey ek = ErrorKey.getDefaultErrorKey();
-				ek.setErrorMessage(mess);
-				throw new SMException(ek,csex,null);
+				ErrorKey errorKey = ErrorKey.getDefaultErrorKey();
+				errorKey.setErrorMessage(mess);
+				throw new SMException(errorKey,csex,null);
 			}
 		}
 	}
@@ -514,55 +514,55 @@ public class PrivilegeCache
 				NameValueBean nmv = new NameValueBean();
 				nmv.setName(PrivilegeLocator.getInstance().getPrivilegeByBit(i).getPrivilegeName());
 
-				switch (i)
+				/*switch (i)
 				{
-					/*case 17:
+					case 17:
 						nmv.setName(Permissions.DEFINE_ANNOTATION);
-						break;*/
+						break;
 
 					case 21 :
 						nmv.setName(Permissions.DISTRIBUTION);
 						break;
 
-					/*case 29:
+					case 29:
 						nmv.setName(Permissions.GENERAL_ADMINISTRATION);
-						break;*/
+						break;
 
-					/*
+					
 					case 24:
 					nmv.setName(Permissions.PARTICIPANT_SCG_ANNOTATION);
 					break;
-					*/
+					
 
 					case 16 :
 						nmv.setName(Permissions.PROTOCOL_ADMINISTRATION);
 						break;
 
-					/*case 22:
+					case 22:
 						nmv.setName(Permissions.QUERY);
-						break;*/
+						break;
 
 					case 18 :
 						nmv.setName(Permissions.REGISTRATION);
 						break;
 
-					/*case 14:
+					case 14:
 						nmv.setName(Permissions.REPOSITORY_ADMINISTRATION);
-						break;*/
-					/*
+						break;
+					
 					case 25:
 						nmv.setName(Permissions.SPECIMEN_ANNOTATION);
 						break;
-					*/
+					
 
 					case 26 :
 						nmv.setName(Permissions.SPECIMEN_PROCESSING);
 						break;
-					/*
+					
 					case 27:
 						nmv.setName(Permissions.SPECIMEN_STORAGE);
 						break;
-					*/
+					
 
 					case 15 :
 						nmv.setName(Permissions.STORAGE_ADMINISTRATION);
@@ -579,7 +579,7 @@ public class PrivilegeCache
 					case 1 :
 						nmv.setName(Permissions.READ_DENIED);
 						break;
-				}
+				}*/
 
 				for (Object o : Utility.getAllPrivileges())
 				{

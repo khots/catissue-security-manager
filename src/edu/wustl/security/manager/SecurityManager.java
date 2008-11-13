@@ -212,13 +212,13 @@ public class SecurityManager implements Permissions,ISecurityManager
 	public List<Role> getRoles() throws SMException
 	{
 		List<Role> roles = new ArrayList<Role>();
-		UserProvisioningManager userProvisioningManager = null;
+		UserProvisioningManager upManager = null;
 		try
 		{
-			userProvisioningManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
 			List<String> roleIdList = RoleGroupLocator.getInstance().getAllRoleIds();
 			for (String roleId : roleIdList) {
-				roles.add(userProvisioningManager.getRoleById(roleId));
+				roles.add(upManager.getRoleById(roleId));
 			}
 		}
 		catch (CSException exception)
@@ -244,14 +244,14 @@ public class SecurityManager implements Permissions,ISecurityManager
 	{
 		try
 		{
-			UserProvisioningManager userProvisioningManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
-			User user = userProvisioningManager.getUserById(userID);
+			UserProvisioningManager upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			User user = upManager.getUserById(userID);
 
 			//Remove user from any other role if he is assigned some
 			String userId = String.valueOf(user.getUserId());
 			List<String> allGroupIds = RoleGroupLocator.getInstance().getAllGroupIds();
 			for (String grpId : allGroupIds) {
-				userProvisioningManager.removeUserFromGroup(grpId, userId);
+				upManager.removeUserFromGroup(grpId, userId);
 			}
 			//Add user to corresponding group
 			String groupId = getGroupIdForRole(roleID);
@@ -338,12 +338,12 @@ public class SecurityManager implements Permissions,ISecurityManager
 		String role=TextConstants.EMPTY_STRING;
 		try
 		{
-			UserProvisioningManager userProvisioningManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
-			Set groups = userProvisioningManager.getGroups(String.valueOf(userID));
-			Iterator it = groups.iterator();
-			while (it.hasNext())
+			UserProvisioningManager upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			Set groups = upManager.getGroups(String.valueOf(userID));
+			Iterator iter = groups.iterator();
+			while (iter.hasNext())
 			{
-				Group group = (Group) it.next();
+				Group group = (Group) iter.next();
 				if (group.getApplication().getApplicationName().equals(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
 				{
 					RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
@@ -500,12 +500,12 @@ public class SecurityManager implements Permissions,ISecurityManager
 		Set consolidatedGroupIds = new HashSet();
 		Set consolidatedGroups;
 		String[] finalUserGroupIds;
-		UserProvisioningManager userProvisioningManager;
+		UserProvisioningManager upManager;
 		Group group = null;
 		try
 		{
-			userProvisioningManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
-			consolidatedGroups = userProvisioningManager.getGroups(userId);
+			upManager = ProvisionManager.getInstance().getInstance().getUserProvisioningManager();
+			consolidatedGroups = upManager.getGroups(userId);
 			
 			if (null != consolidatedGroups)
 			{
@@ -528,7 +528,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 				finalUserGroupIds[i] = (String) it.next();
 			}
 			//Setting groups for user and updating it
-			userProvisioningManager.assignGroupsToUser(userId, finalUserGroupIds);
+			upManager.assignGroupsToUser(userId, finalUserGroupIds);
 		}
 		catch (CSException exception)
 		{
@@ -850,12 +850,12 @@ public class SecurityManager implements Permissions,ISecurityManager
 	}
 	/**
 	 * @param groups
-	 * @param userProvisioningManager
+	 * @param upManager
 	 * @param role
 	 * @return
 	 * @throws CSObjectNotFoundException
 	 */
-	private Role getRole(Set groups, UserProvisioningManager userProvisioningManager)
+	private Role getRole(Set groups, UserProvisioningManager upManager)
 	throws CSObjectNotFoundException
 	{
 		Role role = null;
@@ -869,7 +869,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 				sampleBean.setGroupName(group.getGroupName());
 				RoleGroupDetailsBean requiredBean = getRequiredBean(sampleBean);
 				String roleId = requiredBean.getRoleId();
-				role = userProvisioningManager.getRoleById(roleId);
+				role = upManager.getRoleById(roleId);
 			}
 		}
 		return role;

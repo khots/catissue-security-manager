@@ -343,9 +343,9 @@ public final class PrivilegeManager
 			{
 				logger.debug("Exception in method assignPrivilegeToGroup", csex);
 				String mess = "Exception in method assignPrivilegeToGroup";
-				ErrorKey ek = ErrorKey.getDefaultErrorKey();
-				ek.setErrorMessage(mess);
-				throw new SMException(ek,csex,null);
+				ErrorKey errorKey = ErrorKey.getDefaultErrorKey();
+				errorKey.setErrorMessage(mess);
+				throw new SMException(errorKey,csex,null);
 			}
 		}
 	}

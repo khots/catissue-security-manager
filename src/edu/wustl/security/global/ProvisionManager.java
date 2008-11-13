@@ -24,7 +24,7 @@ import gov.nih.nci.security.exceptions.CSException;
  */
 public final class ProvisionManager 
 {
-	static ProvisionManager provManager = new ProvisionManager();
+	private static ProvisionManager provManager = new ProvisionManager();
 	private ProvisionManager()
 	{
 		
@@ -37,18 +37,18 @@ public final class ProvisionManager
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	protected  org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	private final org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	private  AuthenticationManager authenticationManager = null;
+	private AuthenticationManager authenticationManager = null;
 
-	private  AuthorizationManager authorizationManager = null;
+	private AuthorizationManager authorizationManager = null;
 	/**
 	 * Returns the UserProvisioningManager singleton object.
 	 *
 	 * @return
 	 * @throws	CSException
 	 */
-	public  final UserProvisioningManager getUserProvisioningManager() throws CSException
+	public UserProvisioningManager getUserProvisioningManager() throws CSException
 	{
 		return (UserProvisioningManager) getAuthorizationManager();
 	}
@@ -60,7 +60,7 @@ public final class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public  final AuthenticationManager getAuthenticationManager() throws CSException
+	public  AuthenticationManager getAuthenticationManager() throws CSException
 	{
 		if (authenticationManager == null)
 		{
@@ -78,7 +78,7 @@ public final class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public  final AuthorizationManager getAuthorizationManager() throws CSException
+	public AuthorizationManager getAuthorizationManager() throws CSException
 	{
 
 		if (authorizationManager == null)
@@ -96,9 +96,9 @@ public final class ProvisionManager
 	* @throws CSException 
 	* @throws SMException 
 	*/
-	public  final String getGroupID(String groupName) throws CSException, SMException
+	public String getGroupID(final String groupName) throws CSException, SMException
 	{
-		List list;
+		List<Group> list;
 		String groupId=null;
 		Group group = new Group();
 		group.setGroupName(groupName);
@@ -120,7 +120,7 @@ public final class ProvisionManager
 	 * @param roleName
 	 * @return
 	 */
-	public  final String getRoleID(String roleName) throws CSException, SMException
+	public String getRoleID(final String roleName) throws CSException, SMException
 	{
 		String roleId=null;
 		Role role = new Role();
@@ -143,7 +143,7 @@ public final class ProvisionManager
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
 	 * @throws CSException
 	 */
-	public  final List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
+	public  List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
 		if (null == searchCriteria)
 		{
@@ -153,8 +153,8 @@ public final class ProvisionManager
 			defaultErrorKey.setErrorMessage(mesg);
 			throw new SMException(defaultErrorKey,null,null);	
 		}
-		UserProvisioningManager userProvisioningManager = getUserProvisioningManager();
-		List list = userProvisioningManager.getObjects(searchCriteria);
+		UserProvisioningManager upManager = getUserProvisioningManager();
+		List list = upManager.getObjects(searchCriteria);
 		if (null == list || list.size() <= 0)
 		{
 			logger.warn("Search resulted in no results");
