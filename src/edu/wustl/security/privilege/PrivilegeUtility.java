@@ -925,16 +925,25 @@ public class PrivilegeUtility
 		}
 		return getRole(roleName);
 	}
-	public static String getProtectionGroupName(Class objectType, CSMGroupLocator locator) throws ClassNotFoundException {
+	public static String getProtectionGroupName(Long objectId,Class objectType) throws ClassNotFoundException {
 		String protGrName = null;
+		CSMGroupLocator locator = new CSMGroupLocator();
 		if (objectType.getName().equals(Constants.COLLECTION_PROTOCOL_CLASS_NAME))
 		{
-			protGrName = locator.getPGName(null,Class.forName(Constants.COLLECTION_PROTOCOL_CLASS_NAME));
+			protGrName = locator.getPGName(objectId,Class.forName(Constants.COLLECTION_PROTOCOL_CLASS_NAME));
 		}
 		else if (objectType.getName().equals(Constants.DISTRIBUTION_PROTOCOL_CLASS_NAME))
 		{
-			protGrName = locator.getPGName(null,Class.forName(Constants.DISTRIBUTION_PROTOCOL_CLASS_NAME));
+			protGrName = locator.getPGName(objectId,Class.forName(Constants.DISTRIBUTION_PROTOCOL_CLASS_NAME));
 		}
 		return protGrName;
+	}
+	public static final String getDistributionProtocolPIGroupName(Long identifier)
+	{
+	    if(identifier == null)
+	    {
+	        return "PI_DISTRIBUTION_PROTOCOL_";
+	    }
+	    return "PI_DISTRIBUTION_PROTOCOL_"+identifier;
 	}
 }

@@ -28,21 +28,18 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.global.Constants;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
-import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
-import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
  * @author ravindra_jain
@@ -316,16 +313,7 @@ public final class PrivilegeManager
 				assignOperation ^=assignOperation;
 				for (int i = 0; i < objectIds.length; i++)
 				{
-					if (objectType.getName().equals(Constants.COLLECTION_PROTOCOL_CLASS_NAME))
-					{
-						protGrName = Constants
-						.getCollectionProtocolPGName(objectIds[i]);
-					}
-					else if (objectType.getName().equals(Constants.DISTRIBUTION_PROTOCOL_CLASS_NAME))
-					{
-						protGrName = Constants
-						.getDistributionProtocolPGName(objectIds[i]);
-					}
+					protGrName = getProtGroupName(objectType, objectIds,i);
 					protectionGroup = utility.getProtectionGroup(protGrName);
 					utility.assignGroupRoleToProtectionGroup(Long.valueOf(groupId), roles,
 							protectionGroup, assignOperation);
@@ -340,6 +328,23 @@ public final class PrivilegeManager
 			errorKey.setErrorMessage(mess);
 			throw new SMException(errorKey,csex,null);
 		}
+	}
+
+	/**
+	 * @param objectType
+	 * @param objectIds
+	 * @param i
+	 * @return
+	 */
+	private String getProtGroupName(Class objectType, Long[] objectIds,	int i) 
+	{
+		String name = null;
+		try {
+			name =  privilegeUtility.getProtectionGroupName(objectIds[i], objectType);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return name;
 	}
 
 	/**
