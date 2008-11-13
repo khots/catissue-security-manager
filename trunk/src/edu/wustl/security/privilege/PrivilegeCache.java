@@ -450,10 +450,9 @@ public class PrivilegeCache
 				else
 				{
 					assignOperation = !assignOperation;
-					CSMGroupLocator locator = new CSMGroupLocator();
 					for (int i = 0; i < objectIds.length; i++)
 					{
-						protGrName = PrivilegeUtility.getProtectionGroupName(objectType,locator);
+						protGrName = PrivilegeUtility.getProtectionGroupName(objectIds[i],objectType);
 						protectionGroup = privilegeUtility.getProtectionGroup(protGrName);
 						logger.debug("Assign User Role To Protection Group");
 						// Assign User Role To Protection Group
