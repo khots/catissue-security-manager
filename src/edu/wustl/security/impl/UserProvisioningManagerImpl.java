@@ -29,7 +29,7 @@ public class UserProvisioningManagerImpl
 	 * @throws CSConfigurationException 
 	 * @throws Exception
 	 */
-	public UserProvisioningManagerImpl(String arg0) throws CSConfigurationException  
+	public UserProvisioningManagerImpl(final String arg0) throws CSConfigurationException  
 	{
 		super(arg0);
 

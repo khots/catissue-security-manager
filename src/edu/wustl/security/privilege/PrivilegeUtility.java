@@ -83,11 +83,10 @@ public class PrivilegeUtility
 	public void insertAuthorizationData(List authorizationData, Set protectionObjects,
 			String[] dynamicGroups) throws SMException
 	{
-		Set protElems;
 		try
 		{
 			//Create protection elements corresponding to all protection
-			protElems = createProtectionElementsFromProtectionObjects(protectionObjects);
+			Set protElems = createProtectionElementsFromProtectionObjects(protectionObjects);
 
 			//Create user group role protection group and their mappings if
 			if (authorizationData != null)
@@ -824,14 +823,7 @@ public class PrivilegeUtility
 	public void assignGroupRoleToProtectionGroup(Long groupId, Set roles,
 			ProtectionGroup protectionGroup, boolean assignOperation) throws SMException
 	{
-		if (groupId == null || roles == null || protectionGroup == null)
-		{
-			String mess="One or more parameters are null";
-			logger.debug(mess);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mess);
-			throw new SMException(defaultErrorKey, null,null);
-		}
+		checkForSufficientParams(groupId, roles, protectionGroup);
 		Set protectionGroupRoleContextSet = null;
 		ProtectionGroupRoleContext pgRoleContext = null;
 
@@ -864,6 +856,23 @@ public class PrivilegeUtility
 			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
 			defaultErrorKey.setErrorMessage("Could not assign user role to protection group");
 			throw new SMException(defaultErrorKey, csex,null);
+		}
+	}
+	/**
+	 * @param groupId
+	 * @param roles
+	 * @param protectionGroup
+	 * @throws SMException
+	 */
+	private void checkForSufficientParams(Long groupId, Set roles,
+			ProtectionGroup protectionGroup) throws SMException {
+		if (groupId == null || roles == null || protectionGroup == null)
+		{
+			String mess="One or more parameters are null";
+			logger.debug(mess);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, null,null);
 		}
 	}
 

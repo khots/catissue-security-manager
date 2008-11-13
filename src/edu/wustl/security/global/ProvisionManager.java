@@ -39,9 +39,9 @@ public final class ProvisionManager
 	 */
 	private final org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	private AuthenticationManager authenticationManager = null;
+	private AuthenticationManager authTManager = null;
 
-	private AuthorizationManager authorizationManager = null;
+	private AuthorizationManager authRManager = null;
 	/**
 	 * Returns the UserProvisioningManager singleton object.
 	 *
@@ -62,12 +62,12 @@ public final class ProvisionManager
 	 */
 	public  AuthenticationManager getAuthenticationManager() throws CSException
 	{
-		if (authenticationManager == null)
+		if (authTManager == null)
 		{
-			authenticationManager = SecurityServiceProvider
+			authTManager = SecurityServiceProvider
 					.getAuthenticationManager(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
 		}
-		return authenticationManager;
+		return authTManager;
 	}
 
 	/**
@@ -81,13 +81,13 @@ public final class ProvisionManager
 	public AuthorizationManager getAuthorizationManager() throws CSException
 	{
 
-		if (authorizationManager == null)
+		if (authRManager == null)
 		{
-			authorizationManager = SecurityServiceProvider
+			authRManager = SecurityServiceProvider
 					.getAuthorizationManager(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
 		}
 
-		return authorizationManager;
+		return authRManager;
 	}
 	/**
 	* Returns group id from Group name
