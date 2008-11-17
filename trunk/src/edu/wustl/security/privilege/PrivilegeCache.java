@@ -20,7 +20,6 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
@@ -365,8 +364,9 @@ public class PrivilegeCache
 	 * @param objectIds object Ids
 	 * @param userId user Id
 	 * @param assignOperation assign Operation
-	 * @throws Exception generic exception
-	 */
+	 * @throws SMException generic exception
+	 * @throws ClassNotFoundException classnotfoundexceptiom
+	 *//*
 	public void updateUserPrivilege(String privilegeName, Class objectType, Long[] objectIds,
 			Long userId, boolean assignOperation) throws SMException,ClassNotFoundException
 	{
@@ -388,7 +388,7 @@ public class PrivilegeCache
 			}
 		}
 		assignPrivilegeToUser(privilegeName, objectType, objectIds, userId, assignOperation);
-	}
+	}*/
 
 	/**
 	 * This method assigns privilege by privilegeName to the user identified by
@@ -401,7 +401,7 @@ public class PrivilegeCache
 	 * @param assignOp assignOp
 	 * @throws SMException generic SMException.
 	 * @throws ClassNotFoundException 
-	 */
+	 *//*
 	private void assignPrivilegeToUser(String privilegeName, Class objectType, Long[] objectIds,
 			Long userId, boolean assignOp) throws SMException, ClassNotFoundException
 	{
@@ -414,12 +414,11 @@ public class PrivilegeCache
 		else
 		{
 			String protGrName = null;
-			Role role;
 			ProtectionGroup protectionGroup;
 
 			try
 			{
-				role = privilegeUtility.getRoleByPrivilege(privilegeName);
+				Role role = privilegeUtility.getRoleByPrivilege(privilegeName);
 				Set roles = new HashSet();
 				roles.add(role);
 
@@ -463,14 +462,11 @@ public class PrivilegeCache
 			}
 			catch (CSException csex)
 			{
-				logger.debug("Exception in method assignPrivilegeToUser", csex);
 				String mess = "Exception in method assignPrivilegeToUser";
-				ErrorKey errorKey = ErrorKey.getDefaultErrorKey();
-				errorKey.setErrorMessage(mess);
-				throw new SMException(errorKey,csex,null);
+				privilegeUtility.throwException(csex, mess);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * get the ids and privileges where ids start with the given prefix.
@@ -512,74 +508,6 @@ public class PrivilegeCache
 			{
 				NameValueBean nmv = new NameValueBean();
 				nmv.setName(PrivilegeLocator.getInstance().getPrivilegeByBit(i).getPrivilegeName());
-
-				/*switch (i)
-				{
-					case 17:
-						nmv.setName(Permissions.DEFINE_ANNOTATION);
-						break;
-
-					case 21 :
-						nmv.setName(Permissions.DISTRIBUTION);
-						break;
-
-					case 29:
-						nmv.setName(Permissions.GENERAL_ADMINISTRATION);
-						break;
-
-					
-					case 24:
-					nmv.setName(Permissions.PARTICIPANT_SCG_ANNOTATION);
-					break;
-					
-
-					case 16 :
-						nmv.setName(Permissions.PROTOCOL_ADMINISTRATION);
-						break;
-
-					case 22:
-						nmv.setName(Permissions.QUERY);
-						break;
-
-					case 18 :
-						nmv.setName(Permissions.REGISTRATION);
-						break;
-
-					case 14:
-						nmv.setName(Permissions.REPOSITORY_ADMINISTRATION);
-						break;
-					
-					case 25:
-						nmv.setName(Permissions.SPECIMEN_ANNOTATION);
-						break;
-					
-
-					case 26 :
-						nmv.setName(Permissions.SPECIMEN_PROCESSING);
-						break;
-					
-					case 27:
-						nmv.setName(Permissions.SPECIMEN_STORAGE);
-						break;
-					
-
-					case 15 :
-						nmv.setName(Permissions.STORAGE_ADMINISTRATION);
-						break;
-
-					case 13 :
-						nmv.setName(Permissions.USER_PROVISIONING);
-						break;
-
-					case 30 :
-						nmv.setName(Permissions.SHIPMENT_PROCESSING);
-						break;
-
-					case 1 :
-						nmv.setName(Permissions.READ_DENIED);
-						break;
-				}*/
-
 				for (Object o : Utility.getAllPrivileges())
 				{
 					NameValueBean privilege = (NameValueBean) o;

@@ -7,7 +7,7 @@ package edu.wustl.security.beans;
  * @author deepti_shelar
  *
  */
-public class RoleGroupDetailsBean {
+public class RoleGroupDetailsBean { // NOPMD by deepti_shelar on 11/17/08 5:35 PM
 	private String roleName;
 	private String roleType;
 	private String groupType;
@@ -99,7 +99,7 @@ public class RoleGroupDetailsBean {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(final Object object)
+	public boolean equals(final Object object) // NOPMD by deepti_shelar on 11/17/08 5:35 PM
 	{
 		boolean equals = false;
 		if((object!=null) && object instanceof RoleGroupDetailsBean)
@@ -168,7 +168,7 @@ public class RoleGroupDetailsBean {
 	 */
 	public String toString()
 	{
-		return "groupId=" + this.getGroupId()+ ":" + 
+		return "groupId=" + this.getGroupId()+ ":" +
 		"groupName=" + this.getGroupName() +":" +
 		"groupType=" + this.getGroupType() +":" +
 		"roleId=" + this.getRoleId() +":"+

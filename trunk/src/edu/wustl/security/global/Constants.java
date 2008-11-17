@@ -44,6 +44,7 @@ public class Constants
 	public static final String READ_DENIED = "READ_DENIED";
 	public static final String allowOperation = "allowOperation";
 	public static final String BDATE_TAG_NAME = "IS_BIRTH_DATE";
+	public static final String HASHED_OUT = "##";
 }
 
 
