@@ -95,7 +95,7 @@ public final class PrivilegeManager
 	 * @return
 	 * @throws Exception
 	 */
-	private PrivilegeCache getPrivilegeCache(String loginName)
+	public PrivilegeCache getPrivilegeCache(String loginName)
 	{
 		PrivilegeCache privilegeCache = privilegeCaches.get(loginName);
 		if (privilegeCache == null)
@@ -123,7 +123,7 @@ public final class PrivilegeManager
 	 * @throws CSException 
 	 * @throws CSObjectNotFoundException 
 	 * @throws Exception
-	 */
+	 *//*
 	public List<PrivilegeCache> getPrivilegeCaches(String groupName) throws CSObjectNotFoundException, CSException  
 	{
 		List<PrivilegeCache> listOfPrivCaches = new ArrayList<PrivilegeCache>();
@@ -141,7 +141,7 @@ public final class PrivilegeManager
 		}
 
 		return listOfPrivCaches;
-	}
+	}*/
 
 	/**
 	 * To get all PrivilegeCache objects.
@@ -233,7 +233,7 @@ public final class PrivilegeManager
 	 * @throws CSObjectNotFoundException 
 	 * @throws SMException 
 	 * @throws Exception
-	 */
+	 *//*
 	public void updateGroupPrivilege(String privilegeName, Class objectType, Long[] objectIds,
 			String roleId, boolean assignOperation) throws CSObjectNotFoundException, CSException, SMException
 	{
@@ -260,7 +260,7 @@ public final class PrivilegeManager
 			}
 			assignPrivilegeToGroup(privilegeName, objectType, objectIds, roleId, assignOperation);
 		}
-	}
+	}*/
 
 	/**
 	 * This method assigns privilege by privilegeName to the user group
@@ -271,7 +271,7 @@ public final class PrivilegeManager
 	 * @param objectIds
 	 * @param roleId
 	 * @throws SMException
-	 */
+	 *//*
 	private void assignPrivilegeToGroup(String privilegeName, Class objectType, Long[] objectIds,
 			String roleId, boolean assignOp) throws SMException
 			{
@@ -328,7 +328,7 @@ public final class PrivilegeManager
 			errorKey.setErrorMessage(mess);
 			throw new SMException(errorKey,csex,null);
 		}
-	}
+	}*/
 
 	/**
 	 * @param objectType
@@ -376,7 +376,7 @@ public final class PrivilegeManager
 	 * @return
 	 * @throws CSException 
 	 * @throws CSObjectNotFoundException 
-	 */
+	 *//*
 	public boolean hasGroupPrivilege(String roleId, String objectId, String privilegeName) throws CSObjectNotFoundException, CSException
 			
 	{
@@ -394,7 +394,7 @@ public final class PrivilegeManager
 		}
 
 		return hasGroupPriv;
-	}
+	}*/
 	/**
 	 * 
 	 * @param fileName
@@ -480,7 +480,10 @@ public final class PrivilegeManager
 		InputStream inputXmlFile = this.getClass().getClassLoader().getResourceAsStream(
 				xmlFileName);
 
-		if (inputXmlFile != null)
+		if (inputXmlFile == null)
+		{
+			logger.debug("FileNotFound with name : "+fileName);
+		}else
 		{
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();

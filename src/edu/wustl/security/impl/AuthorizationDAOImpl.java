@@ -26,6 +26,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
@@ -66,8 +68,14 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		this.sessionFact = sessionFact;
 
 	}
-	
-	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs) throws CSException
+	/**
+	 * @param String username
+	 * @param collection pes
+	 * @throws CSException
+	 * @return List<ObjectPrivilegeMap> list
+	 */
+	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs) 
+	throws CSException
 	{
 		List<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
 		ResultSet resulSet = null;
@@ -76,14 +84,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		Session session = null;
 		Connection connection = null;
 
-		if (StringUtilities.isBlank(userName))
-		{
-			throw new CSException("userName can't be null!");
-		}
-		if (pEs == null)
-		{
-			throw new CSException("protection elements collection can't be null!");
-		}
+		checkForSufficientParams(userName, pEs);
 		if (!pEs.isEmpty())
 		{
 			try
@@ -135,9 +136,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 					ObjectPrivilegeMap opm = new ObjectPrivilegeMap(pElement, privs);
 					result.add(opm);
 				}
-				pstmt.close();
 			}
-			catch (Exception ex)
+			catch (SQLException ex)
 			{
 				StringBuffer mess= new StringBuffer("Failed to get privileges for ")
 				.append(userName).append(':').append(ex.getMessage());
@@ -151,6 +151,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 					session.close();
 					resulSet.close();
 					pstmt.close();
+					pstmt2.close();
 					connection.close();
 				}
 				catch (SQLException ex2)
@@ -160,6 +161,22 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			}
 		}
 		return result;
+	}
+	/**
+	 * @param userName
+	 * @param pEs
+	 * @throws CSException
+	 */
+	private void checkForSufficientParams(final String userName,
+			final Collection pEs) throws CSException {
+		if (StringUtilities.isBlank(userName))
+		{
+			throw new CSException("userName can't be null!");
+		}
+		if (pEs == null)
+		{
+			throw new CSException("protection elements collection can't be null!");
+		}
 	}
 
 	//changes to load the object and then delete it
