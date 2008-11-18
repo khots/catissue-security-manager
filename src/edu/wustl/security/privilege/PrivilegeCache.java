@@ -9,26 +9,18 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.PrivilegeLocator;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 

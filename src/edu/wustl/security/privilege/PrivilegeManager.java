@@ -30,16 +30,12 @@ import org.xml.sax.SAXException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.global.Constants;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
-import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
 /**
  * @author ravindra_jain
@@ -203,7 +199,13 @@ public final class PrivilegeManager
 			logger.debug("Exception in addObjectToPrivilegeCaches:"+exception);
 		}
 	}
-
+	/**
+	 * 
+	 * @param authorizationData data
+	 * @param protectionObjects protObjs
+	 * @param dynamicGroups set
+	 * @param objectId id
+	 */
 	public void insertAuthorizationData(List authorizationData, Set protectionObjects,
 			String[] dynamicGroups, String objectId)
 	{
@@ -331,11 +333,11 @@ public final class PrivilegeManager
 	}*/
 
 	/**
-	 * @param objectType
-	 * @param objectIds
-	 * @param i
-	 * @return
-	 */
+	 * @param objectType class
+	 * @param objectIds long ids
+	 * @param i int
+	 * @return string name
+	 *//*
 	private String getProtGroupName(Class objectType, Long[] objectIds,	int i) 
 	{
 		String name = null;
@@ -346,14 +348,14 @@ public final class PrivilegeManager
 		}
 		return name;
 	}
-
+*/
 	/**
 	 * @param privilegeName
 	 * @param objectType
 	 * @param objectIds
 	 * @param roleId
 	 * @throws SMException
-	 */
+	 *//*
 	private void checkForSufficientParams(String privilegeName,
 			Class objectType, Long[] objectIds, String roleId)
 			throws SMException {
@@ -365,7 +367,7 @@ public final class PrivilegeManager
 			defaultErrorKey.setErrorMessage(mess);
 			throw new SMException(defaultErrorKey, null,null);
 		}
-	}
+	}*/
 	/**
 	 * This is a temporary method written for StorageContainer - special case
 	 * Used for StorageContainerBizLogic.isDeAssignable() method
@@ -397,7 +399,7 @@ public final class PrivilegeManager
 	}*/
 	/**
 	 * 
-	 * @param fileName
+	 * @param fileName name of the file
 	 */
 	private void readXmlFile(String fileName)
 	{

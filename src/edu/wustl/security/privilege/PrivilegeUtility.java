@@ -348,12 +348,14 @@ public class PrivilegeUtility
 		try
 		{
 			protectionElement
-					.setApplication(getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
+					.setApplication(getApplication(SecurityManagerPropertiesLocator.
+							getInstance().getApplicationCtxName()));
 			protectionElement.setProtectionElementDescription(protectionObject.getClass().getName()
 					+ " object");
 			protectionElement.setProtectionElementName(protectionObject.getObjectId());
 
-			String[] staticGroups = (String[]) edu.wustl.security.global.Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+			String[] staticGroups = (String[]) 
+			edu.wustl.security.global.Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
 					.get(protectionObject.getClass().getName());
 
 			setProtectGroups(protectionElement, staticGroups);
@@ -576,10 +578,8 @@ public class PrivilegeUtility
 	{
 		if (pgName == null)
 		{
-			logger.debug("pgName passed is null");
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage("No protectionGroup of name null " );
-			throw new SMException(defaultErrorKey, null,null);
+			String mess = "pgName passed is null";
+			throwException(null, mess);
 		}
 
 		//Search for Protection Group of the name passed
@@ -614,7 +614,7 @@ public class PrivilegeUtility
 	 * @param objectType Class
 	 * @param objectIds objectIds
 	 * @throws SMException SMException
-	 */
+	 *//*
 	public void assignProtectionElements(String pgName, Class objectType,
 			Long[] objectIds) throws SMException
 			{
@@ -639,7 +639,7 @@ public class PrivilegeUtility
 			throwException(csex, mess);
 		}
 			}
-
+*/
 	/**
 	 * This method assigns user identified by userId, roles identified by roles
 	 * on protectionGroup
@@ -649,7 +649,7 @@ public class PrivilegeUtility
 	 * @param protectionGroup operation
 	 * @param assignOperation boolean
 	 * @throws SMException exception
-	 */
+	 *//*
 	public void assignUserRoleToProtectionGroup(Long userId, Set roles,
 			ProtectionGroup protectionGroup, boolean assignOperation) throws SMException
 	{
@@ -678,7 +678,7 @@ public class PrivilegeUtility
 			throw new SMException(defaultErrorKey, csex,null);
 		}
 	}
-
+*/
 	/**
 	 * get all the roles that user has on this protection group.
 	 * @param userId user id
@@ -768,7 +768,7 @@ public class PrivilegeUtility
 	 * @param objectType Class
 	 * @param objectIds objectIds
 	 * @throws SMException exception
-	 */
+	 *//*
 	public void deAssignProtectionElements(String pgName, Class objectType,
 			Long[] objectIds) throws SMException
 			{
@@ -793,7 +793,7 @@ public class PrivilegeUtility
 			String mess="Could not deassign Protection elements to protection group"+csex.getMessage();
 			throwException(csex, mess);
 		}
-			}
+			}*/
 	/**
 	 * Called when we need to throw SMException
 	 * @param exc exception
@@ -841,7 +841,7 @@ public class PrivilegeUtility
 	 * @param protectionGroup protectionGroup
 	 * @param assignOperation boolean
 	 * @throws SMException Exception
-	 */
+	 *//*
 	public void assignGroupRoleToProtectionGroup(Long groupId, Set roles,
 			ProtectionGroup protectionGroup, boolean assignOperation) throws SMException
 	{
@@ -877,7 +877,7 @@ public class PrivilegeUtility
 			String mess = "Could not assign user role to protection group";
 			throwException(csex, mess);
 		}
-	}
+	}*/
 	/**
 	 * @param groupId id
 	 * @param roles roles
@@ -953,7 +953,7 @@ public class PrivilegeUtility
 	 * @param objectType type
 	 * @return String name
 	 * @throws ClassNotFoundException excpetion
-	 */
+	 *//*
 	public static String getProtectionGroupName(Long objectId,Class objectType) throws ClassNotFoundException {
 		String protGrName = null;
 		CSMGroupLocator locator = new CSMGroupLocator();
@@ -968,7 +968,7 @@ public class PrivilegeUtility
 					Constants.DISTRIBUTION_PROTOCOL_CLASS_NAME));
 		}
 		return protGrName;
-	}
+	}*/
 	/*public static final String getDistributionProtocolPIGroupName(Long identifier)
 	{
 	    if(identifier == null)
