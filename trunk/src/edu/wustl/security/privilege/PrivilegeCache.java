@@ -84,7 +84,6 @@ public class PrivilegeCache
 			Collection objPrivMap = getObjectPrivilegeMap(objectPattern);
 			populatePrivileges(objPrivMap);
 		}
-
 	}
 
 	/**
@@ -95,7 +94,6 @@ public class PrivilegeCache
 	private Collection getObjectPrivilegeMap(final String protEleObjId)
 	{
 		Collection objPrivMap = new ArrayList();
-
 		try
 		{
 			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
@@ -115,7 +113,6 @@ public class PrivilegeCache
 		{
 			logger.error(excp.getMessage(), excp);
 		}
-
 		return objPrivMap;
 	}
 
@@ -215,7 +212,6 @@ public class PrivilegeCache
 				if (objectId.startsWith(objectIdPart))
 				{
 					bitSet = getPrivilegesFromDatabase(objectId);
-
 					break;
 				}
 			}
@@ -265,29 +261,29 @@ public class PrivilegeCache
 	 * @param classObj classObj
 	 * @param privilegeName privilege name
 	 * @param value boolean value.
-	 */
+	 *//*
 	public void updatePrivilege(Class classObj, String privilegeName, boolean value)
 	{
 		updatePrivilege(classObj.getName(), privilegeName, value);
 	}
 
-	/**
+	*//**
 	 * This method update Privilege.
 	 * @param aDObject AbstractDomainObject
 	 * @param privilegeName privilege name
 	 * @param value boolean value.
-	 */
+	 *//*
 	public void updatePrivilege(AbstractDomainObject aDObject, String privilegeName, boolean value)
 	{
 		updatePrivilege(aDObject.getObjectId(), privilegeName, value);
 	}
 
-	/**
+	*//**
 	 * This method update Privilege.
 	 * @param objectId object Id
 	 * @param privilegeName privilege name
 	 * @param value boolean value.
-	 */
+	 *//*
 	public void updatePrivilege(String objectId, String privilegeName, boolean value)
 	{
 		BitSet bitSet = privilegeMap.get(objectId);
@@ -300,7 +296,7 @@ public class PrivilegeCache
 		{
 			bitSet.set(getBitNumber(privilegeName), value);
 		}
-	}
+	}*/
 
 	/**
 	 * This method is used to refresh the Privilege Cache for the user A call to
@@ -321,7 +317,9 @@ public class PrivilegeCache
 	 */
 	private int getBitNumber(String privilegeName)
 	{
-		return PrivilegeLocator.getInstance().getPrivilegeByName(privilegeName).getBitNumber();		
+		edu.wustl.security.privilege.Privilege privilege = PrivilegeLocator.getInstance()
+		.getPrivilegeByName(privilegeName);
+		return privilege.getBitNumber();		
 	}
 
 	/**
@@ -493,7 +491,6 @@ public class PrivilegeCache
 	private List<NameValueBean> getPrivilegeNames(BitSet value)
 	{
 		List<NameValueBean> privilegeNames = new ArrayList<NameValueBean>();
-
 		for (int i = 0; i < value.size(); i++)
 		{
 			if (value.get(i))
@@ -512,8 +509,6 @@ public class PrivilegeCache
 				}
 			}
 		}
-
 		return privilegeNames;
 	}
-
 }
