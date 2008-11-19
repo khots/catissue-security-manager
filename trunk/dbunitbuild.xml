@@ -106,7 +106,7 @@
 	
 	<target name="RundbUnit" depends="dbclean, dbinit, configure_properties, build_jar" >
 		<antcall target="runJUnit">
-			<param name="classNames" value="**/TestPrivilegeManager.java" />
+			<param name="classNames" value="**/Test*.java" />
 		</antcall>
 	</target>
 	
