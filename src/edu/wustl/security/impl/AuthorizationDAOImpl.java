@@ -26,8 +26,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
@@ -179,7 +177,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 	}
 
-	//changes to load the object and then delete it
+	/*//changes to load the object and then delete it
 	//else it throws exception
 	public void removeProtectionElementsFromProtectionGroup(final String protectionGroupId,
 			final String[] protectionEleIds) throws CSTransactionException
@@ -221,7 +219,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		{
 				session.close();
 		}
-	}
+	}*/
 
 	public Set getGroups(final String userId) throws CSObjectNotFoundException
 	{

@@ -54,7 +54,7 @@ public final class PrivilegeManager
 	 */
 	private static PrivilegeManager instance = new PrivilegeManager();
 
-	/* the map of object id and corresponding PrivilegeCache  
+	/* the map of login name and corresponding PrivilegeCache  
 	 */
 	private Map<String, PrivilegeCache> privilegeCaches;
 
