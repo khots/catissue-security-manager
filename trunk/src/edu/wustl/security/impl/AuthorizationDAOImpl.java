@@ -66,14 +66,13 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	/**
 	 * @param String username
 	 * @param collection pes
-	 * @throws CSException
+	 * @throws CSException exc
 	 * @return List<ObjectPrivilegeMap> list
 	 */
 	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs) 
 	throws CSException
 	{
 		List<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
-		ResultSet resulSet = null;
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		Session session = null;
@@ -99,38 +98,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 				String sql2 = stbr2.toString();
 				pstmt2 = connection.prepareStatement(sql2);
-				Iterator iterator = pEs.iterator();
-				while (iterator.hasNext())
-				{
-					ProtectionElement pElement = (ProtectionElement) iterator.next();
-					ArrayList<Privilege> privs = new ArrayList<Privilege>();
-					if (pElement.getObjectId() != null)
-					{
-						if (pElement.getAttribute()== null)
-						{
-							pstmt2.setString(1, pElement.getObjectId());
-							pstmt2.setString(2, userName);
-							resulSet = pstmt2.executeQuery();
-						}
-						else
-						{
-							pstmt.setString(1, pElement.getObjectId());
-							pstmt.setString(2, pElement.getAttribute());
-							pstmt.setString(3, userName);
-							resulSet = pstmt.executeQuery();
-						}
-					}
-					while (resulSet.next())
-					{
-						String priv = resulSet.getString(1);
-						Privilege privilege = new Privilege();
-						privilege.setName(priv);
-						privs.add(privilege);
-					}
-					resulSet.close();
-					ObjectPrivilegeMap opm = new ObjectPrivilegeMap(pElement, privs);
-					result.add(opm);
-				}
+				result = getResult(userName, pEs, pstmt, pstmt2);
 			}
 			catch (SQLException ex)
 			{
@@ -141,19 +109,77 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			}
 			finally
 			{
-				try
+				close(pstmt, pstmt2, session, connection);
+			}
+		}
+		return result;
+	}
+	/**
+	 * @param pstmt
+	 * @param pstmt2
+	 * @param session
+	 * @param connection
+	 * @throws HibernateException
+	 */
+	private void close(PreparedStatement pstmt, PreparedStatement pstmt2,
+			Session session, Connection connection) throws HibernateException {
+		try
+		{
+			session.close();
+			pstmt.close();
+			pstmt2.close();
+			connection.close();
+		}
+		catch (SQLException ex2)
+		{
+			logger.debug("Error in Closing Session |"+ ex2.getMessage());
+		}
+	}
+	/**
+	 * @param userName userName
+	 * @param pEs pes
+	 * @param pstmt stmt
+	 * @param pstmt2 stmt2
+	 * @return list of ObjectPrivMap
+	 * @throws SQLException exc
+	 */
+	private List<ObjectPrivilegeMap> getResult(final String userName, final Collection pEs,
+			PreparedStatement pstmt, PreparedStatement pstmt2)
+			throws SQLException 
+			{
+		ResultSet resulSet = null;
+		List<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
+		Iterator iterator = pEs.iterator();
+		while (iterator.hasNext())
+		{
+			ProtectionElement pElement = (ProtectionElement) iterator.next();
+			ArrayList<Privilege> privs = new ArrayList<Privilege>();
+			if (pElement.getObjectId() != null)
+			{
+				if (pElement.getAttribute()== null)
 				{
-					session.close();
-					resulSet.close();
-					pstmt.close();
-					pstmt2.close();
-					connection.close();
+					pstmt2.setString(1, pElement.getObjectId());
+					pstmt2.setString(2, userName);
+					resulSet = pstmt2.executeQuery();
 				}
-				catch (SQLException ex2)
+				else
 				{
-					logger.debug("Error in Closing Session |"+ ex2.getMessage());
+					pstmt.setString(1, pElement.getObjectId());
+					pstmt.setString(2, pElement.getAttribute());
+					pstmt.setString(3, userName);
+					resulSet = pstmt.executeQuery();
 				}
 			}
+			while (resulSet.next())
+			{
+				String priv = resulSet.getString(1);
+				Privilege privilege = new Privilege();
+				privilege.setName(priv);
+				privs.add(privilege);
+			}
+			resulSet.close();
+			ObjectPrivilegeMap opm = new ObjectPrivilegeMap(pElement, privs);
+			result.add(opm);
 		}
 		return result;
 	}
@@ -189,7 +215,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 			for (int i = 0; i < protectionEleIds.length; i++)
 			{
-				StringBuffer query = new StringBuffer("from gov.nih.nci.security.dao.hibernate.ProtectionGroupProtectionElement protectionGroupProtectionElement");
+				StringBuffer query = new StringBuffer(
+				"from gov.nih.nci.security.dao.hibernate.ProtectionGroupProtectionElement protectionGroupProtectionElement");
 				query.append(" where protectionGroupProtectionElement.protectionElement.protectionElementId=");
 				query.append(protectionEleIds[i]);
 				query.append(" and protectionGroupProtectionElement.protectionGroup.protectionGroupId=");

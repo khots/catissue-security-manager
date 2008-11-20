@@ -20,8 +20,6 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.query.AbstractClient;
 import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
@@ -563,7 +561,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	}
 	/**
 	 * 
-	 */
+	 *//*
 	public boolean isAuthorized(String userName, String objectId, String privilegeName)
 	throws SMException
 	{
@@ -579,9 +577,9 @@ public class SecurityManager implements Permissions,ISecurityManager
 			defaultErrorKey.setErrorMessage(mesg);
 			throw new SMException(defaultErrorKey,e,null);	
 		}
-	}
+	}*/
 
-	public boolean checkPermission(String userName, String objectType, String objectIdentifier,
+	/*public boolean checkPermission(String userName, String objectType, String objectIdentifier,
 			String privilegeName) throws SMException
 			{
 		boolean isAuthorized=true;
@@ -603,7 +601,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		return isAuthorized;
 			}
-
+*/
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
 	 * Protection Element and whose name consists of string nameConsistingOf.
@@ -612,7 +610,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @param nameConsistingOf
 	 * @return @throws
 	 *         SMException
-	 */
+	 *//*
 	public String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf)
 	throws SMException
 	{
@@ -650,7 +648,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		return name;
 
-	}
+	}*/
 
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
