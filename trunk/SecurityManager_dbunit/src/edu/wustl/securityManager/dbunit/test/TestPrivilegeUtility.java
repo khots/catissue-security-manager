@@ -25,6 +25,7 @@ import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
+import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 
 public class TestPrivilegeUtility extends TestCase {
@@ -175,6 +176,36 @@ public class TestPrivilegeUtility extends TestCase {
 	/**
 	 * 
 	 */
+	public void testGetGroupIdForRole()
+	{
+		String grpId = privilegeUtility.getGroupIdForRole("1");
+		assertNotNull(grpId);
+		assertEquals("1",grpId);
+	}
+	/**
+	 * 
+	 */
+	public void testGetObjects()
+	{
+		Role role = new Role();
+		role.setName("");
+		RoleSearchCriteria criteria = new RoleSearchCriteria(role);
+		List<Role> list;
+		try {
+			list = privilegeUtility.getObjects(criteria);
+			for (Role role1 : list) {
+				System.out.println("getName() "+role1.getName());
+			}
+			assertNotNull(list);
+		} catch (SMException e) {
+			e.printStackTrace();
+		} catch (CSException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 
+	 */
 	public void testGetPrivilegeById ()
 	{
 		try {
@@ -220,7 +251,7 @@ public class TestPrivilegeUtility extends TestCase {
 	}
 	/**
 	 * 
-	 */
+	 *//*
 	public void testInsertAuthorizationData()
 	{
 		try {
@@ -235,7 +266,7 @@ public class TestPrivilegeUtility extends TestCase {
 		}catch (SMException e) {
 			logger.error(e.getStackTrace());
 		}
-	}
+	}*/
 	/**
 	 * Inserts a sample User.
 	 * @throws SMTransactionException 

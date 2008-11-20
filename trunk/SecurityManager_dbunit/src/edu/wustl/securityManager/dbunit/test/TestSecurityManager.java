@@ -332,6 +332,7 @@ public class TestSecurityManager extends TestCase {
 		User userByLoginName = getUserByLoginName(loginName+count);
 		String[] groupIds = {"1"};
 		try {
+			//assignGroupToUser(loginName+count, "PUBLIC_GROUP");
 			securityManager.assignAdditionalGroupsToUser(userByLoginName.getUserId().toString(), groupIds);
 			//	assertEquals(userByLoginName.getGroups().size(), 1);
 			String userGroup = securityManager.getRoleName(userByLoginName.getUserId());
@@ -352,8 +353,8 @@ public class TestSecurityManager extends TestCase {
 				Long userId =user.getUserId(); 
 				assignGroupToUser(user.getLoginName(),ADMIN_GROUP);
 				securityManager.assignRoleToUser(userId.toString(), "1");
-				Role userRole = securityManager.getUserRole(userId); assertEquals("Administrator",
-						userRole.getName()); 
+				Role userRole = securityManager.getUserRole(userId); 
+				assertEquals("Administrator",userRole.getName()); 
 			} 
 		} catch (Exception e)
 		{
@@ -439,6 +440,7 @@ public class TestSecurityManager extends TestCase {
 			List<User> allUsers = securityManager.getUsers();
 			for (User user : allUsers) {
 				Long userId = user.getUserId();
+				assignGroupToUser(loginName+count, "PUBLIC_GROUP");
 				Role userRole = securityManager.getUserRole(userId);
 				assertNotNull(userRole);
 			}
@@ -448,7 +450,7 @@ public class TestSecurityManager extends TestCase {
 	}
 	/**
 	 * test getuserGroup()
-	 */
+	 *//*
 	public void testGetRoleNameForAdmin() {
 		try {
 			User user = getUserByLoginName(loginName + count);
@@ -459,9 +461,9 @@ public class TestSecurityManager extends TestCase {
 			logger.error(e.getStackTrace());
 		}
 	}
-	/**
+	*//**
 	 * test getuserGroup()
-	 */
+	 *//*
 	public void testGetRoleNameForScientist() {
 		try {
 			User user = getUserByLoginName(loginName + count);
@@ -474,9 +476,9 @@ public class TestSecurityManager extends TestCase {
 			logger.error(e.getStackTrace());
 		}
 	}
-	/**
+	*//**
 	 * test getuserGroup()
-	 */
+	 *//*
 	public void testGetRoleNameForSupervisor() {
 		try {
 			User user = getUserByLoginName(loginName + count);
@@ -487,9 +489,9 @@ public class TestSecurityManager extends TestCase {
 			logger.error(e.getStackTrace());
 		}
 	}
-	/**
+	*//**
 	 * test getuserGroup()
-	 */
+	 *//*
 	public void testGetRoleNameForTech() {
 		try {
 			User user = getUserByLoginName(loginName + count);
@@ -499,5 +501,5 @@ public class TestSecurityManager extends TestCase {
 		} catch (Exception e) {
 			logger.error(e.getStackTrace());
 		}
-	}
+	}*/
 }
