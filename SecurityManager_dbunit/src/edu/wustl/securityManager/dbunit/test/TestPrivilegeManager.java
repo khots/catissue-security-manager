@@ -31,6 +31,7 @@ public class TestPrivilegeManager extends TestCase{
 	static ApplicationService appService = null;
 	PrivilegeManager privManager;
 	static String configFile = "";
+	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
 	protected void setUp() throws Exception {
 		
 		privManager = PrivilegeManager.getInstance();
@@ -47,7 +48,6 @@ public class TestPrivilegeManager extends TestCase{
 		} 	
 		catch (Exception ex) 
 		{ 
-			System.out.println(ex.getMessage()); 
 			ex.printStackTrace();
 			fail();
 			System.exit(1);
@@ -113,6 +113,31 @@ public class TestPrivilegeManager extends TestCase{
 		}
 	}
 	/**
+	 * Inserts a sample User.
+	 * @throws SMTransactionException 
+	 * 
+	 * @throws Exception
+	 */
+	private void insertSampleCSMUser(String name) throws SMTransactionException {
+		User user = new User();
+		String newVal = name;
+		user.setDepartment(newVal);
+		user.setEmailId(newVal + "@test.com");
+		user.setFirstName(newVal);
+		user.setLoginName(newVal);
+		user.setOrganization(newVal);
+		user.setPassword(newVal);
+		user.setTitle(newVal);
+		user.setLastName(newVal);
+		ISecurityManager securityManager;
+		try {
+			securityManager = SecurityManagerFactory.getSecurityManager(null);
+			securityManager.createUser(user);
+		} catch (SMException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
 	 * testGetClasses
 	 */
 	public void testGetClasses()
@@ -145,10 +170,17 @@ public class TestPrivilegeManager extends TestCase{
 		String privilege = "QUERY";
 		Set<String> classes;
 		try {
+			assignGroupToUser("test", ADMIN_GROUP);
+			
 			classes =  privManager.getAccesibleUsers(objectId, privilege);
-			System.out.println("classes.size()  "+classes.size());
 			assertNotNull(classes);
-		} catch (CSException e) {
+			assertEquals(1, classes.size());
+			insertSampleCSMUser("test1");
+			assignGroupToUser("test1", "SUPERVISOR_GROUP");
+			classes =  privManager.getAccesibleUsers(objectId, privilege);
+			assertNotNull(classes);
+			assertEquals(2, classes.size());
+		} catch (SMException e) {
 			logger.error(e.getStackTrace());
 			e.printStackTrace();
 		}
@@ -159,8 +191,13 @@ public class TestPrivilegeManager extends TestCase{
 	public void testGetPrivilegeCaches()
 	{
 		Collection<PrivilegeCache> classes = privManager.getPrivilegeCaches();
-		System.out.println("classes.size()  "+classes.size());
 		assertNotNull(classes);
+		assertEquals(0, classes.size());
+		
+		PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
+		Collection<PrivilegeCache> classes1 = privManager.getPrivilegeCaches();
+		assertNotNull(classes1);
+		assertEquals(1, classes1.size());
 	}
 	/**
 	 * testGetPrivilegeCacheLoginName
@@ -168,7 +205,6 @@ public class TestPrivilegeManager extends TestCase{
 	public void testGetPrivilegeCacheLoginName()
 	{
 		PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
-		System.out.println("privilegeCache   "+privilegeCache.getLoginName());
 		assertNotNull(privilegeCache);
 		assertEquals("test", privilegeCache.getLoginName());
 	}
@@ -180,9 +216,14 @@ public class TestPrivilegeManager extends TestCase{
 		User user;
 		try {
 			user = SecurityManagerFactory.getSecurityManager(null).getUser("test");
-			privManager.removePrivilegeCache(user.getUserId().toString());
 			PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
-			//assertNull(privilegeCache);
+			Collection<PrivilegeCache> classes1 = privManager.getPrivilegeCaches();
+			assertNotNull(classes1);
+			assertEquals(1, classes1.size());
+			privManager.removePrivilegeCache("test");
+			Collection<PrivilegeCache> classes = privManager.getPrivilegeCaches();
+			assertNotNull(classes);
+			assertEquals(0, classes.size());
 		} catch (SMException e) {
 			e.printStackTrace();
 		}
@@ -211,4 +252,20 @@ public class TestPrivilegeManager extends TestCase{
 			e.printStackTrace();
 		}
 	}*/
+	/**
+	 * assigns the given group name to the user with the given login name
+	 * 
+	 * @param loginName
+	 * @param groupName
+	 * @throws SMException 
+	 * @throws Exception
+	 */
+	private void assignGroupToUser(String loginName, String groupName) throws SMException
+	{
+		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager(null);
+		User user = securityManager.getUser(loginName);
+		String userId = user.getUserId().toString();
+		securityManager.assignUserToGroup(groupName, userId);
+	}
+
 }
