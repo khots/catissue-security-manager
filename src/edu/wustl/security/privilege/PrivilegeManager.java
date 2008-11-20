@@ -36,6 +36,7 @@ import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
 /**
  * @author ravindra_jain
@@ -64,17 +65,22 @@ public final class PrivilegeManager
 	private List<String> classes;
 	private List<String> eagerObjects;
 
-	// CONSTRUCTOR
+	/**
+	 * private constructor to make the class singleton
+	 */
 	private PrivilegeManager()
 	{
 		lazyObjects = new ArrayList<String>();
 		classes = new ArrayList<String>();
 		eagerObjects = new ArrayList<String>();
-
 		privilegeUtility = new PrivilegeUtility();
 		privilegeCaches = new HashMap<String, PrivilegeCache>();
-
-		readXmlFile("CacheableObjects.xml");
+		try {
+			readXmlFile("CacheableObjects.xml");
+		} catch (SMException e) {
+			logger.debug(e.getStackTrace());
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -96,14 +102,7 @@ public final class PrivilegeManager
 		PrivilegeCache privilegeCache = privilegeCaches.get(loginName);
 		if (privilegeCache == null)
 		{
-			try
-			{
-				privilegeCache = new PrivilegeCache(loginName);
-			}
-			catch (Exception exception)
-			{
-				logger.debug("Unable to create instance of PrivilegeCache for user:"+loginName, exception);
-			}
+			privilegeCache = new PrivilegeCache(loginName);
 			privilegeCaches.put(loginName, privilegeCache);
 		}
 
@@ -167,8 +166,9 @@ public final class PrivilegeManager
 	 * appropriate users in Session.
 	 *
 	 * @param objectId
+	 * @throws SMException 
 	 */
-	private void addObjectToPrivilegeCaches(String objectId)
+	private void addObjectToPrivilegeCaches(String objectId) throws SMException
 	{
 		try
 		{
@@ -193,10 +193,10 @@ public final class PrivilegeManager
 				}
 			}
 		}
-
-		catch (Exception exception)
-		{
-			logger.debug("Exception in addObjectToPrivilegeCaches:"+exception);
+		catch (CSObjectNotFoundException e) {
+			throwException(e, e.getMessage());
+		} catch (CSException e) {
+			throwException(e, e.getMessage());
 		}
 	}
 	/**
@@ -205,9 +205,10 @@ public final class PrivilegeManager
 	 * @param protectionObjects protObjs
 	 * @param dynamicGroups set
 	 * @param objectId id
+	 * @throws SMException 
 	 */
 	public void insertAuthorizationData(List authorizationData, Set protectionObjects,
-			String[] dynamicGroups, String objectId)
+			String[] dynamicGroups, String objectId) throws SMException
 	{
 		PrivilegeUtility utility = new PrivilegeUtility();
 		try
@@ -216,7 +217,8 @@ public final class PrivilegeManager
 		}
 		catch (SMException exception)
 		{
-			logger.debug("Exception in insertAuthorizationData:"+exception);
+			String mess = "Exception in insertAuthorizationData:"+exception;
+			throwException(exception, mess);
 		}
 
 		addObjectToPrivilegeCaches(objectId);
@@ -400,8 +402,9 @@ public final class PrivilegeManager
 	/**
 	 * 
 	 * @param fileName name of the file
+	 * @throws SMException 
 	 */
-	private void readXmlFile(String fileName)
+	private void readXmlFile(String fileName) throws SMException
 	{
 		try
 		{
@@ -415,15 +418,18 @@ public final class PrivilegeManager
 		}
 		catch (ParserConfigurationException excp)
 		{
-			logger.debug("DocumentBuilder cannot be created:",excp);
+			String mess = "DocumentBuilder cannot be created:";
+			throwException(excp, mess);
 		}
 		catch (SAXException excp)
 		{
-			logger.debug("Not able to parse xml file:"+fileName,excp);
+			String mess = "Not able to parse xml file:"+fileName;
+			throwException(excp, mess);
 		}
 		catch (IOException excp)
 		{
-			logger.debug("Not able to parse xml file:"+fileName,excp);
+			String mess = "Not able to parse xml file: IOException"+fileName;
+			throwException(excp, mess);
 		}
 
 	}
@@ -517,7 +523,7 @@ public final class PrivilegeManager
 	 * @return
 	 * @throws CSException
 	 */
-	public Set<String> getAccesibleUsers(String objectId, String privilege) throws CSException
+	public Set<String> getAccesibleUsers(String objectId, String privilege) throws SMException
 	{
 		Set<String> result = new HashSet<String>();
 		try
@@ -525,26 +531,35 @@ public final class PrivilegeManager
 			UserProvisioningManager userProvManager = privilegeUtility
 					.getUserProvisioningManager();
 
-			List list = userProvManager.getAccessibleGroups(objectId, privilege);
-
-			for (Object o : list)
+			List<Group> list = userProvManager.getAccessibleGroups(objectId, privilege);
+			for (Group group : list)
 			{
-				Group group = (Group) o;
-
-				for (Object o1 : group.getUsers())
+				Set<User> users = group.getUsers();
+				for (User user : users)
 				{
-					User user = (User) o1;
 					result.add(user.getLoginName());
 				}
 			}
 		}
 		catch (CSException excp)
 		{
-			logger.debug("Not able to get instance of UserProvisioningManager:",excp);
-			throw excp;
+			String mess = "Not able to get instance of UserProvisioningManager:";
+			throwException(excp, mess);
 		}
 
 		return result;
 	}
-
+	/**
+	 * Called when we need to throw SMException
+	 * @param exc exception
+	 * @param mess message to be shown on error
+	 * @throws SMException exception
+	 */
+	public void throwException(Exception exc, String mess)
+			throws SMException {
+		logger.debug(mess, exc);
+		ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+		defaultErrorKey.setErrorMessage(mess);
+		throw new SMException(defaultErrorKey, exc,null);
+	}
 }

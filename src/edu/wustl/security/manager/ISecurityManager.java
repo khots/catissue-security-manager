@@ -30,13 +30,14 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 	 void removeUserFromGroup(String userGroupname, String userId) throws SMException;
 	 void assignUserToGroup(String userGroupname, String userId) throws SMException;
 	 void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException;
-	 boolean isAuthorized(String userName, String objectId, String privilegeName)
-	throws SMException;
-	 boolean checkPermission(String userName, String objectType, String objectIdentifier,
+	/* boolean isAuthorized(String userName, String objectId, String privilegeName)
+	 throws SMException;*/
+	/* boolean checkPermission(String userName, String objectType, String objectIdentifier,
 			String privilegeName) throws SMException;
-	 String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf)
-	throws SMException;
-	 String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
+	*/ 
+	/* String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf)
+	 throws SMException;
+	*/ String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
 	// List<NameValueBean> getPrivilegesForAssignPrivilege(String roleName); : Not used anymore , shd be removed as AssignPrivilege in suite is removed
 	// Set<NameValueBean> getObjectsForAssignPrivilege(String userID, String[] objectTypes,
 		//	String[] privilegeNames) throws SMException;
