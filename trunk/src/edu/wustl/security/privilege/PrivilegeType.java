@@ -11,15 +11,16 @@ import edu.wustl.security.global.Constants;
  * @author prafull_kadam
  *
  */
-public enum PrivilegeType {
+public enum PrivilegeType 
+{
 	ObjectLevel(Constants.OBJECT_LEVEL_SECURE_RETRIEVE), 
-	InsecureLevel(Constants.INSECURE_RETRIEVE), ClassLevel
-	(
+	InsecureLevel(Constants.INSECURE_RETRIEVE), ClassLevel(
 			Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+
 	/**
 	 * 
 	 */
-	int value;
+	private int value;
 
 	/**                     
 	 * @param value The value

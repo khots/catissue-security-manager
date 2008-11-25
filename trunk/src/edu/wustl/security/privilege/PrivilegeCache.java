@@ -50,7 +50,6 @@ public class PrivilegeCache
 	 * is made initialize() uses some ProtectionElementSearchCriterias & gets
 	 * Protection Elements from the database.
 	 * @param loginName login name of the user who has logged in.
-	 * @throws Exception generic exception
 	 */
 	public PrivilegeCache(final String loginName)
 	{
@@ -69,7 +68,6 @@ public class PrivilegeCache
 	 * the ProtectionElement such ObjectPrivilegeMaps are then passed to
 	 * 'populatePrivileges' method.
 	 *
-	 * @throws Exception generic exception
 	 */
 	private void initialize()
 	{
@@ -227,7 +225,6 @@ public class PrivilegeCache
 	/**
 	 * This method gets Privileges From Database.
 	 * @param objectId object Id
-	 * @param privilegeName privilege Name
 	 * @return BitSet return bitSet of Privileges from Database.
 	 */
 	private BitSet getPrivilegesFromDatabase(String objectId)
@@ -263,7 +260,6 @@ public class PrivilegeCache
 	 * this method forces CSM to go to the database & get the ProtectionElements
 	 * For more, please refer to the 'initialize' method above.
 	 *
-	 * @throws Exception generic exception
 	 */
 	public void refresh() 
 	{
@@ -347,7 +343,8 @@ public class PrivilegeCache
 			if (value.get(i))
 			{
 				NameValueBean nmv = new NameValueBean();
-				nmv.setName(PrivilegeLocator.getInstance().getPrivilegeByBit(i).getPrivilegeName());
+				nmv.setName(PrivilegeLocator.getInstance().
+						getPrivilegeByBit(i).getPrivilegeName());
 				for (Object o : Utility.getAllPrivileges())
 				{
 					NameValueBean privilege = (NameValueBean) o;
