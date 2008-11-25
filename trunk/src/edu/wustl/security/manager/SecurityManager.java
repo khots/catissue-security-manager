@@ -17,14 +17,12 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.query.AbstractClient;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.SMTransactionException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.RoleGroupLocator;
@@ -107,7 +105,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			StringBuffer mesg=new StringBuffer("Authentication fails for user")
 			.append(loginName).append("requestingClass:").append(requestingClass);
-			Utility.getInstance().throwException(exception, mesg.toString());
+			Utility.getInstance().throwSMException(exception, mesg.toString());
 		}
 		return loginSuccess;
 	}
@@ -129,12 +127,12 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSTransactionException exception)
 		{
 			String mesg = "Unable to create user "+user.getEmailId();
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		catch (CSException exception)
 		{
 			String mesg = "Unable to create user "+user.getEmailId();
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 	}
 
@@ -156,7 +154,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get user: "+loginName;
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		return user;
 	}
@@ -173,13 +171,13 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSTransactionException ex)
 		{
 			String mesg = "Failed to find this user with userId:" + userId;
-			Utility.getInstance().throwException(ex, mesg);
+			Utility.getInstance().throwSMException(ex, mesg);
 		}
 		catch (CSException exception)
 		{
 			logger.debug("Unable to obtain Authorization Manager: Exception: " + exception.getMessage());
 			String mesg = "Failed to find this user with userId:" + userId;
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 	}
 
@@ -205,7 +203,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get roles: Exception:  ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		return roles;
 	}
@@ -247,7 +245,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "UNABLE TO ASSIGN ROLE TO USER: Exception: ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 	}
 
@@ -286,7 +284,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get roles: Exception:  ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		return role;
 	}
@@ -327,7 +325,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get roles: Exception: ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		return role;
 	}
@@ -348,7 +346,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to modify user: Exception:  ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 	}
 
@@ -369,7 +367,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get user by Id for : ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		return user;
 	}
@@ -391,7 +389,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			logger.debug("Unable to get all users: Exception: " + exception.getMessage());
 			String mesg = "Unable to get all users: Exception: ";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 		return list;
 	}
@@ -417,7 +415,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mess="The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess);
 		}
 	}
 	
@@ -442,7 +440,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			String mess="The Security Service encountered a fatal exception.";
 			logger.fatal(mess, ex);
-			Utility.getInstance().throwException(ex, mess);
+			Utility.getInstance().throwSMException(ex, mess);
 		}
 	}
 
@@ -473,7 +471,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg="The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg);
 		}
 	}
 
@@ -518,7 +516,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		if (userId == null || groupIds == null || groupIds.length < 1)
 		{
 			String mesg=" Null or insufficient Parameters passed";
-			Utility.getInstance().throwException(null, mesg);
+			Utility.getInstance().throwSMException(null, mesg);
 		}
 	}
 	/**
@@ -647,7 +645,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mess="Unable to get protection group for Protection Element "+ protElemName;
-			Utility.getInstance().throwException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess);
 		}
 		return names;
 
@@ -834,10 +832,11 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @param upManager
 	 * @param role
 	 * @return
+	 * @throws SMException 
 	 * @throws CSObjectNotFoundException
 	 */
-	private Role getRole(Set groups, UserProvisioningManager upManager)
-	throws CSObjectNotFoundException
+	private Role getRole(Set groups, UserProvisioningManager upManager) throws SMException
+	
 	{
 		Role role = null;
 		Iterator<Group> iter = groups.iterator();
@@ -850,7 +849,15 @@ public class SecurityManager implements Permissions,ISecurityManager
 				sampleBean.setGroupName(group.getGroupName());
 				RoleGroupDetailsBean requiredBean = getRequiredBean(sampleBean);
 				String roleId = requiredBean.getRoleId();
-				role = upManager.getRoleById(roleId);
+				try
+				{
+					role = upManager.getRoleById(roleId);
+				}
+				catch (CSObjectNotFoundException e)
+				{
+					String mess = "Unable to get role by id"+e.getMessage();
+					Utility.getInstance().throwSMException(e, mess);
+				}
 			}
 		}
 		return role;
@@ -871,7 +878,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		if (userId == null || userGroupname == null)
 		{
 			String mesg = "Null or insufficient Parameters passed";
-			Utility.getInstance().throwException(null, mesg);
+			Utility.getInstance().throwSMException(null, mesg);
 		}
 	}
 	/**

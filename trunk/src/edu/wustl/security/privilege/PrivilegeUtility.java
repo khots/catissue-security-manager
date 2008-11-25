@@ -102,7 +102,7 @@ public class PrivilegeUtility
 		catch (CSException exception)
 		{
 			String mess="The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class PrivilegeUtility
 					("Error occured Assigned Group Role To Protection Group ")
 					.append(protectionGroup.getProtectionGroupId()).append(' ')
 					.append(group.getGroupId()).append(' ').append(roleIds);
-					Utility.getInstance().throwException(ex, mess.toString());
+					Utility.getInstance().throwSMException(ex, mess.toString());
 				}
 			}
 		}
@@ -530,7 +530,7 @@ public class PrivilegeUtility
 		if (roleName == null)
 		{
 			String mess = "Role name passed is null";
-			Utility.getInstance().throwException(null, mess);
+			Utility.getInstance().throwSMException(null, mess);
 		}
 
 		//Search for role by the name roleName
@@ -548,7 +548,7 @@ public class PrivilegeUtility
 		catch (SMException e)
 		{
 			String mess = "Role not found by name " + roleName;
-			Utility.getInstance().throwException(e, mess);
+			Utility.getInstance().throwSMException(e, mess);
 		}
 		return role;
 	}
@@ -578,7 +578,7 @@ public class PrivilegeUtility
 		if (pgName == null)
 		{
 			String mess = "pgName passed is null";
-			Utility.getInstance().throwException(null, mess);
+			Utility.getInstance().throwSMException(null, mess);
 		}
 
 		//Search for Protection Group of the name passed
@@ -876,7 +876,7 @@ public class PrivilegeUtility
 		if (groupId == null || roles == null || protectionGroup == null)
 		{
 			String mess="One or more parameters are null";
-			Utility.getInstance().throwException(null, mess);
+			Utility.getInstance().throwSMException(null, mess);
 		}
 	}
 

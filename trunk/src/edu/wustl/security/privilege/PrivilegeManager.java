@@ -199,11 +199,11 @@ public final class PrivilegeManager
 		}
 		catch (CSObjectNotFoundException e)
 		{
-			Utility.getInstance().throwException(e, e.getMessage());
+			Utility.getInstance().throwSMException(e, e.getMessage());
 		}
 		catch (CSException e)
 		{
-			Utility.getInstance().throwException(e, e.getMessage());
+			Utility.getInstance().throwSMException(e, e.getMessage());
 		}
 	}
 
@@ -226,7 +226,7 @@ public final class PrivilegeManager
 		catch (SMException exception)
 		{
 			String mess = "Exception in insertAuthorizationData:" + exception;
-			Utility.getInstance().throwException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess);
 		}
 
 		addObjectToPrivilegeCaches(objectId);
@@ -432,17 +432,17 @@ public final class PrivilegeManager
 		catch (ParserConfigurationException excp)
 		{
 			String mess = "DocumentBuilder cannot be created:";
-			Utility.getInstance().throwException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess);
 		}
 		catch (SAXException excp)
 		{
 			String mess = "Not able to parse xml file:" + fileName;
-			Utility.getInstance().throwException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess);
 		}
 		catch (IOException excp)
 		{
 			String mess = "Not able to parse xml file: IOException" + fileName;
-			Utility.getInstance().throwException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess);
 		}
 
 	}
@@ -560,7 +560,7 @@ public final class PrivilegeManager
 		catch (CSException excp)
 		{
 			String mess = "Not able to get instance of UserProvisioningManager:";
-			Utility.getInstance().throwException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess);
 		}
 
 		return result;

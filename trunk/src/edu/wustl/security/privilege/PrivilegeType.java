@@ -21,7 +21,7 @@ public enum PrivilegeType {
 	 */
 	int value;
 
-	/**
+	/**                     
 	 * @param value The value
 	 */
 	PrivilegeType(int value)

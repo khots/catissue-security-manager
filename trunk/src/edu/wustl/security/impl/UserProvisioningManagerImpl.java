@@ -28,12 +28,12 @@ public class UserProvisioningManagerImpl
 	 * @param arg0
 	 * @throws CSConfigurationException 
 	 * @throws Exception
-	 */
+	 *//*
 	public UserProvisioningManagerImpl(final String arg0) throws CSConfigurationException  
 	{
 		super(arg0);
 
-	}
+	}*/
 
 	/**
 	 * @param arg0
