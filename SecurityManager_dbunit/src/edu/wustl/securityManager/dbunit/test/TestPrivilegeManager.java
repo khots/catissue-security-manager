@@ -77,7 +77,7 @@ public class TestPrivilegeManager extends TestCase{
 	 */
 	private void removeAllUsers() {
 		try {
-			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager(null);
+			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			List<User> allUsers = securityManager.getUsers();
 			for (User user : allUsers) {
 				Long userId = user.getUserId();
@@ -106,7 +106,7 @@ public class TestPrivilegeManager extends TestCase{
 		user.setLastName(newVal);
 		ISecurityManager securityManager;
 		try {
-			securityManager = SecurityManagerFactory.getSecurityManager(null);
+			securityManager = SecurityManagerFactory.getSecurityManager();
 			securityManager.createUser(user);
 		} catch (SMException e) {
 			e.printStackTrace();
@@ -131,7 +131,7 @@ public class TestPrivilegeManager extends TestCase{
 		user.setLastName(newVal);
 		ISecurityManager securityManager;
 		try {
-			securityManager = SecurityManagerFactory.getSecurityManager(null);
+			securityManager = SecurityManagerFactory.getSecurityManager();
 			securityManager.createUser(user);
 		} catch (SMException e) {
 			e.printStackTrace();
@@ -215,7 +215,7 @@ public class TestPrivilegeManager extends TestCase{
 	{
 		User user;
 		try {
-			user = SecurityManagerFactory.getSecurityManager(null).getUser("test");
+			user = SecurityManagerFactory.getSecurityManager().getUser("test");
 			PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
 			Collection<PrivilegeCache> classes1 = privManager.getPrivilegeCaches();
 			assertNotNull(classes1);
@@ -262,7 +262,7 @@ public class TestPrivilegeManager extends TestCase{
 	 */
 	private void assignGroupToUser(String loginName, String groupName) throws SMException
 	{
-		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager(null);
+		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 		User user = securityManager.getUser(loginName);
 		String userId = user.getUserId().toString();
 		securityManager.assignUserToGroup(groupName, userId);

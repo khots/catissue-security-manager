@@ -63,6 +63,14 @@ public class TestPrivilegeCache extends TestCase {
 	/**
 	 * 
 	 */
+	public void testRefresh()
+	{
+		PrivilegeCache cache = new PrivilegeCache("test");
+		cache.refresh();
+	}
+	/**
+	 * 
+	 */
 	public void testAddObject()
 	{
 		

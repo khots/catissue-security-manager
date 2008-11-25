@@ -104,11 +104,10 @@ public class TestAuthorizationDAOImpl extends TestCase{
 	}
 	/**
 	 * Inserts a sample User.
-	 * @throws SMTransactionException 
-	 * 
+	 * @throws SMException 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser() throws SMTransactionException {
+	private void insertSampleCSMUser() throws SMException {
 		User user = new User();
 		String newVal = "test";
 		user.setDepartment(newVal);
@@ -183,19 +182,8 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			ProtectionElementSearchCriteria protEleSearchCrit = new ProtectionElementSearchCriteria(
 					protectionElement);
 			List<ProtectionElement> list = privilegeUtility.getUserProvisioningManager().getObjects(protEleSearchCrit);
-			System.out.println("list.size()" +list.size());
-			for (ProtectionElement object : list) {
-				System.out.println("getProtectionElementName "+object.getProtectionElementName());
-				System.out.println("getProtectionElementId "+object.getProtectionElementId());
-				System.out.println("getProtectionElementType "+object.getProtectionElementType());
-			}
+			
 			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(),list);
-			System.out.println("map"+map);
-			for (ObjectPrivilegeMap objectPrivilegeMap : map) {
-				System.out.println("getProtectionElement "+objectPrivilegeMap.getProtectionElement());
-				System.out.println("Privileges().size() "+objectPrivilegeMap.getPrivileges().size());
-				
-			}
 		}catch (SMException e) {
 			e.printStackTrace();
 		} catch (CSException e) {
@@ -217,19 +205,9 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			ProtectionElementSearchCriteria protEleSearchCrit = new ProtectionElementSearchCriteria(
 					protectionElement);
 			List<ProtectionElement> list = privilegeUtility.getUserProvisioningManager().getObjects(protEleSearchCrit);
-			System.out.println("list.size()" +list.size());
-			for (ProtectionElement object : list) {
-				System.out.println("getProtectionElementName "+object.getProtectionElementName());
-				System.out.println("getProtectionElementId "+object.getProtectionElementId());
-				System.out.println("getProtectionElementType "+object.getProtectionElementType());
-			}
+			
 			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(),list);
-			System.out.println("map"+map);
-			for (ObjectPrivilegeMap objectPrivilegeMap : map) {
-				System.out.println("getProtectionElement "+objectPrivilegeMap.getProtectionElement());
-				System.out.println("Privileges().size() "+objectPrivilegeMap.getPrivileges().size());
-				
-			}
+			
 		}catch (SMException e) {
 			e.printStackTrace();
 		} catch (CSException e) {

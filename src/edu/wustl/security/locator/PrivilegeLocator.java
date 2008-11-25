@@ -18,14 +18,21 @@ import edu.wustl.security.privilege.Privilege;
  */
 public final class PrivilegeLocator
 {
-
-	static private PrivilegeLocator locator = new PrivilegeLocator();
-
+	/**
+	 * locator obj
+	 */
+	private static PrivilegeLocator locator = new PrivilegeLocator();
+	/**
+	 * private constructor
+	 */
 	private PrivilegeLocator()
 	{
 		init();
 	}
-
+	/**
+	 * returns the single obj
+	 * @return {@link PrivilegeLocator} obj
+	 */
 	public static PrivilegeLocator getInstance()
 	{
 		return locator;

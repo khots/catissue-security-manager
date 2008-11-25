@@ -63,7 +63,7 @@ public class PrivilegeUtility
 	{
 		try 
 		{
-			securityManager = SecurityManagerFactory.getSecurityManager(PrivilegeUtility.class);
+			securityManager = SecurityManagerFactory.getSecurityManager();
 		} catch (SMException e) {
 			logger.error(e.getStackTrace());
 		}
