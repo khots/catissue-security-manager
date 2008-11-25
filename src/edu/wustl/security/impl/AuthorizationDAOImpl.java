@@ -52,9 +52,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	private SessionFactory sessionFact = null;
 
 	/**
-	 * @param sessionFact
-	 * @param appContextName
-	 * @throws CSConfigurationException
+	 * @param sessionFact sf
+	 * @param appContextName name
+	 * @throws CSConfigurationException exc
 	 */
 	public AuthorizationDAOImpl(SessionFactory sessionFact, String appContextName)
 			throws CSConfigurationException
@@ -63,10 +63,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		this.sessionFact = sessionFact;
 
 	}
-
 	/**
-	 * @param String username
-	 * @param collection pes
+	 * @param userName name
+	 * @param pEes pes
 	 * @throws CSException exc
 	 * @return List<ObjectPrivilegeMap> list
 	 */
@@ -117,11 +116,11 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	}
 
 	/**
-	 * @param pstmt
-	 * @param pstmt2
-	 * @param session
-	 * @param connection
-	 * @throws HibernateException
+	 * @param pstmt stmt 1
+	 * @param pstmt2 smt2
+	 * @param session sess
+	 * @param connection conn
+	 * @throws HibernateException exc
 	 */
 	private void close(PreparedStatement pstmt, PreparedStatement pstmt2, Session session,
 			Connection connection) throws HibernateException

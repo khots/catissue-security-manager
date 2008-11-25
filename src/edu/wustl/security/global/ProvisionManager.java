@@ -3,7 +3,6 @@ package edu.wustl.security.global;
 
 import java.util.List;
 
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
@@ -27,13 +26,23 @@ import gov.nih.nci.security.exceptions.CSException;
 public final class ProvisionManager
 {
 
+	/**
+	 * 
+	 */
 	private static ProvisionManager provManager = new ProvisionManager();
 
+	/**
+	 * 
+	 */
 	private ProvisionManager()
 	{
 
 	}
 
+	/**
+	 * 
+	 * @return ProvisionManager single instance
+	 */
 	public static ProvisionManager getInstance()
 	{
 		return provManager;
@@ -43,16 +52,20 @@ public final class ProvisionManager
 	 * logger Logger - Generic logger.
 	 */
 	private final org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
-
+	/**
+	 * 
+	 */
 	private AuthenticationManager authTManager = null;
-
+	/**
+	 * 
+	 */
 	private AuthorizationManager authRManager = null;
 
 	/**
 	 * Returns the UserProvisioningManager singleton object.
 	 *
-	 * @return
-	 * @throws	CSException
+	 * @return UserProvisioningManager up
+	 * @throws	CSException exc
 	 */
 	public UserProvisioningManager getUserProvisioningManager() throws CSException
 	{
@@ -64,8 +77,8 @@ public final class ProvisionManager
 	 * follows the singleton pattern so that only one AuthenticationManager is
 	 * created for the caTISSUE Core.
 	 *
-	 * @return
-	 * @throws	CSException
+	 * @return AuthenticationManager au
+	 * @throws CSException exc
 	 */
 	public AuthenticationManager getAuthenticationManager() throws CSException
 	{
@@ -83,8 +96,8 @@ public final class ProvisionManager
 	 * follows the singleton pattern so that only one AuthorizationManager is
 	 * created.
 	 *
-	 * @return
-	 * @throws	CSException
+	 * @return AuthenticationManager au
+	 * @throws	CSException exc
 	 */
 	public AuthorizationManager getAuthorizationManager() throws CSException
 	{
@@ -101,10 +114,10 @@ public final class ProvisionManager
 
 	/**
 	* Returns group id from Group name
-	* @param groupName
-	* @return
-	* @throws CSException 
-	* @throws SMException 
+	* @param groupName name
+	* @return String str
+	* @throws CSException  exc
+	* @throws SMException  exc
 	*/
 	public String getGroupID(final String groupName) throws CSException, SMException
 	{
@@ -128,8 +141,10 @@ public final class ProvisionManager
 
 	/**
 	 * Returns role id from role name
-	 * @param roleName
-	 * @return
+	 * @param roleName name
+	 * @throws CSException exc
+	 * @throws SMException exc
+	 * @return String roleid
 	 */
 	public String getRoleID(final String roleName) throws CSException, SMException
 	{
@@ -151,10 +166,10 @@ public final class ProvisionManager
 
 	/**
 	 * Returns list of objects corresponding to the searchCriteria passed.
-	 * @param searchCriteria
+	 * @param searchCriteria cr
 	 * @return List of resultant objects
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
-	 * @throws CSException
+	 * @throws CSException exc
 	 */
 	public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{

@@ -184,12 +184,14 @@ public class PrivilegeUtility
 					roleIds = new String[1];
 					roleIds[0] = getRoleId(bean);
 					upManager.assignGroupRoleToProtectionGroup(String.valueOf(protectionGroup
-							.getProtectionGroupId()), String.valueOf(group.getGroupId()), roleIds);
+							.getProtectionGroupId()),
+							String.valueOf(group.getGroupId()), roleIds);
 				}
 				catch (CSTransactionException ex)
 				{
 					StringBuffer mess = new StringBuffer(
-							"Error occured Assigned Group Role To Protection Group ").append(
+							"Error occured Assigned Group Role " +
+							"To Protection Group ").append(
 							protectionGroup.getProtectionGroupId()).append(' ').append(
 							group.getGroupId()).append(' ').append(roleIds);
 					Utility.getInstance().throwSMException(ex, mess.toString());
@@ -350,7 +352,8 @@ public class PrivilegeUtility
 					+ " object");
 			protectionElement.setProtectionElementName(protectionObject.getObjectId());
 
-			String[] staticGroups = (String[]) edu.wustl.security.global.Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+			String[] staticGroups = (String[]) edu.wustl.security.global.Constants.
+			STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
 					.get(protectionObject.getClass().getName());
 
 			setProtectGroups(protectionElement, staticGroups);
