@@ -1,3 +1,4 @@
+
 package edu.wustl.security.locator;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.global.Utility;
 import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.exceptions.CSException;
 
@@ -25,28 +27,43 @@ import gov.nih.nci.security.exceptions.CSException;
  */
 public final class RoleGroupLocator
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
 	/**
 	 * File name for privilege configuration.
 	 */
 	private static final String CONF_FILE = "SMRoleGroupConf.xml";
-	private static final String ELE_ROLE="Role";
-	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGrpMap = new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
+	/**
+	 * 
+	 */
+	private static final String ELE_ROLE = "Role";
+	/**
+	 * 
+	 */
+	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGrpMap = 
+		new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
+	/**
+	 * 
+	 */
 	private List<String> roleIdList = new ArrayList<String>();
+	/**
+	 * 
+	 */
 	private List<String> groupIdList = new ArrayList<String>();
 	/**
-	 * Instantiating the class whenever loaded for the first time. The same instance will be returned whenever getInstance is called. 
+	 * Instantiating the class whenever loaded for the first time.
+	 *  The same instance will be returned whenever getInstance is called. 
 	 */
-	public static RoleGroupLocator locator = new RoleGroupLocator();
-	
+	private static RoleGroupLocator locator = new RoleGroupLocator();
+
 	/**
 	 * Making the class singleton.
 	 */
-	private RoleGroupLocator() 
+	private RoleGroupLocator()
 	{
 		Document doc = XMLParserUtility.getDocument(CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
@@ -72,6 +89,7 @@ public final class RoleGroupLocator
 			}
 		}*/
 	}
+
 	/**
 	 * Singleton class, will return the single object every time.
 	 * @return RoleGroupLocator instance
@@ -80,11 +98,13 @@ public final class RoleGroupLocator
 	{
 		return locator;
 	}
+
 	/**
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml
 	 * @param roleList
 	 */
-	private void createRoleGroupBeans(NodeList roleList) {
+	private void createRoleGroupBeans(NodeList roleList)
+	{
 		for (int s = 0; s < roleList.getLength(); s++)
 		{
 			Node role = roleList.item(s);
@@ -94,18 +114,21 @@ public final class RoleGroupLocator
 			}
 		}
 	}
+
 	/**
 	 * Creates a bean object for role and group details.
 	 * @param role
+	 * @throws SMException 
 	 */
-	private void createRoleGroupBean(Node role) {
-		try 
+	private void createRoleGroupBean(Node role) throws SMException
+	{
+		try
 		{
 			Element roleElement = (Element) role;
-			String roleName = XMLParserUtility.getElementValue(roleElement,"RoleName");
-			String roleType = XMLParserUtility.getElementValue(roleElement,"RoleType");
-			String groupName = XMLParserUtility.getElementValue(roleElement,"GroupName");
-			String groupType = XMLParserUtility.getElementValue(roleElement,"GroupType");
+			String roleName = XMLParserUtility.getElementValue(roleElement, "RoleName");
+			String roleType = XMLParserUtility.getElementValue(roleElement, "RoleType");
+			String groupName = XMLParserUtility.getElementValue(roleElement, "GroupName");
+			String groupType = XMLParserUtility.getElementValue(roleElement, "GroupType");
 
 			String roleId = ProvisionManager.getInstance().getRoleID(roleName);
 			String groupId = ProvisionManager.getInstance().getGroupID(groupName);
@@ -119,32 +142,42 @@ public final class RoleGroupLocator
 			roleIdList.add(roleId);
 			groupIdList.add(groupId);
 			roleGrpMap.put(bean, bean);
-		} catch (CSException e) {
-			logger.warn("Error in initializing rolegroupNamevsId map",e);
-			e.printStackTrace();
-		} catch (SMException e) {
-			logger.warn("Error in initializing rolegroupNamevsId map",e);
-			e.printStackTrace();
+		}
+		catch (CSException e)
+		{
+			String mess = "Error in initializing rolegroupNamevsId map";
+			Utility.getInstance().throwSMException(e, mess);
+		}
+		catch (SMException e)
+		{
+			String mess = "Error in initializing rolegroupNamevsId map";
+			Utility.getInstance().throwSMException(e, mess);
 		}
 	}
+
 	/**
 	 * @return the roleGrpMap
 	 */
-	public Map<RoleGroupDetailsBean, RoleGroupDetailsBean> getRoleGroupDetailsMap() {
+	public Map<RoleGroupDetailsBean, RoleGroupDetailsBean> getRoleGroupDetailsMap()
+	{
 		return roleGrpMap;
 	}
+
 	/**
 	 * @return the roleGrpMap
 	 */
-	public List<String> getAllRoleIds() {
-		
+	public List<String> getAllRoleIds()
+	{
+
 		return roleIdList;
 	}
+
 	/**
 	 * @return the roleGrpMap
 	 */
-	public List<String> getAllGroupIds() {
-		
+	public List<String> getAllGroupIds()
+	{
+
 		return groupIdList;
 	}
 }

@@ -2,17 +2,20 @@ package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Vector;
 
 import junit.framework.TestCase;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.SMTransactionException;
+import edu.wustl.security.global.Roles;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManager;
@@ -20,7 +23,6 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeUtility;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.domainobjects.Application;
-import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -31,6 +33,7 @@ import gov.nih.nci.security.exceptions.CSException;
 public class TestPrivilegeUtility extends TestCase {
 	
 	PrivilegeUtility privilegeUtility;
+	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
 	static String configFile = "";
 	/**
 	 * logger Logger - Generic logger.
@@ -126,7 +129,7 @@ public class TestPrivilegeUtility extends TestCase {
 		removeAllUsers();
 		insertSampleCSMUser();
 		try {
-			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager(null);
+			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			List<User> allUsers = securityManager.getUsers();
 			for (User user : allUsers) {
 				Long userId = user.getUserId();
@@ -206,6 +209,26 @@ public class TestPrivilegeUtility extends TestCase {
 	/**
 	 * 
 	 */
+	public void testGetObjectsNull()
+	{
+		Role role = new Role();
+		role.setName("");
+		List<Role> list;
+		try {
+			list = privilegeUtility.getObjects(null);
+			for (Role role1 : list) {
+				System.out.println("getName() "+role1.getName());
+			}
+			assertNotNull(list);
+		} catch (SMException e) {
+			e.printStackTrace();
+		} catch (CSException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 
+	 */
 	public void testGetPrivilegeById ()
 	{
 		try {
@@ -225,7 +248,7 @@ public class TestPrivilegeUtility extends TestCase {
 		insertSampleCSMUser();
 		try {
 			String[] groupIds = {"3","4"};
-			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager(null);
+			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			User user = securityManager.getUser("test");
 			privilegeUtility.assignAdditionalGroupsToUser(user.getUserId().toString(), groupIds);
 			/*Set<Group> groups = user.getGroups();
@@ -285,7 +308,7 @@ public class TestPrivilegeUtility extends TestCase {
 		user.setTitle(newVal);
 		user.setLastName(newVal);
 		try {
-			SecurityManagerFactory.getSecurityManager(null).createUser(user);
+			SecurityManagerFactory.getSecurityManager().createUser(user);
 		} catch (SMException e) {
 			e.printStackTrace();
 		}
@@ -295,7 +318,7 @@ public class TestPrivilegeUtility extends TestCase {
 	 */
 	private void removeAllUsers() {
 		try {
-			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager(null);
+			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			List<User> allUsers = securityManager.getUsers();
 			for (User user : allUsers) {
 				Long userId = user.getUserId();
@@ -304,5 +327,40 @@ public class TestPrivilegeUtility extends TestCase {
 		} catch (Exception e) {
 			logger.error(e.getStackTrace());
 		}
+	}
+	public void testInsertAuthData()
+	{
+		Vector authorizationData = new Vector();
+		Set group = new HashSet();
+		String userId = "";
+		ISecurityManager securityManager;
+		try
+		{
+			securityManager = SecurityManagerFactory.getSecurityManager();
+			List<User> allUsers = securityManager.getUsers();
+			for (User user1 : allUsers) {
+				Long userId1 = user1.getUserId();
+				group.add(user1);
+			}
+			// Protection group of PI
+			SecurityDataBean userGroupRoleProtectionGroupBean;
+			userGroupRoleProtectionGroupBean = new SecurityDataBean();
+			userGroupRoleProtectionGroupBean.setUser(userId);
+			userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
+			userGroupRoleProtectionGroupBean.setGroupName(ADMIN_GROUP);
+			userGroupRoleProtectionGroupBean.setGroup(group);
+			authorizationData.add(userGroupRoleProtectionGroupBean);
+			PrivilegeUtility util = new PrivilegeUtility();
+			Set protectionObjects=new HashSet();
+			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
+			protectionObjects.add(usr);
+			util.insertAuthorizationData(authorizationData, protectionObjects, null);
+		}
+		catch (SMException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
