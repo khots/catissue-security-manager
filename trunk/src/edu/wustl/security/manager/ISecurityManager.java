@@ -15,7 +15,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 	
 	// UserProvisioningManager getUserProvisioningManager() throws CSException;
 	boolean login(String loginName, String password) throws SMException;
-	 void createUser(User user) throws SMTransactionException;
+	 void createUser(User user) throws SMException;
 	 User getUser(String loginName) throws SMException;
 	 void removeUser(String userId) throws SMException;
 	 List<Role> getRoles() throws SMException;

@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.global.CSMGroupLocator;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
@@ -103,7 +102,7 @@ public class PrivilegeUtility
 		catch (CSException exception)
 		{
 			String mess="The Security Service encountered a fatal exception.";
-			throwException(exception, mess);
+			Utility.getInstance().throwException(exception, mess);
 		}
 	}
 
@@ -193,7 +192,7 @@ public class PrivilegeUtility
 					("Error occured Assigned Group Role To Protection Group ")
 					.append(protectionGroup.getProtectionGroupId()).append(' ')
 					.append(group.getGroupId()).append(' ').append(roleIds);
-					throwException(ex, mess.toString());
+					Utility.getInstance().throwException(ex, mess.toString());
 				}
 			}
 		}
@@ -531,7 +530,7 @@ public class PrivilegeUtility
 		if (roleName == null)
 		{
 			String mess = "Role name passed is null";
-			throwException(null, mess);
+			Utility.getInstance().throwException(null, mess);
 		}
 
 		//Search for role by the name roleName
@@ -549,7 +548,7 @@ public class PrivilegeUtility
 		catch (SMException e)
 		{
 			String mess = "Role not found by name " + roleName;
-			throwException(e, mess);
+			Utility.getInstance().throwException(e, mess);
 		}
 		return role;
 	}
@@ -579,7 +578,7 @@ public class PrivilegeUtility
 		if (pgName == null)
 		{
 			String mess = "pgName passed is null";
-			throwException(null, mess);
+			Utility.getInstance().throwException(null, mess);
 		}
 
 		//Search for Protection Group of the name passed
@@ -631,12 +630,12 @@ public class PrivilegeUtility
 		catch (CSTransactionException txex) //thrown when association
 		{
 			logger.debug("Exception:" + txex.getMessage(),txex);
-			throwException(txex, txex.getMessage());
+			Utility.getInstance().throwException(txex, txex.getMessage());
 		}
 		catch (CSException csex)
 		{
 			String mess="Could not assign Protection elements to protection group";
-			throwException(csex, mess);
+			Utility.getInstance().throwException(csex, mess);
 		}
 			}
 */
@@ -786,42 +785,30 @@ public class PrivilegeUtility
 		catch (CSTransactionException txex) //thrown when no association exists
 		{
 			String mess="Could not deassign Protection elements to protection group"+txex.getMessage();
-			throwException(txex, mess);
+			Utility.getInstance().throwException(txex, mess);
 		}
 		catch (CSException csex)
 		{
 			String mess="Could not deassign Protection elements to protection group"+csex.getMessage();
-			throwException(csex, mess);
+			Utility.getInstance().throwException(csex, mess);
 		}
 			}*/
-	/**
-	 * Called when we need to throw SMException
-	 * @param exc exception
-	 * @param mess message to be shown on error
-	 * @throws SMException exception
-	 */
-	public void throwException(Exception exc, String mess)
-			throws SMException {
-		logger.debug(mess, exc);
-		ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-		defaultErrorKey.setErrorMessage(mess);
-		throw new SMException(defaultErrorKey, exc,null);
-	}
+	
 	/**
 	 * Checks for sufficient params
 	 * @param pgName string
 	 * @param objectType class
 	 * @param objectIds list
 	 * @throws SMException exception
-	 */
+	 *//*
 	private void checkForSufficientParams(String pgName, Class objectType,
 			Long[] objectIds) throws SMException {
 		if (pgName == null || objectType == null || objectIds == null)
 		{
 			String mess="Cannot disassign protection elements. One of the parameters is null.";
-			throwException(null, mess);
+			Utility.getInstance().throwException(null, mess);
 		}
-	}
+	}*/
 	/**
 	 * 
 	 * @param roleID string
@@ -875,7 +862,7 @@ public class PrivilegeUtility
 		catch (CSException csex)
 		{
 			String mess = "Could not assign user role to protection group";
-			throwException(csex, mess);
+			Utility.getInstance().throwException(csex, mess);
 		}
 	}*/
 	/**
@@ -889,7 +876,7 @@ public class PrivilegeUtility
 		if (groupId == null || roles == null || protectionGroup == null)
 		{
 			String mess="One or more parameters are null";
-			throwException(null, mess);
+			Utility.getInstance().throwException(null, mess);
 		}
 	}
 

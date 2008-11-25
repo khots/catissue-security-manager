@@ -149,9 +149,7 @@ public final class ProvisionManager
 		{
 			logger.debug("searchCriteria is null");
 			String mesg = "searchCriteria is null";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,null,null);	
+			Utility.getInstance().throwException(null, mesg);
 		}
 		UserProvisioningManager upManager = getUserProvisioningManager();
 		List list = upManager.getObjects(searchCriteria);
