@@ -2,7 +2,11 @@ package edu.wustl.security.global;
 
 import java.util.Map;
 
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
+import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.security.privilege.PrivilegeType;
 /**
  * Utility methods required in SecurityManager
@@ -13,6 +17,9 @@ public final class Utility {
 	/**
 	 * logger -Generic Logger
 	 */
+
+	private static org.apache.log4j.Logger logger = Logger.getLogger(PrivilegeManager.class);
+
 
 	private static Utility util = new Utility();;
 	private Utility()
@@ -56,7 +63,19 @@ public final class Utility {
 	        return isBirthDate;
 	    }
 	
-
+	 /**
+		 * Called when we need to throw SMException
+		 * @param exc exception
+		 * @param mess message to be shown on error
+		 * @throws SMException exception
+		 */
+		public void throwException(Exception exc, String mess) throws SMException
+		{
+			logger.debug(mess, exc);
+			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
+			defaultErrorKey.setErrorMessage(mess);
+			throw new SMException(defaultErrorKey, exc, null);
+		}
 	/* Added By Rukhsana
 	 * Added list of objects on which read denied has to be checked while filtration of result for csm-query performance.
 	 * A map that contains entity name as key and sql to get Main_Protocol_Object (Collection protocol, Clinical Study) Ids for that entity id as value for csm-query performance.

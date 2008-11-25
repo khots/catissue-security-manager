@@ -26,6 +26,7 @@ import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.SMTransactionException;
 import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.RoleGroupLocator;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.security.AuthenticationManager;
@@ -106,10 +107,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			StringBuffer mesg=new StringBuffer("Authentication fails for user")
 			.append(loginName).append("requestingClass:").append(requestingClass);
-			logger.debug(mesg);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg.toString());
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg.toString());
 		}
 		return loginSuccess;
 	}
@@ -122,7 +120,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 * @throws SMTransactionException
 	 *             If there is any exception in creating the User
 	 */
-	public void createUser(User user) throws SMTransactionException
+	public void createUser(User user) throws SMException
 	{
 		try
 		{
@@ -130,15 +128,13 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSTransactionException exception)
 		{
-			logger.debug("Unable to create user "+user.getEmailId());
 			String mesg = "Unable to create user "+user.getEmailId();
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMTransactionException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to create user:"+user.getEmailId(), exception);
+			String mesg = "Unable to create user "+user.getEmailId();
+			Utility.getInstance().throwException(exception, mesg);
 		}
 	}
 
@@ -152,18 +148,17 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	public User getUser(final String loginName) throws SMException
 	{
+		User user = null;
 		try
 		{
-			return ProvisionManager.getInstance().getAuthorizationManager().getUser(loginName);
+			user = ProvisionManager.getInstance().getAuthorizationManager().getUser(loginName);
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to get user: "+loginName,exception);
 			String mesg = "Unable to get user: "+loginName;
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
+		return user;
 	}
 	
 	/**
@@ -177,19 +172,14 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSTransactionException ex)
 		{
-			logger.debug("Unable to get user: Exception: " + ex.getMessage());
 			String mesg = "Failed to find this user with userId:" + userId;
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMTransactionException(defaultErrorKey,ex,null);
+			Utility.getInstance().throwException(ex, mesg);
 		}
 		catch (CSException exception)
 		{
 			logger.debug("Unable to obtain Authorization Manager: Exception: " + exception.getMessage());
 			String mesg = "Failed to find this user with userId:" + userId;
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 	}
 
@@ -214,12 +204,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to get roles: Exception: ",exception);
-			
 			String mesg = "Unable to get roles: Exception:  ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 		return roles;
 	}
@@ -260,11 +246,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			logger.debug("UNABLE TO ASSIGN ROLE TO USER: Exception: " + exception.getMessage());
 			String mesg = "UNABLE TO ASSIGN ROLE TO USER: Exception: ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 	}
 
@@ -302,11 +285,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to get roles: Exception: " + exception.getMessage(),exception);
 			String mesg = "Unable to get roles: Exception:  ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 		return role;
 	}
@@ -346,11 +326,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to get roles: Exception: " + exception.getMessage(),exception);
 			String mesg = "Unable to get roles: Exception: ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 		return role;
 	}
@@ -370,11 +347,8 @@ public class SecurityManager implements Permissions,ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to modify user: Exception: " + exception.getMessage(),exception);
 			String mesg = "Unable to modify user: Exception:  ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);
+			Utility.getInstance().throwException(exception, mesg);
 		}
 	}
 
@@ -387,18 +361,17 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	public User getUserById(String userId) throws SMException
 	{
+		User user = null;
 		try
 		{
-			return ProvisionManager.getInstance().getUserProvisioningManager().getUserById(userId);
+			user =  ProvisionManager.getInstance().getUserProvisioningManager().getUserById(userId);
 		}
 		catch (CSException exception)
 		{
-			logger.debug("Unable to get user by Id for : "+userId,exception);
 			String mesg = "Unable to get user by Id for : ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);		
+			Utility.getInstance().throwException(exception, mesg);
 		}
+		return user;
 	}
 
 	/**
@@ -407,20 +380,20 @@ public class SecurityManager implements Permissions,ISecurityManager
 	 */
 	public List getUsers() throws SMException
 	{
+		List list = null;
 		try
 		{
 			User user = new User();
 			SearchCriteria searchCriteria = new UserSearchCriteria(user);
-			return ProvisionManager.getInstance().getUserProvisioningManager().getObjects(searchCriteria);
+			list = ProvisionManager.getInstance().getUserProvisioningManager().getObjects(searchCriteria);
 		}
 		catch (CSException exception)
 		{
 			logger.debug("Unable to get all users: Exception: " + exception.getMessage());
 			String mesg = "Unable to get all users: Exception: ";
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);	
+			Utility.getInstance().throwException(exception, mesg);
 		}
+		return list;
 	}
 
 
@@ -444,10 +417,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mess="The Security Service encountered a fatal exception.";
-			logger.fatal(mess, exception);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mess);
-			throw new SMException(defaultErrorKey,exception,null);		
+			Utility.getInstance().throwException(exception, mess);
 		}
 	}
 	
@@ -472,9 +442,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		{
 			String mess="The Security Service encountered a fatal exception.";
 			logger.fatal(mess, ex);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mess);
-			throw new SMException(defaultErrorKey,ex,null);	
+			Utility.getInstance().throwException(ex, mess);
 		}
 	}
 
@@ -505,10 +473,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg="The Security Service encountered a fatal exception.";
-			logger.fatal(mesg, exception);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,exception,null);	
+			Utility.getInstance().throwException(exception, mesg);
 		}
 	}
 
@@ -553,10 +518,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		if (userId == null || groupIds == null || groupIds.length < 1)
 		{
 			String mesg=" Null or insufficient Parameters passed";
-			logger.debug(mesg);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,null,null);	
+			Utility.getInstance().throwException(null, mesg);
 		}
 	}
 	/**
@@ -685,10 +647,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		catch (CSException exception)
 		{
 			String mess="Unable to get protection group for Protection Element "+ protElemName;
-			logger.debug(mess,exception);
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mess);
-			throw new SMException(defaultErrorKey,exception,null);	
+			Utility.getInstance().throwException(exception, mess);
 		}
 		return names;
 
@@ -912,10 +871,7 @@ public class SecurityManager implements Permissions,ISecurityManager
 		if (userId == null || userGroupname == null)
 		{
 			String mesg = "Null or insufficient Parameters passed";
-			logger.debug(" Null or insufficient Parameters passed");
-			ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-			defaultErrorKey.setErrorMessage(mesg);
-			throw new SMException(defaultErrorKey,null,null);	
+			Utility.getInstance().throwException(null, mesg);
 		}
 	}
 	/**
