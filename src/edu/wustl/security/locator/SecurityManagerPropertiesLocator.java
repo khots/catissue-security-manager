@@ -72,7 +72,4 @@ public final class SecurityManagerPropertiesLocator {
 	public String getSecurityMgrClassName() {
 		return className;
 	}
-
-	
-	
 }

@@ -63,14 +63,15 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		this.sessionFact = sessionFact;
 
 	}
+
 	/**
 	 * @param String username
 	 * @param collection pes
 	 * @throws CSException exc
 	 * @return List<ObjectPrivilegeMap> list
 	 */
-	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs) 
-	throws CSException
+	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs)
+			throws CSException
 	{
 		List<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
 		PreparedStatement pstmt = null;
@@ -87,11 +88,11 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				connection = session.connection();
 				StringBuffer stbr = new StringBuffer();
 				String attributeVal = "=?";
-				generateQuery(stbr,attributeVal);
+				generateQuery(stbr, attributeVal);
 
 				StringBuffer stbr2 = new StringBuffer();
 				attributeVal = " IS NULL";
-				generateQuery(stbr2,attributeVal);
+				generateQuery(stbr2, attributeVal);
 
 				String sql = stbr.toString();
 				pstmt = connection.prepareStatement(sql);
@@ -102,9 +103,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			}
 			catch (SQLException ex)
 			{
-				StringBuffer mess= new StringBuffer("Failed to get privileges for ")
-				.append(userName).append(':').append(ex.getMessage());
-				logger.debug(mess,ex);
+				StringBuffer mess = new StringBuffer("Failed to get privileges for ").append(
+						userName).append(':').append(ex.getMessage());
+				logger.debug(mess, ex);
 				throw new CSException(mess.toString(), ex);
 			}
 			finally
@@ -114,6 +115,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 		return result;
 	}
+
 	/**
 	 * @param pstmt
 	 * @param pstmt2
@@ -121,8 +123,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	 * @param connection
 	 * @throws HibernateException
 	 */
-	private void close(PreparedStatement pstmt, PreparedStatement pstmt2,
-			Session session, Connection connection) throws HibernateException {
+	private void close(PreparedStatement pstmt, PreparedStatement pstmt2, Session session,
+			Connection connection) throws HibernateException
+	{
 		try
 		{
 			session.close();
@@ -132,9 +135,10 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 		catch (SQLException ex2)
 		{
-			logger.debug("Error in Closing Session |"+ ex2.getMessage());
+			logger.debug("Error in Closing Session |" + ex2.getMessage());
 		}
 	}
+
 	/**
 	 * @param userName userName
 	 * @param pEs pes
@@ -144,9 +148,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	 * @throws SQLException exc
 	 */
 	private List<ObjectPrivilegeMap> getResult(final String userName, final Collection pEs,
-			PreparedStatement pstmt, PreparedStatement pstmt2)
-			throws SQLException 
-			{
+			PreparedStatement pstmt, PreparedStatement pstmt2) throws SQLException
+	{
 		ResultSet resulSet = null;
 		List<ObjectPrivilegeMap> result = new ArrayList<ObjectPrivilegeMap>();
 		Iterator iterator = pEs.iterator();
@@ -156,7 +159,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			ArrayList<Privilege> privs = new ArrayList<Privilege>();
 			if (pElement.getObjectId() != null)
 			{
-				if (pElement.getAttribute()== null)
+				if (pElement.getAttribute() == null)
 				{
 					pstmt2.setString(1, pElement.getObjectId());
 					pstmt2.setString(2, userName);
@@ -183,13 +186,15 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 		return result;
 	}
+
 	/**
 	 * @param userName
 	 * @param pEs
 	 * @throws CSException
 	 */
-	private void checkForSufficientParams(final String userName,
-			final Collection pEs) throws CSException {
+	private void checkForSufficientParams(final String userName, final Collection pEs)
+			throws CSException
+	{
 		if (StringUtilities.isBlank(userName))
 		{
 			throw new CSException("userName can't be null!");
@@ -253,7 +258,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		{
 			session = HibernateSessionFactoryHelper.getAuditSession(sessionFact);
 
-			User user = (User) this.getObjectByPrimaryKey(session, User.class, Long.valueOf(userId));
+			User user = (User) this
+					.getObjectByPrimaryKey(session, User.class, Long.valueOf(userId));
 			groups = user.getGroups();
 			List<Group> list = new ArrayList<Group>();
 			Iterator<Group> toSortIterator = groups.iterator();
@@ -267,9 +273,10 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 		catch (Exception ex)
 		{
-			String mess="An error occurred while obtaining Associated Groups for the User:"+userId;
-			logger.error(mess,ex);
-			throw new CSObjectNotFoundException(mess+ ex.getMessage(), ex);
+			String mess = "An error occurred while obtaining Associated Groups for the User:"
+					+ userId;
+			logger.error(mess, ex);
+			throw new CSObjectNotFoundException(mess + ex.getMessage(), ex);
 		}
 		finally
 		{
@@ -279,15 +286,15 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			}
 			catch (Exception ex2)
 			{
-				logger.debug("Error in Closing Session"	+ ex2.getMessage());
+				logger.debug("Error in Closing Session" + ex2.getMessage());
 			}
 		}
 		return groups;
 
 	}
 
-	private Object getObjectByPrimaryKey(final Session session, final Class objectType, final Long primaryKey)
-			throws HibernateException, CSObjectNotFoundException
+	private Object getObjectByPrimaryKey(final Session session, final Class objectType,
+			final Long primaryKey) throws HibernateException, CSObjectNotFoundException
 	{
 
 		if (primaryKey == null)
@@ -307,34 +314,24 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 						+ objectType.getName() + "|");
 		return obj;
 	}
-	
-	private void generateQuery(StringBuffer stbr,final String attributeVal)
-	{
-		String str = "select distinct(p.privilege_name)" +
-		" from csm_protection_group pg," +
-		" csm_protection_element pe,"+
-		" csm_pg_pe pgpe,"+
-		" csm_user_group_role_pg ugrpg,"+
-		" csm_user u,"+
-		" csm_group g,"+
-		" csm_user_group ug,"+
-		" csm_role_privilege rp,"+
-		" csm_privilege p "+
-		" where pgpe.protection_group_id = pg.protection_group_id"+
-		" and pgpe.protection_element_id = pe.protection_element_id"+
-		" and pe.object_id= ?"+
 
-		" and pe.attribute " + attributeVal +
-		" and pg.protection_group_id = ugrpg.protection_group_id "+
-		" and (( ugrpg.group_id = g.group_id"+
-		" and ug.group_id= g.group_id"+
-		"       and ug.user_id = u.user_id)"+
-		"       or "+
-		"     (ugrpg.user_id = u.user_id))"+
-		" and u.login_name=?"+
-		" and ugrpg.role_id = rp.role_id "+
-		" and rp.privilege_id = p.privilege_id";
-		
+	private void generateQuery(StringBuffer stbr, final String attributeVal)
+	{
+		String str = "select distinct(p.privilege_name)" + " from csm_protection_group pg,"
+				+ " csm_protection_element pe," + " csm_pg_pe pgpe,"
+				+ " csm_user_group_role_pg ugrpg," + " csm_user u," + " csm_group g,"
+				+ " csm_user_group ug," + " csm_role_privilege rp," + " csm_privilege p "
+				+ " where pgpe.protection_group_id = pg.protection_group_id"
+				+ " and pgpe.protection_element_id = pe.protection_element_id"
+				+ " and pe.object_id= ?" +
+
+				" and pe.attribute " + attributeVal
+				+ " and pg.protection_group_id = ugrpg.protection_group_id "
+				+ " and (( ugrpg.group_id = g.group_id" + " and ug.group_id= g.group_id"
+				+ "       and ug.user_id = u.user_id)" + "       or "
+				+ "     (ugrpg.user_id = u.user_id))" + " and u.login_name=?"
+				+ " and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id";
+
 		stbr.append(str);
 	}
 

@@ -44,6 +44,7 @@ public class SecurityDataBean
 	{
 		this.protGrpName = protGrpName;
 	}
+
 	/**
 	 * @return Returns the roleName.
 	 */
@@ -51,6 +52,7 @@ public class SecurityDataBean
 	{
 		return roleName;
 	}
+
 	/**
 	 * @param roleName The roleName to set.
 	 */
@@ -58,6 +60,7 @@ public class SecurityDataBean
 	{
 		this.roleName = roleName;
 	}
+
 	/**
 	 * @return Returns the userGroup.
 	 */

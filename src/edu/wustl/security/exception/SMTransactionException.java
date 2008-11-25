@@ -13,47 +13,58 @@ import edu.wustl.common.exception.ErrorKey;
  */
 public class SMTransactionException extends SMException
 {
-
-	public SMTransactionException(final ErrorKey errorKey,final  Throwable throwable,
-			final String msgValues) {
+	/**
+	 *
+	 * @param errorKey eror key
+	 * @param throwable exc
+	 * @param msgValues meg
+	 */
+	public SMTransactionException(final ErrorKey errorKey, final Throwable throwable,
+			final String msgValues)
+	{
 		super(errorKey, throwable, msgValues);
 	}
 
 	/**
 	 * serial version id.
-	 *//*
-	private static final long serialVersionUID = 3799704644728617089L;
+	 */
+	/*
+		private static final long serialVersionUID = 3799704644728617089L;
 
-	*//**
-	 * No argument constructor.
-	 *//*
-	public SMTransactionException()
-	{
-		super();
-	}
+		*//**
+		 * No argument constructor.
+		 */
+	/*
+		public SMTransactionException()
+		{
+			super();
+		}
 
-	*//**
-	 * @param message
-	 *//*
-	public SMTransactionException(String message)
-	{
-		super(message);
-	}
+		*//**
+		 * @param message
+		 */
+	/*
+		public SMTransactionException(String message)
+		{
+			super(message);
+		}
 
-	*//**
-	 * @param message
-	 * @param cause
-	 *//*
-	public SMTransactionException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+		*//**
+		 * @param message
+		 * @param cause
+		 */
+	/*
+		public SMTransactionException(String message, Throwable cause)
+		{
+			super(message, cause);
+		}
 
-	*//**
-	 * @param cause
-	 *//*
-	public SMTransactionException(Throwable cause)
-	{
-		super(cause);
-	}*/
+		*//**
+		 * @param cause
+		 */
+	/*
+		public SMTransactionException(Throwable cause)
+		{
+			super(cause);
+		}*/
 }

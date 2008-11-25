@@ -23,7 +23,7 @@ public class SecurityManagerFactory
 		ISecurityManager securityManager = null;
 		if (smClassName == null)
 		{
-			Utility.getInstance().throwException(null, "Could not get the className ");
+			Utility.getInstance().throwSMException(null, "Could not get the className ");
 		}else
 		{
 			securityManager = getSMInstance(smClassName);
@@ -41,13 +41,13 @@ public class SecurityManagerFactory
 			securityManager = (ISecurityManager)className.newInstance();
 		} catch (ClassNotFoundException e) {
 			String message = "Expected SecurityManager class name is not provided in properties file";
-			Utility.getInstance().throwException(e,message);
+			Utility.getInstance().throwSMException(e,message);
 		} catch (InstantiationException e) {
 			String message = "Can not instantiate class ";
-			Utility.getInstance().throwException(e,message);
+			Utility.getInstance().throwSMException(e,message);
 		} catch (IllegalAccessException e) {
 			String message = "Illegal access to the class ";
-			Utility.getInstance().throwException(e,message);
+			Utility.getInstance().throwSMException(e,message);
 		}
 		return securityManager;
 	}

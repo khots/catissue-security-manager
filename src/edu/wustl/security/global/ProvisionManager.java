@@ -1,3 +1,4 @@
+
 package edu.wustl.security.global;
 
 import java.util.List;
@@ -17,23 +18,27 @@ import gov.nih.nci.security.dao.GroupSearchCriteria;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.dao.SearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
+
 /**
  * Class to provide required objects from csm apis.
  * @author deepti_shelar
  *
  */
-public final class ProvisionManager 
+public final class ProvisionManager
 {
+
 	private static ProvisionManager provManager = new ProvisionManager();
+
 	private ProvisionManager()
 	{
-		
+
 	}
-	public  static ProvisionManager getInstance()
+
+	public static ProvisionManager getInstance()
 	{
 		return provManager;
 	}
-	
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -42,6 +47,7 @@ public final class ProvisionManager
 	private AuthenticationManager authTManager = null;
 
 	private AuthorizationManager authRManager = null;
+
 	/**
 	 * Returns the UserProvisioningManager singleton object.
 	 *
@@ -52,6 +58,7 @@ public final class ProvisionManager
 	{
 		return (UserProvisioningManager) getAuthorizationManager();
 	}
+
 	/**
 	 * Returns the AuthenticationManager for the caTISSUE Core. This method
 	 * follows the singleton pattern so that only one AuthenticationManager is
@@ -60,12 +67,13 @@ public final class ProvisionManager
 	 * @return
 	 * @throws	CSException
 	 */
-	public  AuthenticationManager getAuthenticationManager() throws CSException
+	public AuthenticationManager getAuthenticationManager() throws CSException
 	{
 		if (authTManager == null)
 		{
 			authTManager = SecurityServiceProvider
-					.getAuthenticationManager(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
+					.getAuthenticationManager(SecurityManagerPropertiesLocator.getInstance()
+							.getApplicationCtxName());
 		}
 		return authTManager;
 	}
@@ -84,11 +92,13 @@ public final class ProvisionManager
 		if (authRManager == null)
 		{
 			authRManager = SecurityServiceProvider
-					.getAuthorizationManager(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
+					.getAuthorizationManager(SecurityManagerPropertiesLocator.getInstance()
+							.getApplicationCtxName());
 		}
 
 		return authRManager;
 	}
+
 	/**
 	* Returns group id from Group name
 	* @param groupName
@@ -99,17 +109,18 @@ public final class ProvisionManager
 	public String getGroupID(final String groupName) throws CSException, SMException
 	{
 		List<Group> list;
-		String groupId=null;
+		String groupId = null;
 		Group group = new Group();
 		group.setGroupName(groupName);
-		UserProvisioningManager upManager=getUserProvisioningManager();
+		UserProvisioningManager upManager = getUserProvisioningManager();
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
-		group.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
+		group.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator
+				.getInstance().getApplicationCtxName()));
 		list = getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
 			group = (Group) list.get(0);
-			groupId= group.getGroupId().toString();
+			groupId = group.getGroupId().toString();
 		}
 
 		return groupId;
@@ -122,20 +133,22 @@ public final class ProvisionManager
 	 */
 	public String getRoleID(final String roleName) throws CSException, SMException
 	{
-		String roleId=null;
+		String roleId = null;
 		Role role = new Role();
 		role.setName(roleName);
 		SearchCriteria searchCriteria = new RoleSearchCriteria(role);
-		UserProvisioningManager upManager= getUserProvisioningManager();
-		role.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()));
+		UserProvisioningManager upManager = getUserProvisioningManager();
+		role.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator.getInstance()
+				.getApplicationCtxName()));
 		List list = getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
 			role = (Role) list.get(0);
-			roleId=role.getId().toString();
+			roleId = role.getId().toString();
 		}
 		return roleId;
 	}
+
 	/**
 	 * Returns list of objects corresponding to the searchCriteria passed.
 	 * @param searchCriteria
@@ -143,13 +156,13 @@ public final class ProvisionManager
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
 	 * @throws CSException
 	 */
-	public  List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
+	public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
 	{
 		if (null == searchCriteria)
 		{
 			logger.debug("searchCriteria is null");
 			String mesg = "searchCriteria is null";
-			Utility.getInstance().throwException(null, mesg);
+			Utility.getInstance().throwSMException(null, mesg);
 		}
 		UserProvisioningManager upManager = getUserProvisioningManager();
 		List list = upManager.getObjects(searchCriteria);
