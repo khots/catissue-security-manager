@@ -68,26 +68,6 @@ public final class RoleGroupLocator
 		Document doc = XMLParserUtility.getDocument(CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		createRoleGroupBeans(roleList);
-		/*System.out.println(" inside roleGrpLocator .........");
-		System.out.println("roleIdList lenghth "+roleIdList.size());
-		for (String id : roleIdList) {
-			System.out.println(" role id "+id);	
-		}
-		System.out.println("groupIdList lenghth "+groupIdList.size());
-		for (String id : groupIdList) {
-			System.out.println(" grp id "+id);	
-		}
-		System.out.println("roleGrpMap lenghth "+roleGrpMap.size());
-		*/
-		/*Set<RoleGroupDetailsBean> keySet = roleGrpMap.keySet();
-		Iterator<RoleGroupDetailsBean> iterator = keySet.iterator();
-		{
-			while(iterator.hasNext())
-			{
-				RoleGroupDetailsBean next = iterator.next();
-				System.out.println("RoleGroupDetailsBean   "+next.toString());
-			}
-		}*/
 	}
 
 	/**
@@ -103,7 +83,7 @@ public final class RoleGroupLocator
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml.
 	 * @param roleList list
 	 */
-	private void createRoleGroupBeans(NodeList roleList) 
+	private void createRoleGroupBeans(NodeList roleList)
 	{
 		for (int s = 0; s < roleList.getLength(); s++)
 		{
@@ -116,7 +96,9 @@ public final class RoleGroupLocator
 				}
 				catch (SMException e)
 				{
-					e.printStackTrace();
+					String mess = "error in creating role grp bean"+e.getMessage();
+					logger.error(mess);
+					//Utility.getInstance().throwSMException(e, mess);
 				}
 			}
 		}

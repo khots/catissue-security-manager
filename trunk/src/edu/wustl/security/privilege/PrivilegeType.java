@@ -25,9 +25,9 @@ public enum PrivilegeType
 	/**                     
 	 * @param value The value
 	 */
-	PrivilegeType(int value)
+	PrivilegeType(int val)
 	{
-		this.value = value;
+		this.value = val;
 	}
 
 	/**

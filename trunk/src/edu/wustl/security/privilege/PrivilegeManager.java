@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -82,7 +81,6 @@ public final class PrivilegeManager
 		catch (SMException e)
 		{
 			logger.debug(e.getStackTrace());
-			e.printStackTrace();
 		}
 	}
 
@@ -111,36 +109,6 @@ public final class PrivilegeManager
 
 		return privilegeCache;
 	}
-
-	/**
-	 * To get PrivilegeCache objects for all users
-	 * belonging to a particular group
-	 *
-	 * @param groupName
-	 * @return
-	 * @throws CSException 
-	 * @throws CSObjectNotFoundException 
-	 * @throws Exception
-	 */
-	/*
-		public List<PrivilegeCache> getPrivilegeCaches(String groupName) throws CSObjectNotFoundException, CSException  
-		{
-			List<PrivilegeCache> listOfPrivCaches = new ArrayList<PrivilegeCache>();
-
-			Set<User> users = privilegeUtility.getUserProvisioningManager().getUsers(groupName);
-
-			for (User user : users)
-			{
-				PrivilegeCache privilegeCache = privilegeCaches.get(user.getUserId().toString());
-
-				if (privilegeCache != null)
-				{
-					listOfPrivCaches.add(privilegeCache);
-				}
-			}
-
-			return listOfPrivCaches;
-		}*/
 
 	/**
 	 * To get all PrivilegeCache objects.
@@ -181,7 +149,7 @@ public final class PrivilegeManager
 			ProtectionElement protectionElement = privilegeUtility.getUserProvisioningManager()
 					.getProtectionElement(objectId);
 
-			Collection<ProtectionElement> protElements = new Vector<ProtectionElement>();
+			Collection<ProtectionElement> protElements = new ArrayList<ProtectionElement>();
 			protElements.add(protectionElement);
 
 			for (PrivilegeCache privilegeCache : listOfPrivCaches)
@@ -232,7 +200,6 @@ public final class PrivilegeManager
 		addObjectToPrivilegeCaches(objectId);
 	}
 
-	
 	/**
 	 * 
 	 * @param fileName name of the file
@@ -383,9 +350,7 @@ public final class PrivilegeManager
 			String mess = "Not able to get instance of UserProvisioningManager:";
 			Utility.getInstance().throwSMException(excp, mess);
 		}
-
 		return result;
 	}
 
-	
 }

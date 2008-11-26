@@ -185,6 +185,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			ObjectPrivilegeMap opm = new ObjectPrivilegeMap(pElement, privs);
 			result.add(opm);
 		}
+		resulSet.close();
 		return result;
 	}
 
