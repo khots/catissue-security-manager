@@ -102,15 +102,23 @@ public final class RoleGroupLocator
 	/**
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml
 	 * @param roleList
+	 * @throws SMException 
 	 */
-	private void createRoleGroupBeans(NodeList roleList)
+	private void createRoleGroupBeans(NodeList roleList) 
 	{
 		for (int s = 0; s < roleList.getLength(); s++)
 		{
 			Node role = roleList.item(s);
 			if (role.getNodeType() == Node.ELEMENT_NODE)
 			{
-				createRoleGroupBean(role);
+				try
+				{
+					createRoleGroupBean(role);
+				}
+				catch (SMException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}
