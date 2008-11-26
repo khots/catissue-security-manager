@@ -19,7 +19,7 @@ public final class Utility
 {
 
 	/**
-	 * logger -Generic Logger
+	 * logger -Generic Logger.
 	 */
 
 	private static org.apache.log4j.Logger logger = Logger.getLogger(PrivilegeManager.class);
@@ -86,55 +86,4 @@ public final class Utility
 		defaultErrorKey.setErrorMessage(mess);
 		throw new SMException(defaultErrorKey, exc, null);
 	}
-	/* Added By Rukhsana
-	 * Added list of objects on which read denied has to be checked while filtration of result for csm-query performance.
-	 * A map that contains entity name as key and sql to get Main_Protocol_Object (Collection protocol, Clinical Study) Ids for that entity id as value for csm-query performance.
-	 * Reading the above values from a properties file to make query module application independent
-	 
-	public static void setReadDeniedAndEntitySqlMap()
-	{
-		List<String> queryReadDeniedObjectsList = new ArrayList<String>();
-		Map<String, String> entityCSSqlMap = new HashMap<String, String>();
-		String mainProtocolClassName = "";
-		String validatorClassname = "";
-		File file = new File(Variables.applicationHome + System.getProperty("file.separator")
-				+ "WEB-INF" + System.getProperty("file.separator") + "classes"
-				+ System.getProperty("file.separator") + Constants.CSM_PROPERTY_FILE);
-		if (file.exists())
-		{
-			Properties csmPropertyFile = new Properties();
-			try
-			{
-
-				csmPropertyFile.load(new FileInputStream(file));
-				mainProtocolClassName = csmPropertyFile.getProperty(Constants.MAIN_PROTOCOL_OBJECT);
-				validatorClassname = csmPropertyFile.getProperty(Constants.VALIDATOR_CLASSNAME);
-				String readdenied = csmPropertyFile.getProperty(Constants.READ_DENIED_OBJECTS);
-				String[] readDeniedObjects = readdenied.split(",");
-				for (int i = 0; i < readDeniedObjects.length; i++)
-				{
-					queryReadDeniedObjectsList.add(readDeniedObjects[i]);
-					if (csmPropertyFile.getProperty(readDeniedObjects[i]) != null)
-						entityCSSqlMap.put(readDeniedObjects[i], csmPropertyFile
-								.getProperty(readDeniedObjects[i]));
-				}
-			}
-			catch (FileNotFoundException e)
-			{
-				Logger.out.debug("csm.properties not found");
-				e.printStackTrace();
-			}
-			catch (IOException e)
-			{
-				Logger.out.debug("Exception occured while reading csm.properties");
-				e.printStackTrace();
-			}
-			Variables.mainProtocolObject = mainProtocolClassName;
-			Variables.queryReadDeniedObjectList.addAll(queryReadDeniedObjectsList);
-			Variables.entityCPSqlMap.putAll(entityCSSqlMap);
-			Variables.validatorClassname = validatorClassname;
-		}
-
-	}*/
-
 }
