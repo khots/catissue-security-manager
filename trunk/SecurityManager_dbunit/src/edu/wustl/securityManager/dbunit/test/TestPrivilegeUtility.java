@@ -2,9 +2,11 @@ package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
@@ -14,7 +16,6 @@ import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.SMTransactionException;
 import edu.wustl.security.global.Roles;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
@@ -105,7 +106,7 @@ public class TestPrivilegeUtility extends TestCase {
 		try {
 			Set<Privilege> rolePrivileges = privilegeUtility.getRolePrivileges(roleId);
 			assertEquals(24, rolePrivileges.size());
-		} catch (CSException e) {
+		} catch (SMException e) {
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -117,7 +118,7 @@ public class TestPrivilegeUtility extends TestCase {
 		try {
 			UserProvisioningManager upManager = privilegeUtility.getUserProvisioningManager();
 			assertNotNull(upManager);
-		} catch (CSException e) {
+		} catch (SMException e) {
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -202,9 +203,7 @@ public class TestPrivilegeUtility extends TestCase {
 			assertNotNull(list);
 		} catch (SMException e) {
 			e.printStackTrace();
-		} catch (CSException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	/**
 	 * 
@@ -222,9 +221,7 @@ public class TestPrivilegeUtility extends TestCase {
 			assertNotNull(list);
 		} catch (SMException e) {
 			e.printStackTrace();
-		} catch (CSException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	/**
 	 * 
@@ -235,7 +232,7 @@ public class TestPrivilegeUtility extends TestCase {
 			Privilege priv = privilegeUtility.getPrivilegeById("1");
 			assertNotNull(priv);
 			assertEquals("CREATE", priv.getName());
-		}catch (CSException e) {
+		}catch (SMException e) {
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -268,31 +265,14 @@ public class TestPrivilegeUtility extends TestCase {
 			Application application = privilegeUtility.getApplication("catissuecore");
 			assertNotNull(application);
 			assertEquals("catissuecore", application.getApplicationName());
-		}catch (CSException e) {
-			logger.error(e.getStackTrace());
-		}
-	}
-	/**
-	 * 
-	 *//*
-	public void testInsertAuthorizationData()
-	{
-		try {
-			edu.wustl.catissuecore.domain.User user = new edu.wustl.catissuecore.domain.User();
-			
-			List<SecurityDataBean> authorizationData = new ArrayList<SecurityDataBean>();
-			Set protectionObjects=new HashSet();
-			protectionObjects.add(user);
-			String[] dynamicGroups;
-			privilegeUtility.insertAuthorizationData
-			(authorizationData, protectionObjects, null);
 		}catch (SMException e) {
 			logger.error(e.getStackTrace());
 		}
-	}*/
+	}
+	
 	/**
 	 * Inserts a sample User.
-	 * @throws SMTransactionException 
+	 * @throws SMException 
 	 * 
 	 * @throws Exception
 	 */
@@ -328,8 +308,10 @@ public class TestPrivilegeUtility extends TestCase {
 			logger.error(e.getStackTrace());
 		}
 	}
+	
 	public void testInsertAuthData()
 	{
+		removeAllUsers();
 		Vector authorizationData = new Vector();
 		Set group = new HashSet();
 		String userId = "";
@@ -337,12 +319,9 @@ public class TestPrivilegeUtility extends TestCase {
 		try
 		{
 			securityManager = SecurityManagerFactory.getSecurityManager();
-			List<User> allUsers = securityManager.getUsers();
-			for (User user1 : allUsers) {
-				Long userId1 = user1.getUserId();
-				group.add(user1);
-			}
-			// Protection group of PI
+		
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = 
+				new gov.nih.nci.security.authorization.domainobjects.User();
 			SecurityDataBean userGroupRoleProtectionGroupBean;
 			userGroupRoleProtectionGroupBean = new SecurityDataBean();
 			userGroupRoleProtectionGroupBean.setUser(userId);
@@ -353,8 +332,26 @@ public class TestPrivilegeUtility extends TestCase {
 			PrivilegeUtility util = new PrivilegeUtility();
 			Set protectionObjects=new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
+			usr.setLastName("dee1");
+			usr.setId(new Long(231));
+			usr.setLoginName("dee1");
+			usr.setEmailAddress("dee1@dee.com");
+			csmUser.setLoginName(usr.getLoginName());
+			csmUser.setLastName(usr.getLastName());
+			csmUser.setFirstName(usr.getFirstName());
+			csmUser.setEmailId(usr.getEmailAddress());
+			csmUser.setStartDate(Calendar.getInstance().getTime());
+			securityManager.createUser(csmUser);
+			//assignGroupToUser(usr.getLoginName(), "PUBLIC_GROUP");
 			protectionObjects.add(usr);
-			util.insertAuthorizationData(authorizationData, protectionObjects, null);
+			final Map<String, String[]>  protectionGroupsForObjectTypes = new HashMap<String, String[]>();
+			protectionGroupsForObjectTypes.put(User.class.getName(),
+					new String[] {"PUBLIC_DATA_GROUP"});
+			edu.wustl.security.global.Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+			.putAll(protectionGroupsForObjectTypes);
+		//	String[] protectionGroups = securityManager.getProtectionGroupByName(usr);
+			String[] protectionGroups = {"PUBLIC_DATA_GROUP"};
+			util.insertAuthorizationData(authorizationData, protectionObjects, protectionGroups);
 		}
 		catch (SMException e)
 		{
@@ -363,4 +360,20 @@ public class TestPrivilegeUtility extends TestCase {
 		}
 		
 	}
+	/**
+	 * assigns the given group name to the user with the given login name
+	 * 
+	 * @param loginName
+	 * @param groupName
+	 * @throws SMException 
+	 * @throws Exception
+	 */
+	private void assignGroupToUser(String loginName, String groupName) throws SMException
+	{
+		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+		User user = securityManager.getUser(loginName);
+		String userId = user.getUserId().toString();
+		securityManager.assignUserToGroup(groupName, userId);
+	}
+	
 }
