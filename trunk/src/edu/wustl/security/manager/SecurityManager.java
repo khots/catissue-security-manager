@@ -114,7 +114,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * 
 	 * @param user
 	 *            user to be created
-	 * @throws SMTransactionException
+	 * @throws SMTException
 	 *             If there is any exception in creating the User
 	 */
 	public void createUser(User user) throws SMException

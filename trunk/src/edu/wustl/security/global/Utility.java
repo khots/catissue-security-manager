@@ -81,7 +81,7 @@ public final class Utility
 	 */
 	public void throwSMException(Exception exc, String mess) throws SMException
 	{
-		logger.debug(mess, exc);
+		logger.error(mess, exc);
 		ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
 		defaultErrorKey.setErrorMessage(mess);
 		throw new SMException(defaultErrorKey, exc, null);

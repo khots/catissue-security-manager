@@ -65,11 +65,22 @@ public final class ProvisionManager
 	 * Returns the UserProvisioningManager singleton object.
 	 *
 	 * @return UserProvisioningManager up
+	 * @throws SMException 
 	 * @throws	CSException exc
 	 */
-	public UserProvisioningManager getUserProvisioningManager() throws CSException
+	public UserProvisioningManager getUserProvisioningManager() throws SMException
 	{
-		return (UserProvisioningManager) getAuthorizationManager();
+		UserProvisioningManager upManager = null;
+		try
+		{
+			upManager =  (UserProvisioningManager) getAuthorizationManager();
+		}
+		catch (CSException e)
+		{
+			String mess = "Error in getting UserProvisioningManager"+e.getMessage();
+			Utility.getInstance().throwSMException(e, mess);
+		}
+		return upManager;
 	}
 
 	/**
@@ -171,7 +182,7 @@ public final class ProvisionManager
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
 	 * @throws CSException exc
 	 */
-	public List getObjects(SearchCriteria searchCriteria) throws SMException, CSException
+	public List getObjects(SearchCriteria searchCriteria) throws SMException
 	{
 		if (null == searchCriteria)
 		{
