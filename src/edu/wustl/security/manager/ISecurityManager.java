@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.SMTransactionException;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 

@@ -381,19 +381,10 @@ public class SecurityManager implements Permissions, ISecurityManager
 	public List getUsers() throws SMException
 	{
 		List list = null;
-		try
-		{
-			User user = new User();
-			SearchCriteria searchCriteria = new UserSearchCriteria(user);
-			list = ProvisionManager.getInstance().getUserProvisioningManager().getObjects(
-					searchCriteria);
-		}
-		catch (CSException exception)
-		{
-			logger.debug("Unable to get all users: Exception: " + exception.getMessage());
-			String mesg = "Unable to get all users: Exception: ";
-			Utility.getInstance().throwSMException(exception, mesg);
-		}
+		User user = new User();
+		SearchCriteria searchCriteria = new UserSearchCriteria(user);
+		list = ProvisionManager.getInstance().getUserProvisioningManager().getObjects(
+				searchCriteria);
 		return list;
 	}
 
