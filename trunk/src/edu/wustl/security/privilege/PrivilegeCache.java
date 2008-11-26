@@ -17,6 +17,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.PrivilegeLocator;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
@@ -71,16 +72,24 @@ public class PrivilegeCache
 	 */
 	private void initialize()
 	{
-		for (String className : PrivilegeManager.getInstance().getClasses())
+		try
 		{
-			Collection objPrivMap = getObjectPrivilegeMap(className);
-			populatePrivileges(objPrivMap);
+			for (String className : PrivilegeManager.getInstance().getClasses())
+			{
+				Collection objPrivMap = getObjectPrivilegeMap(className);
+				populatePrivileges(objPrivMap);
+			}
+			for (String objectPattern : PrivilegeManager.getInstance().getEagerObjects())
+			{
+				Collection objPrivMap = getObjectPrivilegeMap(objectPattern);
+				populatePrivileges(objPrivMap);
+			}
 		}
-
-		for (String objectPattern : PrivilegeManager.getInstance().getEagerObjects())
+		catch (SMException e)
 		{
-			Collection objPrivMap = getObjectPrivilegeMap(objectPattern);
-			populatePrivileges(objPrivMap);
+			String message = "error in initialising cache "+e.getMessage();
+			e.printStackTrace();
+		//	edu.wustl.security.global.Utility.getInstance().throwSMException(e, message);
 		}
 	}
 
@@ -88,8 +97,9 @@ public class PrivilegeCache
 	 * This method gets Object Privilege Map.
 	 * @param protEleObjId Protection Element Id
 	 * @return objPrivMap return objPrivMap.
+	 * @throws SMException 
 	 */
-	private Collection getObjectPrivilegeMap(final String protEleObjId)
+	private Collection getObjectPrivilegeMap(final String protEleObjId) throws SMException
 	{
 		Collection objPrivMap = new ArrayList();
 		try
@@ -168,8 +178,9 @@ public class PrivilegeCache
 	 * @param classObj classObj
 	 * @param privilegeName privilege Name
 	 * @return return true if user has privilege, false otherwise.
+	 * @throws SMException 
 	 */
-	public boolean hasPrivilege(Class classObj, String privilegeName)
+	public boolean hasPrivilege(Class classObj, String privilegeName) throws SMException
 	{
 		return hasPrivilege(classObj.getName(), privilegeName);
 	}
@@ -183,8 +194,9 @@ public class PrivilegeCache
 	 * @param aDObject aDObject is AbstractDomainObject.
 	 * @param privilegeName privilege Name.
 	 * @return return true if user has privilege, false otherwise.
+	 * @throws SMException 
 	 */
-	public boolean hasPrivilege(AbstractDomainObject aDObject, String privilegeName)
+	public boolean hasPrivilege(AbstractDomainObject aDObject, String privilegeName) throws SMException
 	{
 		return hasPrivilege(aDObject.getObjectId(), privilegeName);
 	}
@@ -198,8 +210,9 @@ public class PrivilegeCache
 	 * @param privilegeName privilege Name.
 	 * @return return true
 	 * if user has privilege, false otherwise.
+	 * @throws SMException 
 	 */
-	public boolean hasPrivilege(String objectId, String privilegeName)
+	public boolean hasPrivilege(String objectId, String privilegeName) throws SMException
 	{
 		boolean isAuthorized = false;
 		BitSet bitSet = privilegeMap.get(objectId);
@@ -226,8 +239,9 @@ public class PrivilegeCache
 	 * This method gets Privileges From Database.
 	 * @param objectId object Id
 	 * @return BitSet return bitSet of Privileges from Database.
+	 * @throws SMException 
 	 */
-	private BitSet getPrivilegesFromDatabase(String objectId)
+	private BitSet getPrivilegesFromDatabase(String objectId) throws SMException
 	{
 		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 
