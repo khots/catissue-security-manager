@@ -21,7 +21,7 @@ import edu.wustl.security.manager.SecurityManager;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
- * Reads SMRoleGroupConf.xml anad loads a map of bean objects having details of Role and group
+ * Reads SMRoleGroupConf.xml anad loads a map of bean objects having details of Role and group.
  * @author deepti_shelar
  *
  */
@@ -38,7 +38,7 @@ public final class RoleGroupLocator
 	 */
 	private static final String CONF_FILE = "SMRoleGroupConf.xml";
 	/**
-	 * 
+	 * ELE_ROLE.
 	 */
 	private static final String ELE_ROLE = "Role";
 	/**
@@ -100,9 +100,8 @@ public final class RoleGroupLocator
 	}
 
 	/**
-	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml
-	 * @param roleList
-	 * @throws SMException 
+	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml.
+	 * @param roleList list
 	 */
 	private void createRoleGroupBeans(NodeList roleList) 
 	{
@@ -125,8 +124,8 @@ public final class RoleGroupLocator
 
 	/**
 	 * Creates a bean object for role and group details.
-	 * @param role
-	 * @throws SMException 
+	 * @param role role
+	 * @throws SMException exc 
 	 */
 	private void createRoleGroupBean(Node role) throws SMException
 	{

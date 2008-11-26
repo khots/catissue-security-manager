@@ -1,3 +1,4 @@
+
 package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
@@ -31,8 +32,9 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 
-public class TestPrivilegeUtility extends TestCase {
-	
+public class TestPrivilegeUtility extends TestCase
+{
+
 	PrivilegeUtility privilegeUtility;
 	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
 	static String configFile = "";
@@ -44,13 +46,14 @@ public class TestPrivilegeUtility extends TestCase {
 	public void setUp() throws Exception
 	{
 		privilegeUtility = new PrivilegeUtility();
-		System.setProperty("gov.nih.nci.security.configFile",configFile);
+		System.setProperty("gov.nih.nci.security.configFile", configFile);
 	}
+
 	static
 	{
 		Properties SECURITY_MANAGER_PROP;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader().getResourceAsStream(
-		"smDBUnit.properties");
+		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
+				.getResourceAsStream("smDBUnit.properties");
 		SECURITY_MANAGER_PROP = new Properties();
 		try
 		{
@@ -63,65 +66,86 @@ public class TestPrivilegeUtility extends TestCase {
 			logger.error(exception.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetRole()
 	{
 		String roleName = "Administrator";
-		try {
+		try
+		{
 			Role role = privilegeUtility.getRole(roleName);
 			assertEquals("Administrator", role.getName());
 			assertEquals("1", role.getId().toString());
-			
-		} catch (SMException e) {
+
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
-		} catch (CSException e) {
+		}
+		catch (CSException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetRoleByPrivilege()
 	{
 		String privName = "READ";
-		try {
+		try
+		{
 			Role role = privilegeUtility.getRoleByPrivilege(privName);
 			assertEquals("READ_DENIED", role.getName());
 			assertEquals("10", role.getId().toString());
-			
-		} catch (SMException e) {
+
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
-		} catch (CSException e) {
+		}
+		catch (CSException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetRolePrivileges()
 	{
 		String roleId = "1";
-		try {
+		try
+		{
 			Set<Privilege> rolePrivileges = privilegeUtility.getRolePrivileges(roleId);
 			assertEquals(24, rolePrivileges.size());
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetUserProvisioningManager()
 	{
-		try {
+		try
+		{
 			UserProvisioningManager upManager = privilegeUtility.getUserProvisioningManager();
 			assertNotNull(upManager);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
@@ -129,21 +153,28 @@ public class TestPrivilegeUtility extends TestCase {
 	{
 		removeAllUsers();
 		insertSampleCSMUser();
-		try {
+		try
+		{
 			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				User user1 = privilegeUtility.getUserById(userId.toString());
 				assertNotNull(user1);
 				assertEquals("test", user1.getLastName());
 			}
-		}catch (SMException e) {
-				logger.error(e.getStackTrace());
-			}finally{
-				removeAllUsers();
-			}
 		}
+		catch (SMException e)
+		{
+			logger.error(e.getStackTrace());
+		}
+		finally
+		{
+			removeAllUsers();
+		}
+	}
+
 	/**
 	 * 
 	 */
@@ -151,32 +182,44 @@ public class TestPrivilegeUtility extends TestCase {
 	{
 		removeAllUsers();
 		insertSampleCSMUser();
-		try {
+		try
+		{
 			User user1 = privilegeUtility.getUser("test");
 			assertNotNull(user1);
 			assertEquals("test", user1.getLastName());
-		}catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
-		}finally{
+		}
+		finally
+		{
 			removeAllUsers();
 		}
 	}
+
 	/**
 	 * 
 	 */
-	public void testGetProtectionGroup ()
+	public void testGetProtectionGroup()
 	{
-		try {
-			ProtectionGroup protectionGroup = privilegeUtility.
-			getProtectionGroup("ADMINISTRATOR_PROTECTION_GROUP");
-			assertNotNull(protectionGroup );
-			assertEquals("ADMINISTRATOR_PROTECTION_GROUP", protectionGroup .getProtectionGroupName());
-		}catch (CSException e) {
+		try
+		{
+			ProtectionGroup protectionGroup = privilegeUtility
+					.getProtectionGroup("ADMINISTRATOR_PROTECTION_GROUP");
+			assertNotNull(protectionGroup);
+			assertEquals("ADMINISTRATOR_PROTECTION_GROUP", protectionGroup.getProtectionGroupName());
+		}
+		catch (CSException e)
+		{
 			logger.error(e.getStackTrace());
-		}catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
@@ -184,8 +227,9 @@ public class TestPrivilegeUtility extends TestCase {
 	{
 		String grpId = privilegeUtility.getGroupIdForRole("1");
 		assertNotNull(grpId);
-		assertEquals("1",grpId);
+		assertEquals("1", grpId);
 	}
+
 	/**
 	 * 
 	 */
@@ -195,16 +239,21 @@ public class TestPrivilegeUtility extends TestCase {
 		role.setName("");
 		RoleSearchCriteria criteria = new RoleSearchCriteria(role);
 		List<Role> list;
-		try {
+		try
+		{
 			list = privilegeUtility.getObjects(criteria);
-			for (Role role1 : list) {
-				System.out.println("getName() "+role1.getName());
+			for (Role role1 : list)
+			{
+				System.out.println("getName() " + role1.getName());
 			}
 			assertNotNull(list);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	/**
 	 * 
 	 */
@@ -213,29 +262,38 @@ public class TestPrivilegeUtility extends TestCase {
 		Role role = new Role();
 		role.setName("");
 		List<Role> list;
-		try {
+		try
+		{
 			list = privilegeUtility.getObjects(null);
-			for (Role role1 : list) {
-				System.out.println("getName() "+role1.getName());
+			for (Role role1 : list)
+			{
+				System.out.println("getName() " + role1.getName());
 			}
 			assertNotNull(list);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	/**
 	 * 
 	 */
-	public void testGetPrivilegeById ()
+	public void testGetPrivilegeById()
 	{
-		try {
+		try
+		{
 			Privilege priv = privilegeUtility.getPrivilegeById("1");
 			assertNotNull(priv);
 			assertEquals("CREATE", priv.getName());
-		}catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
@@ -243,8 +301,9 @@ public class TestPrivilegeUtility extends TestCase {
 	{
 		removeAllUsers();
 		insertSampleCSMUser();
-		try {
-			String[] groupIds = {"3","4"};
+		try
+		{
+			String[] groupIds = {"3", "4"};
 			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			User user = securityManager.getUser("test");
 			privilegeUtility.assignAdditionalGroupsToUser(user.getUserId().toString(), groupIds);
@@ -252,33 +311,40 @@ public class TestPrivilegeUtility extends TestCase {
 			for (Group object : groups) {
 				System.out.println(object.getGroupName());
 			}*/
-		}catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetApplication()
 	{
-		try {
+		try
+		{
 			Application application = privilegeUtility.getApplication("catissuecore");
 			assertNotNull(application);
 			assertEquals("catissuecore", application.getApplicationName());
-		}catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
-	
+
 	/**
 	 * Inserts a sample User.
 	 * @throws SMException 
 	 * 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser() {
+	private void insertSampleCSMUser()
+	{
 		User user = new User();
-		String newVal = "test" ;
+		String newVal = "test";
 		user.setDepartment(newVal);
 		user.setEmailId(newVal + "@test.com");
 		user.setFirstName(newVal);
@@ -287,28 +353,37 @@ public class TestPrivilegeUtility extends TestCase {
 		user.setPassword(newVal);
 		user.setTitle(newVal);
 		user.setLastName(newVal);
-		try {
+		try
+		{
 			SecurityManagerFactory.getSecurityManager().createUser(user);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Removes all users from the system.
 	 */
-	private void removeAllUsers() {
-		try {
+	private void removeAllUsers()
+	{
+		try
+		{
 			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				securityManager.removeUser(userId.toString());
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
-	
+
 	public void testInsertAuthData()
 	{
 		removeAllUsers();
@@ -319,9 +394,8 @@ public class TestPrivilegeUtility extends TestCase {
 		try
 		{
 			securityManager = SecurityManagerFactory.getSecurityManager();
-		
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = 
-				new gov.nih.nci.security.authorization.domainobjects.User();
+
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 			SecurityDataBean userGroupRoleProtectionGroupBean;
 			userGroupRoleProtectionGroupBean = new SecurityDataBean();
 			userGroupRoleProtectionGroupBean.setUser(userId);
@@ -330,7 +404,7 @@ public class TestPrivilegeUtility extends TestCase {
 			userGroupRoleProtectionGroupBean.setGroup(group);
 			authorizationData.add(userGroupRoleProtectionGroupBean);
 			PrivilegeUtility util = new PrivilegeUtility();
-			Set protectionObjects=new HashSet();
+			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
 			usr.setLastName("dee1");
 			usr.setId(new Long(231));
@@ -344,12 +418,12 @@ public class TestPrivilegeUtility extends TestCase {
 			securityManager.createUser(csmUser);
 			//assignGroupToUser(usr.getLoginName(), "PUBLIC_GROUP");
 			protectionObjects.add(usr);
-			final Map<String, String[]>  protectionGroupsForObjectTypes = new HashMap<String, String[]>();
+			final Map<String, String[]> protectionGroupsForObjectTypes = new HashMap<String, String[]>();
 			protectionGroupsForObjectTypes.put(User.class.getName(),
-					new String[] {"PUBLIC_DATA_GROUP"});
-			edu.wustl.security.global.Constants.STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
-			.putAll(protectionGroupsForObjectTypes);
-		//	String[] protectionGroups = securityManager.getProtectionGroupByName(usr);
+					new String[]{"PUBLIC_DATA_GROUP"});
+			edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
+					.putAll(protectionGroupsForObjectTypes);
+			//	String[] protectionGroups = securityManager.getProtectionGroupByName(usr);
 			String[] protectionGroups = {"PUBLIC_DATA_GROUP"};
 			util.insertAuthorizationData(authorizationData, protectionObjects, protectionGroups);
 		}
@@ -358,8 +432,9 @@ public class TestPrivilegeUtility extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	/**
 	 * assigns the given group name to the user with the given login name
 	 * 
@@ -375,5 +450,5 @@ public class TestPrivilegeUtility extends TestCase {
 		String userId = user.getUserId().toString();
 		securityManager.assignUserToGroup(groupName, userId);
 	}
-	
+
 }

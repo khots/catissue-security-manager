@@ -11,7 +11,6 @@ import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.security.privilege.PrivilegeType;
 
 /**
- * Utility methods required in SecurityManager
  * @author deepti_shelar
  *
  */
@@ -23,14 +22,21 @@ public final class Utility
 	 */
 
 	private static org.apache.log4j.Logger logger = Logger.getLogger(PrivilegeManager.class);
-
+	/**
+	 * creates a single obj.
+	 */
 	private static Utility util = new Utility();;
-
+	/**
+	 * Private constructor.
+	 */
 	private Utility()
 	{
 
 	}
-
+	/**
+	 * returns the single obj.
+	 * @return Utility obj
+	 */
 	public static Utility getInstance()
 	{
 		return util;
@@ -53,9 +59,9 @@ public final class Utility
 	}
 
 	/**
-	 * 
-	 * @param tagKeyValueMap
-	 * @return
+	 *
+	 * @param tagKeyValueMap map
+	 * @return boolean whether attribute has a taggedvalue as birthdate
 	 */
 	public boolean getIsBirthDate(final Map<String, String> tagKeyValueMap)
 	{
@@ -73,8 +79,8 @@ public final class Utility
 	}
 
 	/**
-	 * 
-	 * Called when we need to throw SMException
+	 *
+	 * Called when we need to throw SMException.
 	 * @param exc exception
 	 * @param mess message to be shown on error
 	 * @throws SMException exception

@@ -1,19 +1,37 @@
 
 package edu.wustl.security.beans;
 
+
 /**
  * A bean object to store role and group details.
  * @author deepti_shelar
  *
  */
 public class RoleGroupDetailsBean
-{ // NOPMD by deepti_shelar on 11/17/08 5:35 PM
-
+{ 
+	/**
+	 * roleName.
+	 */
 	private String roleName;
+	/**
+	 * roleType.
+	 */
 	private String roleType;
+	/**
+	 * groupType.
+	 */
 	private String groupType;
+	/**
+	 * groupName.
+	 */
 	private String groupName;
+	/**
+	 * roleId.
+	 */
 	private String roleId;
+	/**
+	 * groupId.
+	 */
 	private String groupId;
 
 	/**
@@ -113,7 +131,7 @@ public class RoleGroupDetailsBean
 	}
 
 	/**
-	 * @param obj the object to be compared.
+	 * @param object the object to be compared.
 	 * @return true if any of the following attributes of both object matches:
 	 * 			- roleId
 	 *          - roleName
@@ -142,55 +160,32 @@ public class RoleGroupDetailsBean
 		}
 		return equals;
 	}
-
+	/**
+	 * Checks for equality.
+	 * @param src obj
+	 * @param target obj to be compared
+	 * @return boolean isequal
+	 */
 	private boolean isObjectEqual(final Object src, final Object target)
 	{
-		return (src == null ? false : src.equals(target));
+		boolean isEqual = false;
+		if(src != null)
+		{
+			isEqual = src.equals(target);
+		}
+		return isEqual;
 	}
 
 	/**
-	 * 
+	 * @return int
 	 */
-	/*
-		public int hashCode()
-		{
-			int hashCode = 0;
-			if(this.groupId != null)
-			{
-				hashCode = this.groupId.hashCode();
-			} else if(this.groupName != null)
-			{
-				hashCode = this.groupName.hashCode();
-			} else if(this.groupType != null)
-			{
-				hashCode = this.groupType.hashCode();
-			} else if(this.roleId != null)
-			{
-				hashCode = this.roleId.hashCode();
-			} else if(this.roleName != null)
-			{
-				hashCode = this.roleName.hashCode();
-			} else if(this.roleType != null)
-			{
-				hashCode = this.roleType.hashCode();
-			} 
-			return hashCode;
-		}*/
 	public int hashCode()
 	{
-		/*int hash = 7;
-		hash = 31 * hash + (null == roleId ? 0 : roleId.hashCode());
-		hash = 31 * hash + (null == roleName ? 0 : roleName.hashCode());
-		hash = 31 * hash + (null == roleType ? 0 : roleType.hashCode());
-		hash = 31 * hash + (null == groupId ? 0 : groupId.hashCode());
-		hash = 31 * hash + (null == groupName ? 0 : groupName.hashCode());
-		hash = 31 * hash + (null == groupType ? 0 : groupType.hashCode());
-		return hash;*/
-		return 1;
+		return edu.wustl.security.global.Constants.HASH_CODE;
 	}
 
 	/**
-	 * 
+	 * @return String.
 	 */
 	public String toString()
 	{
