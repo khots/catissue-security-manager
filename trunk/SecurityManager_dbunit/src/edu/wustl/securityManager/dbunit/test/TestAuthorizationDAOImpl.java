@@ -3,8 +3,6 @@ package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -15,7 +13,6 @@ import org.hibernate.SessionFactory;
 
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.SMTransactionException;
 import edu.wustl.security.impl.AuthorizationDAOImpl;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;

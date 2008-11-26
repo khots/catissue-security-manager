@@ -6,13 +6,13 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.SMTransactionException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManager;
