@@ -363,8 +363,7 @@ public class PrivilegeUtility
 					+ " object");
 			protectionElement.setProtectionElementName(protectionObject.getObjectId());
 
-			String[] staticGroups = (String[]) edu.wustl.security.global.Constants.
-			STATIC_PROTECTION_GROUPS_FOR_OBJECT_TYPES
+			String[] staticGroups = (String[]) edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
 					.get(protectionObject.getClass().getName());
 			setProtectGroups(protectionElement, staticGroups);
 			upManager.createProtectionElement(protectionElement);

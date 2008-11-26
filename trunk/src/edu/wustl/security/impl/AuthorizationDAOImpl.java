@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
+import edu.wustl.security.global.Constants;
 
 import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
@@ -48,7 +49,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	 * logger Logger - Generic logger.
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(AuthorizationDAOImpl.class);
-
+	/**
+	 * sessionFact
+	 */
 	private SessionFactory sessionFact = null;
 
 	/**
@@ -65,9 +68,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	}
 	/**
 	 * @param userName name
-	 * @param pEes pes
+	 * @param pEs pes
 	 * @throws CSException exc
-	 * @return List<ObjectPrivilegeMap> list
+	 * @return List<ObjectPrivilegeMap>list
 	 */
 	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs)
 			throws CSException
@@ -120,10 +123,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	 * @param pstmt2 smt2
 	 * @param session sess
 	 * @param connection conn
-	 * @throws HibernateException exc
 	 */
 	private void close(PreparedStatement pstmt, PreparedStatement pstmt2, Session session,
-			Connection connection) throws HibernateException
+			Connection connection)
 	{
 		try
 		{
@@ -160,15 +162,15 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			{
 				if (pElement.getAttribute() == null)
 				{
-					pstmt2.setString(1, pElement.getObjectId());
-					pstmt2.setString(2, userName);
+					pstmt2.setString(Constants.POSITION1, pElement.getObjectId());
+					pstmt2.setString(Constants.POSITION2, userName);
 					resulSet = pstmt2.executeQuery();
 				}
 				else
 				{
-					pstmt.setString(1, pElement.getObjectId());
-					pstmt.setString(2, pElement.getAttribute());
-					pstmt.setString(3, userName);
+					pstmt.setString(Constants.POSITION1, pElement.getObjectId());
+					pstmt.setString(Constants.POSITION2, pElement.getAttribute());
+					pstmt.setString(Constants.POSITION3, userName);
 					resulSet = pstmt.executeQuery();
 				}
 			}
@@ -187,9 +189,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	}
 
 	/**
-	 * @param userName
-	 * @param pEs
-	 * @throws CSException
+	 * @param userName name of the user
+	 * @param pEs pes
+	 * @throws CSException exc
 	 */
 	private void checkForSufficientParams(final String userName, final Collection pEs)
 			throws CSException
@@ -204,51 +206,11 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		}
 	}
 
-	/*//changes to load the object and then delete it
-	//else it throws exception
-	public void removeProtectionElementsFromProtectionGroup(final String protectionGroupId,
-			final String[] protectionEleIds) throws CSTransactionException
-	{
-		Session session = null;
-		Transaction transaction = null;
-
-		try
-		{
-			session = sessionFact.openSession();
-			transaction = session.beginTransaction();
-
-			for (int i = 0; i < protectionEleIds.length; i++)
-			{
-				StringBuffer query = new StringBuffer(
-				"from gov.nih.nci.security.dao.hibernate.ProtectionGroupProtectionElement protectionGroupProtectionElement");
-				query.append(" where protectionGroupProtectionElement.protectionElement.protectionElementId=");
-				query.append(protectionEleIds[i]);
-				query.append(" and protectionGroupProtectionElement.protectionGroup.protectionGroupId=");
-				query.append(protectionGroupId);
-				Query queryObj = session.createQuery(query.toString());
-				List list = queryObj.list();
-				if (list != null && !list.isEmpty())
-				{
-					this.removeObject(list.get(0));
-				}
-			}
-			transaction.commit();
-		}
-		catch (Exception ex)
-		{
-			transaction.rollback();
-			StringBuffer mess= new StringBuffer("Error Occured in deassigning Protection Elements ")
-					.append(StringUtilities.stringArrayToString(protectionEleIds))
-					.append(" to Protection Group").append( protectionGroupId);
-			logger.error(mess + ex.getMessage(),ex);
-			throw new CSTransactionException(mess+ ex.getMessage(), ex);
-		}
-		finally
-		{
-				session.close();
-		}
-	}*/
-
+	/**
+	 * @param userId string
+	 * @return Set groups
+	 * @throws CSObjectNotFoundException exc
+	 */
 	public Set getGroups(final String userId) throws CSObjectNotFoundException
 	{
 		Session session = null;
@@ -291,9 +253,16 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		return groups;
 
 	}
-
+	/**
+	 * 
+	 * @param session session
+	 * @param objectType objType
+	 * @param primaryKey pKey
+	 * @return Object
+	 * @throws CSObjectNotFoundException exc
+	 */
 	private Object getObjectByPrimaryKey(final Session session, final Class objectType,
-			final Long primaryKey) throws HibernateException, CSObjectNotFoundException
+			final Long primaryKey) throws CSObjectNotFoundException
 	{
 
 		if (primaryKey == null)
@@ -309,11 +278,15 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			throw new CSObjectNotFoundException(objectType.getName() + " not found");
 		}
 		logger
-				.debug("Authorization|||getObjectByPrimaryKey|Success|Success in retrieving object of type "
+				.debug("Authorization|||getObjectByPrimaryKey|Success|" +
+						"Success in retrieving object of type "
 						+ objectType.getName() + "|");
 		return obj;
 	}
-
+	/**
+	 * @param stbr stringBuffer
+	 * @param attributeVal string val
+	 */
 	private void generateQuery(StringBuffer stbr, final String attributeVal)
 	{
 		String str = "select distinct(p.privilege_name)" + " from csm_protection_group pg,"

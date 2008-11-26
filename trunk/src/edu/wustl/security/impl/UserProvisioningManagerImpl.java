@@ -36,9 +36,7 @@ public class UserProvisioningManagerImpl
 	}*/
 
 	/**
-	 * @param arg0
-	 * @throws CSConfigurationException 
-	 * @throws Exception
+	 * @throws CSConfigurationException exc
 	 */
 	public UserProvisioningManagerImpl() throws CSConfigurationException 
 	{

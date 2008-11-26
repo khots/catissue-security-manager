@@ -65,8 +65,7 @@ public final class ProvisionManager
 	 * Returns the UserProvisioningManager singleton object.
 	 *
 	 * @return UserProvisioningManager up
-	 * @throws SMException 
-	 * @throws	CSException exc
+	 * @throws SMException exc
 	 */
 	public UserProvisioningManager getUserProvisioningManager() throws SMException
 	{
@@ -124,7 +123,7 @@ public final class ProvisionManager
 	}
 
 	/**
-	* Returns group id from Group name
+	* Returns group id from Group name.
 	* @param groupName name
 	* @return String str
 	* @throws CSException  exc
@@ -151,7 +150,7 @@ public final class ProvisionManager
 	}
 
 	/**
-	 * Returns role id from role name
+	 * Returns role id from role name.
 	 * @param roleName name
 	 * @throws CSException exc
 	 * @throws SMException exc
@@ -180,7 +179,6 @@ public final class ProvisionManager
 	 * @param searchCriteria cr
 	 * @return List of resultant objects
 	 * @throws SMException if searchCriteria passed is null or if search results in no results
-	 * @throws CSException exc
 	 */
 	public List getObjects(SearchCriteria searchCriteria) throws SMException
 	{

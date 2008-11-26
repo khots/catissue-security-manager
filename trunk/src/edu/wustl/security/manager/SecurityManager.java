@@ -562,8 +562,8 @@ public class SecurityManager implements Permissions, ISecurityManager
 	/**
 	 * Checks whether an object type has any identified data associated with
 	 * it or not.
-	 * @param aliasName
-	 * @return
+	 * @param aliasName string
+	 * @return boolean flag
 	 */
 	protected boolean hasAssociatedIdentifiedData(String aliasName)
 	{

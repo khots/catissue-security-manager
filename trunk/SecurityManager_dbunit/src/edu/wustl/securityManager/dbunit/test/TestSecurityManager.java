@@ -1,3 +1,4 @@
+
 package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
@@ -25,7 +26,9 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  * @author deepti_shelar
  * 
  */
-public class TestSecurityManager extends TestCase {
+public class TestSecurityManager extends TestCase
+{
+
 	private transient ISecurityManager securityManager = null;
 	static int count = 0;
 	static String loginName = "test";
@@ -36,20 +39,22 @@ public class TestSecurityManager extends TestCase {
 	 */
 	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	protected void setUp() throws Exception {
+	protected void setUp() throws Exception
+	{
 
 		count++;
 		securityManager = SecurityManagerFactory.getSecurityManager();
-		System.setProperty("gov.nih.nci.security.configFile",configFile);
+		System.setProperty("gov.nih.nci.security.configFile", configFile);
 		removeAllUsers();
 		insertSampleCSMUser();
 		super.setUp();
 	}
+
 	static
 	{
 		Properties SECURITY_MANAGER_PROP;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader().getResourceAsStream(
-		"smDBUnit.properties");
+		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
+				.getResourceAsStream("smDBUnit.properties");
 		SECURITY_MANAGER_PROP = new Properties();
 		try
 		{
@@ -62,12 +67,14 @@ public class TestSecurityManager extends TestCase {
 			logger.error(exception.getStackTrace());
 		}
 	}
+
 	/**
 	 * Inserts a sample User.
 	 * @throws SMException 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser() throws SMException {
+	private void insertSampleCSMUser() throws SMException
+	{
 		User user = new User();
 		String newVal = loginName + count;
 		user.setDepartment(newVal);
@@ -99,14 +106,19 @@ public class TestSecurityManager extends TestCase {
 	/**
 	 * Removes all users from the system.
 	 */
-	private void removeAllUsers() {
-		try {
+	private void removeAllUsers()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				securityManager.removeUser(userId.toString());
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -118,15 +130,20 @@ public class TestSecurityManager extends TestCase {
 	 *            name
 	 * @return User
 	 */
-	private User getUserByLoginName(String loginName) {
+	private User getUserByLoginName(String loginName)
+	{
 		User user = null;
-		try {
+		try
+		{
 			user = securityManager.getUser(loginName);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 		return user;
 	}
+
 	/**
 	 * Test GetProtectionGroupByName
 	 */
@@ -136,11 +153,14 @@ public class TestSecurityManager extends TestCase {
 		AbstractDomainObject obj = new edu.wustl.catissuecore.domain.User();
 		obj.setId(Long.valueOf(1));
 
-		try {
+		try
+		{
 			String[] protGrp = securityManager.getProtectionGroupByName(obj);
 			assertEquals("ADMINISTRATORS_DATA_GROUP", protGrp[0]);
 			assertNotNull(protGrp);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -148,7 +168,8 @@ public class TestSecurityManager extends TestCase {
 	/**
 	 * Test Create user method
 	 */
-	public void testCreateUser() {
+	public void testCreateUser()
+	{
 		User user = new User();
 		String newVal = loginName + ++count;
 		user.setDepartment(newVal);
@@ -158,18 +179,23 @@ public class TestSecurityManager extends TestCase {
 		user.setOrganization(newVal);
 		user.setPassword(newVal);
 		user.setTitle(newVal);
-		try {
+		try
+		{
 			securityManager.createUser(user);
 			User addedUser = getUserByLoginName(newVal);
 			assertEquals(newVal, addedUser.getLoginName());
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test Create user method
 	 */
-	public void testCreateUserException() {
+	public void testCreateUserException()
+	{
 		User user = new User();
 		String newVal = loginName + count;
 		user.setDepartment(newVal);
@@ -179,12 +205,15 @@ public class TestSecurityManager extends TestCase {
 		user.setOrganization(newVal);
 		user.setPassword(newVal);
 		user.setTitle(newVal);
-		try {
+		try
+		{
 			securityManager.createUser(user);
 			User addedUser = getUserByLoginName(newVal);
 			assertEquals(newVal, addedUser.getLoginName());
-		} catch (SMException e) {
-			logger.error("User already exists so cant create a new user"+e.getStackTrace());
+		}
+		catch (SMException e)
+		{
+			logger.error("User already exists so cant create a new user" + e.getStackTrace());
 		}
 	}
 
@@ -194,109 +223,146 @@ public class TestSecurityManager extends TestCase {
 	 * @return void
 	 * 
 	 */
-	public void testGetUser() {
-		try {
+	public void testGetUser()
+	{
+		try
+		{
 			User user = securityManager.getUser(loginName + count);
 			assertEquals(user.getLoginName(), loginName + count);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test getUser method
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testGetUserException() {
+	public void testGetUserException()
+	{
 		User user = null;
-		try {
+		try
+		{
 			user = securityManager.getUser(loginName + count);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			assertNull(user);
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test RemoveUser
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testRemoveUser() {
-		try {
+	public void testRemoveUser()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				securityManager.removeUser(userId.toString());
 			}
 			allUsers = securityManager.getUsers();
 			assertEquals(allUsers.size(), 0);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test RemoveUser
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testRemoveUserException() {
-		try {
+	public void testRemoveUserException()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				securityManager.removeUser(userId.toString()+"fail");
+				securityManager.removeUser(userId.toString() + "fail");
 			}
 			allUsers = securityManager.getUsers();
 			assertEquals(allUsers.size(), 0);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("cant remove user");
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test RemoveUser
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testRemoveUserException1() {
-		try {
+	public void testRemoveUserException1()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
 			System.setProperty("gov.nih.nci.security.configFile", null);
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				securityManager.removeUser(userId.toString()+"fail");
+				securityManager.removeUser(userId.toString() + "fail");
 			}
 			allUsers = securityManager.getUsers();
 			assertEquals(allUsers.size(), 0);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("cant remove user");
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test getRoles()
 	 */
-	public void testGetRoles() {
-		try {
+	public void testGetRoles()
+	{
+		try
+		{
 			List<Role> roles = securityManager.getRoles();
 			assertEquals(roles.size(), 4);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test getRoles()
 	 */
-	public void testGetRolesException() {
-		try {
+	public void testGetRolesException()
+	{
+		try
+		{
 			System.setProperty("gov.nih.nci.security.configFile", null);
 			List<Role> roles = securityManager.getRoles();
 			assertEquals(roles.size(), 4);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -304,20 +370,22 @@ public class TestSecurityManager extends TestCase {
 	/**
 	 * test GetGroupIdForRole()
 	 */
-	public void testGetGroupIdForRole() {
-		try {
+	public void testGetGroupIdForRole()
+	{
+		try
+		{
 			List<Role> roles = securityManager.getRoles();
-			for (Role role : roles) {
-				String groupIdForRole = securityManager.getGroupIdForRole(role
-						.getId().toString());
+			for (Role role : roles)
+			{
+				String groupIdForRole = securityManager.getGroupIdForRole(role.getId().toString());
 				assertNotNull(groupIdForRole);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
-
-
 
 	/**
 	 * Test Login method
@@ -325,118 +393,154 @@ public class TestSecurityManager extends TestCase {
 	 * @return void
 	 * 
 	 */
-	public void testGetUserById() {
-		try {
+	public void testGetUserById()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				User userById = securityManager.getUserById(userId.toString());
 				assertNotNull(userById);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test Login method
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testGetUserByIdException() {
+	public void testGetUserByIdException()
+	{
 		User userById = null;
-		try {
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				userById = securityManager.getUserById(userId.toString()+"1");
+				userById = securityManager.getUserById(userId.toString() + "1");
 				assertNotNull(userById);
 			}
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			assertNull(userById);
-			System.out.println("****"+e.getMessage());
+			System.out.println("****" + e.getMessage());
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test getUsers method
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testGetUsers() {
-		try {
+	public void testGetUsers()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
 			assertEquals(allUsers.size(), 1);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test getUsers method
 	 * 
 	 * @return void
 	 * 
 	 */
-	public void testGetUsersException() {
-		try {
+	public void testGetUsersException()
+	{
+		try
+		{
 			System.setProperty("gov.nih.nci.security.configFile", null);
 			List<User> allUsers = securityManager.getUsers();
 			assertEquals(allUsers.size(), 1);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("error in get Users");
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test assign user to group
 	 */
-	public void testAssignUserToGroup() {
-		try {
+	public void testAssignUserToGroup()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				securityManager.assignUserToGroup("TECHNICIAN_GROUP", userId
-						.toString());
+				securityManager.assignUserToGroup("TECHNICIAN_GROUP", userId.toString());
 				String userGroup = securityManager.getRoleName(userId);
 				assertEquals(userGroup, "Technician");
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test assign user to group
 	 */
-	public void testAssignUserToGroupException() {
-		try {
+	public void testAssignUserToGroupException()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				securityManager.assignUserToGroup("TECHNICIAN_GROUP", userId
-						.toString()+"fail");
+				securityManager.assignUserToGroup("TECHNICIAN_GROUP", userId.toString() + "fail");
 				String userGroup = securityManager.getRoleName(userId);
 				assertEquals(userGroup, "Technician");
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test remove user from group
 	 */
-	public void testRemoveUserFromGroup() {
-		try {
+	public void testRemoveUserFromGroup()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				assignGroupToUser(loginName + count, ADMIN_GROUP);
-				securityManager.removeUserFromGroup(ADMIN_GROUP,
-						userId.toString());
+				securityManager.removeUserFromGroup(ADMIN_GROUP, userId.toString());
 				String userGroup = securityManager.getRoleName(userId);
 				assertEquals(userGroup, "");
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
@@ -446,96 +550,116 @@ public class TestSecurityManager extends TestCase {
 	 */
 	public void testModifyUser()
 	{
-		try{
-			User userByLoginName = getUserByLoginName(loginName+count);
+		try
+		{
+			User userByLoginName = getUserByLoginName(loginName + count);
 
-			assertEquals(loginName+count, userByLoginName.getLastName());
+			assertEquals(loginName + count, userByLoginName.getLastName());
 			userByLoginName.setLoginName("modifiedLastName");
 			securityManager.modifyUser(userByLoginName);
 			User modifiedUser = getUserByLoginName("modifiedLastName");
 			assertNotNull(modifiedUser);
 			assertEquals("modifiedLastName", modifiedUser.getLoginName());
-			assertEquals(loginName+count, modifiedUser.getLastName());
-		}catch(Exception e)
+			assertEquals(loginName + count, modifiedUser.getLastName());
+		}
+		catch (Exception e)
 		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test modifyUser
 	 */
 	public void testModifyUserException()
 	{
-		try{
-			User userByLoginName = getUserByLoginName(loginName+count);
-			userByLoginName.setUserId(userByLoginName.getUserId()+1);
-			assertEquals(loginName+count, userByLoginName.getLastName());
+		try
+		{
+			User userByLoginName = getUserByLoginName(loginName + count);
+			userByLoginName.setUserId(userByLoginName.getUserId() + 1);
+			assertEquals(loginName + count, userByLoginName.getLastName());
 			userByLoginName.setLoginName("modifiedLastName");
 			securityManager.modifyUser(userByLoginName);
 			User modifiedUser = getUserByLoginName("modifiedLastName");
 			assertNotNull(modifiedUser);
 			assertEquals("modifiedLastName", modifiedUser.getLoginName());
-			assertEquals(loginName+count, modifiedUser.getLastName());
-		}catch(SMException e)
+			assertEquals(loginName + count, modifiedUser.getLastName());
+		}
+		catch (SMException e)
 		{
 			System.out.println("exception in modifying");
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test assignAdditionalGroupsToUser
 	 */
 	public void testAssignAdditionalGroupsToUser()
 	{
-		User userByLoginName = getUserByLoginName(loginName+count);
+		User userByLoginName = getUserByLoginName(loginName + count);
 		String[] groupIds = {"1"};
-		try {
-			assignGroupToUser(loginName+count, "PUBLIC_GROUP");
-			securityManager.assignAdditionalGroupsToUser(userByLoginName.getUserId().toString(), groupIds);
+		try
+		{
+			assignGroupToUser(loginName + count, "PUBLIC_GROUP");
+			securityManager.assignAdditionalGroupsToUser(userByLoginName.getUserId().toString(),
+					groupIds);
 			//	assertEquals(userByLoginName.getGroups().size(), 1);
 			String userGroup = securityManager.getRoleName(userByLoginName.getUserId());
-			assertEquals(userGroup,"Administrator");
-		} catch (SMException e) {
+			assertEquals(userGroup, "Administrator");
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test assignAdditionalGroupsToUser
 	 */
 	public void testAssignAdditionalGroupsToUserException()
 	{
-		User userByLoginName = getUserByLoginName(loginName+count);
+		User userByLoginName = getUserByLoginName(loginName + count);
 		String[] groupIds = {"1"};
-		try {
+		try
+		{
 			//assignGroupToUser(loginName+count, "PUBLIC_GROUP");
-			securityManager.assignAdditionalGroupsToUser(userByLoginName.getUserId().toString()+"fail", groupIds);
+			securityManager.assignAdditionalGroupsToUser(userByLoginName.getUserId().toString()
+					+ "fail", groupIds);
 			//	assertEquals(userByLoginName.getGroups().size(), 1);
 			String userGroup = securityManager.getRoleName(userByLoginName.getUserId());
-			assertEquals(userGroup,"Administrator");
-		} catch (SMException e) {
+			assertEquals(userGroup, "Administrator");
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * test AssignRoleToUser()
 	 */
 
-	public void testAssignRoleToUser() {
-		try {
-			List<User> allUsers =	securityManager.getUsers(); 
-			for (User user : allUsers) 
-			{ 
-				Long userId =user.getUserId(); 
-				assignGroupToUser(user.getLoginName(),ADMIN_GROUP);
+	public void testAssignRoleToUser()
+	{
+		try
+		{
+			List<User> allUsers = securityManager.getUsers();
+			for (User user : allUsers)
+			{
+				Long userId = user.getUserId();
+				assignGroupToUser(user.getLoginName(), ADMIN_GROUP);
 				securityManager.assignRoleToUser(userId.toString(), "1");
-				Role userRole = securityManager.getUserRole(userId); 
-				assertEquals("Administrator",userRole.getName()); 
-			} 
-		} catch (Exception e)
+				Role userRole = securityManager.getUserRole(userId);
+				assertEquals("Administrator", userRole.getName());
+			}
+		}
+		catch (Exception e)
 		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test Login method
 	 * 
@@ -543,28 +667,27 @@ public class TestSecurityManager extends TestCase {
 	 * 
 	 */
 
-	public void testGetGroupIdForRoleFromExistingUser() 
+	public void testGetGroupIdForRoleFromExistingUser()
 	{
-		try 
-		{ 
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) 
-			{ 
-				Long userId = user.getUserId(); 
-				assignGroupToUser(loginName+count, ADMIN_GROUP);
-				String roleID = securityManager.getUserRole(userId).getId() .toString(); 
+			for (User user : allUsers)
+			{
+				Long userId = user.getUserId();
+				assignGroupToUser(loginName + count, ADMIN_GROUP);
+				String roleID = securityManager.getUserRole(userId).getId().toString();
 				String userGrp = securityManager.getGroupIdForRole(roleID);
 				assertEquals(userGrp, "1");
 
-			} 
-		} 
-		catch (Exception e) 
+			}
+		}
+		catch (Exception e)
 		{
 			logger.error(e.getStackTrace());
 		}
 	}
 
-
 	/**
 	 * Test Login method
 	 * 
@@ -572,15 +695,20 @@ public class TestSecurityManager extends TestCase {
 	 * 
 	 */
 
-	public void testLogin() {
-		try {
+	public void testLogin()
+	{
+		try
+		{
 			String val = loginName + count;
 			boolean loginSuccess = securityManager.login(val, val);
 			assertTrue(loginSuccess);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test Login method
 	 * 
@@ -588,12 +716,16 @@ public class TestSecurityManager extends TestCase {
 	 * 
 	 */
 
-	public void testLoginFail() {
-		try {
+	public void testLoginFail()
+	{
+		try
+		{
 			String val = loginName + count;
-			boolean loginSuccess = securityManager.login(val+"fail", val);
+			boolean loginSuccess = securityManager.login(val + "fail", val);
 			assertFalse(loginSuccess);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("exception in login");
 			logger.error(e.getStackTrace());
 		}
@@ -606,15 +738,20 @@ public class TestSecurityManager extends TestCase {
 	 * 
 	 */
 
-	public void testGetRoleName1() {
-		try {
+	public void testGetRoleName1()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				String userGrp = securityManager.getRoleName(userId+1);
+				String userGrp = securityManager.getRoleName(userId + 1);
 				assertNotNull(userGrp);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("exception in getting role name");
 			logger.error(e.getStackTrace());
 		}
@@ -627,19 +764,25 @@ public class TestSecurityManager extends TestCase {
 	 * 
 	 */
 
-	public void testGetUserRole() {
-		try {
+	public void testGetUserRole()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
-				assignGroupToUser(loginName+count, "PUBLIC_GROUP");
+				assignGroupToUser(loginName + count, "PUBLIC_GROUP");
 				Role userRole = securityManager.getUserRole(userId);
 				assertNotNull(userRole);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Test Login method
 	 * 
@@ -647,73 +790,82 @@ public class TestSecurityManager extends TestCase {
 	 * 
 	 */
 
-	public void testGetUserRoleException() {
+	public void testGetUserRoleException()
+	{
 		Role userRole = null;
-		System.setProperty("gov.nih.nci.security.configFile",null);
-		try {
+		System.setProperty("gov.nih.nci.security.configFile", null);
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				//assignGroupToUser(loginName+count, "PUBLIC_GROUP");
 				userRole = securityManager.getUserRole(userId);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			assertNull(userRole);
 			logger.error(e.getStackTrace());
 		}
 	}
 	/**
 	 * test getuserGroup()
-	 *//*
-	public void testGetRoleNameForAdmin() {
-		try {
-			User user = getUserByLoginName(loginName + count);
-			assignGroupToUser(loginName + count, ADMIN_GROUP);
-			String userGroup = securityManager.getRoleName(user.getUserId());
-			assertEquals("Administrator", userGroup);
-		} catch (Exception e) {
-			logger.error(e.getStackTrace());
+	 */
+	/*
+		public void testGetRoleNameForAdmin() {
+			try {
+				User user = getUserByLoginName(loginName + count);
+				assignGroupToUser(loginName + count, ADMIN_GROUP);
+				String userGroup = securityManager.getRoleName(user.getUserId());
+				assertEquals("Administrator", userGroup);
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			}
 		}
-	}
-	*//**
-	 * test getuserGroup()
-	 *//*
-	public void testGetRoleNameForScientist() {
-		try {
-			User user = getUserByLoginName(loginName + count);
-			String userGroup = "";
-			assignGroupToUser(loginName + count, "PUBLIC_GROUP");
-			userGroup = securityManager.getRoleName(user.getUserId());
-			assertEquals("Scientist", userGroup);
+		*//**
+			 * test getuserGroup()
+			 */
+	/*
+		public void testGetRoleNameForScientist() {
+			try {
+				User user = getUserByLoginName(loginName + count);
+				String userGroup = "";
+				assignGroupToUser(loginName + count, "PUBLIC_GROUP");
+				userGroup = securityManager.getRoleName(user.getUserId());
+				assertEquals("Scientist", userGroup);
 
-		} catch (Exception e) {
-			logger.error(e.getStackTrace());
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			}
 		}
-	}
-	*//**
-	 * test getuserGroup()
-	 *//*
-	public void testGetRoleNameForSupervisor() {
-		try {
-			User user = getUserByLoginName(loginName + count);
-			assignGroupToUser(loginName + count, "SUPERVISOR_GROUP");
-			String userGroup = securityManager.getRoleName(user.getUserId());
-			assertEquals("Supervisor", userGroup);
-		} catch (Exception e) {
-			logger.error(e.getStackTrace());
+		*//**
+			 * test getuserGroup()
+			 */
+	/*
+		public void testGetRoleNameForSupervisor() {
+			try {
+				User user = getUserByLoginName(loginName + count);
+				assignGroupToUser(loginName + count, "SUPERVISOR_GROUP");
+				String userGroup = securityManager.getRoleName(user.getUserId());
+				assertEquals("Supervisor", userGroup);
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			}
 		}
-	}
-	*//**
-	 * test getuserGroup()
-	 *//*
-	public void testGetRoleNameForTech() {
-		try {
-			User user = getUserByLoginName(loginName + count);
-			assignGroupToUser(loginName + count, "TECHNICIAN_GROUP");
-			String userGroup = securityManager.getRoleName(user.getUserId());
-			assertEquals("Technician", userGroup);
-		} catch (Exception e) {
-			logger.error(e.getStackTrace());
-		}
-	}*/
+		*//**
+			 * test getuserGroup()
+			 */
+	/*
+		public void testGetRoleNameForTech() {
+			try {
+				User user = getUserByLoginName(loginName + count);
+				assignGroupToUser(loginName + count, "TECHNICIAN_GROUP");
+				String userGroup = securityManager.getRoleName(user.getUserId());
+				assertEquals("Technician", userGroup);
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			}
+		}*/
 }

@@ -17,49 +17,95 @@ public interface ISecurityManager
 
 	// UserProvisioningManager getUserProvisioningManager() throws CSException;
 	/**
-	 * 
+	 * login.
+	 * @param loginName name
+	 * @param password pwd
+	 * @throws SMException ex
+	 * @return boolean flag
 	 */
 	boolean login(String loginName, String password) throws SMException;
-
+	/**
+	 * @param user user
+	 * @throws SMException ex
+	 */
 	void createUser(User user) throws SMException;
-
+	/**
+	 * @param loginName name
+	 * @return user user
+	 * @throws SMException ex
+	 */
 	User getUser(String loginName) throws SMException;
-
+	/**
+	 * @param userId string id
+	 * @throws SMException ex
+	 */
 	void removeUser(String userId) throws SMException;
-
+	/**
+	 * @return List roles
+	 * @throws SMException ex
+	 */
 	List<Role> getRoles() throws SMException;
-
+	/**
+	 * @param userID user id
+	 * @param roleID id of the role
+	 * @throws SMException ex
+	 */
 	void assignRoleToUser(String userID, String roleID) throws SMException;
-
+	/**
+	 * @param roleID id
+	 * @return String
+	 */
 	String getGroupIdForRole(String roleID);
-
+	/**
+	 * @param userID id
+	 * @return Role role
+	 * @throws SMException ex
+	 */
 	Role getUserRole(long userID) throws SMException;
-
+	/**
+	 * @param userID id
+	 * @return String name
+	 * @throws SMException ex
+	 */
 	String getRoleName(long userID) throws SMException;
-
+	/**
+	 * @param user user
+	 * @throws SMException ex
+	 */
 	void modifyUser(User user) throws SMException;
-
+	/**
+	 * @param userId id
+	 * @return User user
+	 * @throws SMException ex
+	 */
 	User getUserById(String userId) throws SMException;
-
+	/**
+	 * @return List of users
+	 * @throws SMException ex
+	 */
 	List<User> getUsers() throws SMException;
-
-	// List getObjects(SearchCriteria searchCriteria) throws SMException, CSException;
+	/**
+	 * @param userGroupname name
+	 * @param userId id
+	 * @throws SMException ex
+	 */
 	void removeUserFromGroup(String userGroupname, String userId) throws SMException;
-
+	/**
+	 * @param userGroupname name
+	 * @param userId id
+	 * @throws SMException ex
+	 */
 	void assignUserToGroup(String userGroupname, String userId) throws SMException;
-
+	/**
+	 * @param userId id
+	 * @param groupIds ids
+	 * @throws SMException ex
+	 */
 	void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException;
-
-	/* boolean isAuthorized(String userName, String objectId, String privilegeName)
-	 throws SMException;*/
-	/* boolean checkPermission(String userName, String objectType, String objectIdentifier,
-			String privilegeName) throws SMException;
-	*/
-	/* String getProtectionGroupByName(AbstractDomainObject obj, String nameConsistingOf)
-	 throws SMException;
-	*/String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
-	// List<NameValueBean> getPrivilegesForAssignPrivilege(String roleName); : Not used anymore , shd be removed as AssignPrivilege in suite is removed
-	// Set<NameValueBean> getObjectsForAssignPrivilege(String userID, String[] objectTypes,
-	//	String[] privilegeNames) throws SMException;
-	// AuthorizationManager getAuthorizationManager() throws CSException;
+	/**
+	 * @param obj obj
+	 * @return String array
+	 * @throws SMException ex
+	 */
+	String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
 }

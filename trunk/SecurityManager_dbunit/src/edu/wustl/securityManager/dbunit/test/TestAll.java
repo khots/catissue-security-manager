@@ -8,13 +8,13 @@ package edu.wustl.securityManager.dbunit.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 /**
  * @author prafull_kadam
  * Test Suite for testing all Query Interface related classes.
  */
 public class TestAll
 {
+
 	/**
 	 * Main method called by junit target in build.xml.
 	 * @param args arguments to main method.
@@ -23,6 +23,7 @@ public class TestAll
 	{
 		junit.swingui.TestRunner.run(TestAll.class);
 	}
+
 	/**
 	 *
 	 * @return Test object.
@@ -34,10 +35,10 @@ public class TestAll
 		suite.addTestSuite(TestPrivilegeCache.class);
 		suite.addTestSuite(TestPrivilegeManager.class);
 		suite.addTestSuite(TestPrivilegeUtility.class);
-			suite.addTestSuite(TestAuthorizationDAOImpl.class);
-			suite.addTestSuite(TestPrivilegeType.class);
-			suite.addTestSuite(TestPrivilege.class);
-			suite.addTestSuite(TestUtility.class);
+		suite.addTestSuite(TestAuthorizationDAOImpl.class);
+		suite.addTestSuite(TestPrivilegeType.class);
+		suite.addTestSuite(TestPrivilege.class);
+		suite.addTestSuite(TestUtility.class);
 		return suite;
 	}
 }

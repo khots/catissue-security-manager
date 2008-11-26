@@ -1,3 +1,4 @@
+
 package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
@@ -30,7 +31,9 @@ import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.system.ApplicationSessionFactory;
 
-public class TestAuthorizationDAOImpl extends TestCase{
+public class TestAuthorizationDAOImpl extends TestCase
+{
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -41,37 +44,44 @@ public class TestAuthorizationDAOImpl extends TestCase{
 	static String configFile = "";
 	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
 	final private String PUBLIC_GROUP = "PUBLIC_GROUP";
+
 	public void setUp()
 	{
 		String ctxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
 		SessionFactory sFactory;
-		try {
-			System.setProperty("gov.nih.nci.security.configFile",configFile);
-			sFactory = ApplicationSessionFactory
-					.getSessionFactory(ctxName);
-			impl = new AuthorizationDAOImpl(sFactory,ctxName);
+		try
+		{
+			System.setProperty("gov.nih.nci.security.configFile", configFile);
+			sFactory = ApplicationSessionFactory.getSessionFactory(ctxName);
+			impl = new AuthorizationDAOImpl(sFactory, ctxName);
 			securityManager = SecurityManagerFactory.getSecurityManager();
-			
-			
+
 			removeAllUsers();
 			insertSampleCSMUser();
-			
+
 			super.setUp();
-			
-		} catch (CSConfigurationException e) {
-			e.printStackTrace();
-		} catch (SMException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+
+		}
+		catch (CSConfigurationException e)
+		{
 			e.printStackTrace();
 		}
-		
+		catch (SMException e)
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
+
 	static
 	{
 		Properties SECURITY_MANAGER_PROP;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader().getResourceAsStream(
-		"smDBUnit.properties");
+		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
+				.getResourceAsStream("smDBUnit.properties");
 		SECURITY_MANAGER_PROP = new Properties();
 		try
 		{
@@ -84,6 +94,7 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			logger.error(exception.getStackTrace());
 		}
 	}
+
 	/**
 	 * Returns the user matching with the login name
 	 * 
@@ -91,21 +102,27 @@ public class TestAuthorizationDAOImpl extends TestCase{
 	 *            name
 	 * @return User
 	 */
-	private User getUserByLoginName(String loginName) {
+	private User getUserByLoginName(String loginName)
+	{
 		User user = null;
-		try {
+		try
+		{
 			user = securityManager.getUser(loginName);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 		}
 		return user;
 	}
+
 	/**
 	 * Inserts a sample User.
 	 * @throws SMException 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser() throws SMException {
+	private void insertSampleCSMUser() throws SMException
+	{
 		User user = new User();
 		String newVal = "test";
 		user.setDepartment(newVal);
@@ -137,40 +154,53 @@ public class TestAuthorizationDAOImpl extends TestCase{
 	/**
 	 * Removes all users from the system.
 	 */
-	private void removeAllUsers() {
-		try {
+	private void removeAllUsers()
+	{
+		try
+		{
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				securityManager.removeUser(userId.toString());
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetGroup()
 	{
-		try {
+		try
+		{
 			assignGroupToUser("test", ADMIN_GROUP);
 			assignGroupToUser("test", PUBLIC_GROUP);
 			User user = getUserByLoginName("test");
 			Set groups = impl.getGroups(user.getUserId().toString());
 			assertEquals(2, groups.size());
-		} catch (CSObjectNotFoundException e) {
+		}
+		catch (CSObjectNotFoundException e)
+		{
 			e.printStackTrace();
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetPrivilegeMapForUser()
 	{
-		try {
+		try
+		{
 			assignGroupToUser("test", ADMIN_GROUP);
 			assignGroupToUser("test", PUBLIC_GROUP);
 			User user = getUserByLoginName("test");
@@ -179,21 +209,28 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			protectionElement.setObjectId("edu.wustl.catissuecore.domain.User_1");
 			ProtectionElementSearchCriteria protEleSearchCrit = new ProtectionElementSearchCriteria(
 					protectionElement);
-			List<ProtectionElement> list = privilegeUtility.getUserProvisioningManager().getObjects(protEleSearchCrit);
-			
-			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(),list);
-		}catch (SMException e) {
+			List<ProtectionElement> list = privilegeUtility.getUserProvisioningManager()
+					.getObjects(protEleSearchCrit);
+
+			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(), list);
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
-		} catch (CSException e) {
+		}
+		catch (CSException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 
 	 */
 	public void testGetPrivilegeMapForSite()
 	{
-		try {
+		try
+		{
 			assignGroupToUser("test", ADMIN_GROUP);
 			assignGroupToUser("test", PUBLIC_GROUP);
 			User user = getUserByLoginName("test");
@@ -202,13 +239,18 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			protectionElement.setObjectId("edu.wustl.catissuecore.domain.Site");
 			ProtectionElementSearchCriteria protEleSearchCrit = new ProtectionElementSearchCriteria(
 					protectionElement);
-			List<ProtectionElement> list = privilegeUtility.getUserProvisioningManager().getObjects(protEleSearchCrit);
-			
-			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(),list);
-			
-		}catch (SMException e) {
+			List<ProtectionElement> list = privilegeUtility.getUserProvisioningManager()
+					.getObjects(protEleSearchCrit);
+
+			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(), list);
+
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
-		} catch (CSException e) {
+		}
+		catch (CSException e)
+		{
 			e.printStackTrace();
 		}
 	}

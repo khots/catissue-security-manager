@@ -23,7 +23,7 @@ public final class SecurityManagerPropertiesLocator
 	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
 	/**
-	 * property names from SecurityManager.properties file 
+	 * property names from SecurityManager.properties file .
 	 */
 	private String appCtxName = null;
 	/**

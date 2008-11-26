@@ -22,11 +22,25 @@ import java.util.Set;
 
 public class SecurityDataBean
 {
-
+	/**
+	 * user.
+	 */
 	private String user;
+	/**
+	 * group.
+	 */
 	private Set group;
+	/**
+	 * roleName.
+	 */
 	private String roleName;
+	/**
+	 * groupName.
+	 */
 	private String groupName;
+	/**
+	 * protGrpName.
+	 */
 	private String protGrpName;
 
 	/**
@@ -70,7 +84,7 @@ public class SecurityDataBean
 	}
 
 	/**
-	 * @param userGroup The userGroup to set.
+	 * @param group The userGroup to set.
 	 */
 	public void setGroup(final Set group)
 	{
@@ -109,8 +123,9 @@ public class SecurityDataBean
 		this.groupName = groupName;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * overriding toString().
+	 * @return String
 	 */
 	public String toString()
 	{

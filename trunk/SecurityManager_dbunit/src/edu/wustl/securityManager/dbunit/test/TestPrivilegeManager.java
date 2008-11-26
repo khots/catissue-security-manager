@@ -1,3 +1,4 @@
+
 package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
@@ -23,7 +24,9 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
-public class TestPrivilegeManager extends TestCase{
+public class TestPrivilegeManager extends TestCase
+{
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -32,33 +35,37 @@ public class TestPrivilegeManager extends TestCase{
 	PrivilegeManager privManager;
 	static String configFile = "";
 	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
-	protected void setUp() throws Exception {
-		
+
+	protected void setUp() throws Exception
+	{
+
 		privManager = PrivilegeManager.getInstance();
-		System.setProperty("gov.nih.nci.security.configFile",configFile);
+		System.setProperty("gov.nih.nci.security.configFile", configFile);
 		removeAllUsers();
 		insertSampleCSMUser();
 
-		System.setProperty("javax.net.ssl.trustStore", "E://jboss-4.2.2.GA//server//default//conf//chap8.keystore");
+		System.setProperty("javax.net.ssl.trustStore",
+				"E://jboss-4.2.2.GA//server//default//conf//chap8.keystore");
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
-		{ 
-		//	cs.startSession("test", "test");
-		} 	
-		catch (Exception ex) 
-		{ 
+		{
+			//	cs.startSession("test", "test");
+		}
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			fail();
 			System.exit(1);
-		}		
+		}
 		super.setUp();
 	}
+
 	static
 	{
 		Properties SECURITY_MANAGER_PROP;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader().getResourceAsStream(
-		"smDBUnit.properties");
+		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
+				.getResourceAsStream("smDBUnit.properties");
 		SECURITY_MANAGER_PROP = new Properties();
 		try
 		{
@@ -75,25 +82,32 @@ public class TestPrivilegeManager extends TestCase{
 	/**
 	 * Removes all users from the system.
 	 */
-	private void removeAllUsers() {
-		try {
+	private void removeAllUsers()
+	{
+		try
+		{
 			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			List<User> allUsers = securityManager.getUsers();
-			for (User user : allUsers) {
+			for (User user : allUsers)
+			{
 				Long userId = user.getUserId();
 				securityManager.removeUser(userId.toString());
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error(e.getStackTrace());
 		}
 	}
+
 	/**
 	 * Inserts a sample User.
 	 * @throws SMException 
 	 * 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser() throws SMException {
+	private void insertSampleCSMUser() throws SMException
+	{
 		User user = new User();
 		String newVal = "test";
 		user.setDepartment(newVal);
@@ -105,20 +119,25 @@ public class TestPrivilegeManager extends TestCase{
 		user.setTitle(newVal);
 		user.setLastName(newVal);
 		ISecurityManager securityManager;
-		try {
+		try
+		{
 			securityManager = SecurityManagerFactory.getSecurityManager();
 			securityManager.createUser(user);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Inserts a sample User.
 	 * @throws SMException 
 	 * 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser(String name) throws SMException {
+	private void insertSampleCSMUser(String name) throws SMException
+	{
 		User user = new User();
 		String newVal = name;
 		user.setDepartment(newVal);
@@ -130,13 +149,17 @@ public class TestPrivilegeManager extends TestCase{
 		user.setTitle(newVal);
 		user.setLastName(newVal);
 		ISecurityManager securityManager;
-		try {
+		try
+		{
 			securityManager = SecurityManagerFactory.getSecurityManager();
 			securityManager.createUser(user);
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * testGetClasses
 	 */
@@ -145,6 +168,7 @@ public class TestPrivilegeManager extends TestCase{
 		List<String> classes = privManager.getClasses();
 		assertNotNull(classes);
 	}
+
 	/**
 	 * testGetLazyObjects
 	 */
@@ -153,6 +177,7 @@ public class TestPrivilegeManager extends TestCase{
 		List<String> classes = privManager.getLazyObjects();
 		assertEquals(0, classes.size());
 	}
+
 	/**
 	 * testEagerObjects
 	 */
@@ -161,6 +186,7 @@ public class TestPrivilegeManager extends TestCase{
 		List<String> classes = privManager.getEagerObjects();
 		assertNotNull(classes);
 	}
+
 	/**
 	 * testGetAccesibleUsers
 	 */
@@ -169,22 +195,26 @@ public class TestPrivilegeManager extends TestCase{
 		String objectId = "edu.wustl.catissuecore.domain.Participant";
 		String privilege = "QUERY";
 		Set<String> classes;
-		try {
+		try
+		{
 			assignGroupToUser("test", ADMIN_GROUP);
-			
-			classes =  privManager.getAccesibleUsers(objectId, privilege);
+
+			classes = privManager.getAccesibleUsers(objectId, privilege);
 			assertNotNull(classes);
 			assertEquals(1, classes.size());
 			insertSampleCSMUser("test1");
 			assignGroupToUser("test1", "SUPERVISOR_GROUP");
-			classes =  privManager.getAccesibleUsers(objectId, privilege);
+			classes = privManager.getAccesibleUsers(objectId, privilege);
 			assertNotNull(classes);
 			assertEquals(2, classes.size());
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			logger.error(e.getStackTrace());
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * getPrivilegeCaches
 	 */
@@ -193,12 +223,13 @@ public class TestPrivilegeManager extends TestCase{
 		Collection<PrivilegeCache> classes = privManager.getPrivilegeCaches();
 		assertNotNull(classes);
 		assertEquals(0, classes.size());
-		
+
 		PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
 		Collection<PrivilegeCache> classes1 = privManager.getPrivilegeCaches();
 		assertNotNull(classes1);
 		assertEquals(1, classes1.size());
 	}
+
 	/**
 	 * testGetPrivilegeCacheLoginName
 	 */
@@ -208,13 +239,15 @@ public class TestPrivilegeManager extends TestCase{
 		assertNotNull(privilegeCache);
 		assertEquals("test", privilegeCache.getLoginName());
 	}
+
 	/**
 	 * testGetPrivilegeCacheLoginName
 	 */
 	public void testRemovePrivilegeCache()
 	{
 		User user;
-		try {
+		try
+		{
 			user = SecurityManagerFactory.getSecurityManager().getUser("test");
 			PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
 			Collection<PrivilegeCache> classes1 = privManager.getPrivilegeCaches();
@@ -224,34 +257,38 @@ public class TestPrivilegeManager extends TestCase{
 			Collection<PrivilegeCache> classes = privManager.getPrivilegeCaches();
 			assertNotNull(classes);
 			assertEquals(0, classes.size());
-		} catch (SMException e) {
+		}
+		catch (SMException e)
+		{
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * getPrivilegeCaches
-	 *//*
-	public void testHasGroupPrivilege()
-	{
-		String roleId = "1";
-		String objectId = "edu.wustl.catissuecore.domain.Participant";
-		String privilegeName = "QUERY";
-		boolean hasPriv;
-		try
+	 */
+	/*
+		public void testHasGroupPrivilege()
 		{
-			hasPriv = privManager.hasGroupPrivilege(roleId, objectId, privilegeName);
-			System.out.println("hasPriv  "+hasPriv);
-			assertNotNull(hasPriv);
-		}
-		catch (CSObjectNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (CSException e)
-		{
-			e.printStackTrace();
-		}
-	}*/
+			String roleId = "1";
+			String objectId = "edu.wustl.catissuecore.domain.Participant";
+			String privilegeName = "QUERY";
+			boolean hasPriv;
+			try
+			{
+				hasPriv = privManager.hasGroupPrivilege(roleId, objectId, privilegeName);
+				System.out.println("hasPriv  "+hasPriv);
+				assertNotNull(hasPriv);
+			}
+			catch (CSObjectNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+			catch (CSException e)
+			{
+				e.printStackTrace();
+			}
+		}*/
 	/**
 	 * assigns the given group name to the user with the given login name
 	 * 
