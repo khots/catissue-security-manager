@@ -11,7 +11,6 @@ import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Permissions;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -27,7 +26,6 @@ import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionGroupRoleContext;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.dao.ApplicationSearchCriteria;
@@ -269,15 +267,15 @@ public class PrivilegeUtility
 	}
 
 	/**
-	 * @param userGroupRoleProtectionGroupBean bean
+	 * @param bean bean
 	 * @param group Group
 	 * @throws SMException ex
 	 */
-	private void assignGroupToUsersInUserGroup(SecurityDataBean userGroupRoleProtectionGroupBean,
+	private void assignGroupToUsersInUserGroup(SecurityDataBean bean,
 			Group group) throws SMException
 	{
 		User user;
-		Set userGroup = userGroupRoleProtectionGroupBean.getGroup();
+		Set userGroup = bean.getGroup();
 		for (Iterator it = userGroup.iterator(); it.hasNext();)
 		{
 			user = (User) it.next();
@@ -287,17 +285,17 @@ public class PrivilegeUtility
 	}
 
 	/**
-	 * @param userGroupRoleProtectionGroupBean bean
-	 * @return Group
+	 * @param bean bean 
+	 * @return Group grp
 	 * @throws CSException exc
 	 */
-	private Group getNewGroupObject(SecurityDataBean userGroupRoleProtectionGroupBean)
+	private Group getNewGroupObject(SecurityDataBean bean)
 			throws SMException
 	{
 		Group group = new Group();
 		group.setApplication(getApplication(SecurityManagerPropertiesLocator.getInstance()
 				.getApplicationCtxName()));
-		group.setGroupName(userGroupRoleProtectionGroupBean.getGroupName());
+		group.setGroupName(bean.getGroupName());
 		return group;
 	}
 
@@ -631,94 +629,7 @@ public class PrivilegeUtility
 		protectionGroup = (ProtectionGroup) list.get(0);
 		return protectionGroup;
 	}
-
 	
-	/**
-	 * get all the roles that user has on this protection group.
-	 * @param userId user id
-	 * @param protectionGroup protGrp
-	 * @param upManager manager class
-	 * @return set of roles
-	 * @throws CSObjectNotFoundException exception
-	 */
-	private Set getAllRolesOnProtGroup(Long userId, ProtectionGroup protectionGroup,
-			UserProvisioningManager upManager) throws CSObjectNotFoundException
-	{
-		Set pgRoleContextSet = upManager.getProtectionGroupRoleContextForUser(String
-				.valueOf(userId));
-		return getAggregatedRoles(protectionGroup, pgRoleContextSet);
-	}
-
-	/**
-	 * This method returns array of rile id.
-	 * @param aggregatedRoles Set of roles
-	 * @return array of role ids
-	 */
-	private String[] getRoleIds(Set<Role> aggregatedRoles)
-	{
-		String[] roleIds = null;
-		roleIds = new String[aggregatedRoles.size()];
-		Iterator<Role> roleIt = aggregatedRoles.iterator();
-
-		for (int i = 0; roleIt.hasNext(); i++)
-		{
-			roleIds[i] = String.valueOf(((Role) roleIt.next()).getId());
-		}
-		return roleIds;
-	}
-
-	/**
-	 * @param roles roles.
-	 * @param assignOperation operation
-	 * @param aggrRoles list of roles
-	 * @return set of roles
-	 */
-	private Set addRemoveRoles(Set roles, boolean assignOperation, Set aggrRoles)
-	{
-		Set aggregatedRoles = aggrRoles;
-
-		// if the operation is assign, add the roles to be assigned.
-		if (assignOperation == Constants.PRIVILEGE_ASSIGN)
-		{
-			aggregatedRoles.addAll(roles);
-		}
-		else
-		// if the operation is de-assign, remove the roles to be de-assigned.
-		{
-			Set newaggregateRoles = removeRoles(aggregatedRoles, roles);
-			aggregatedRoles = newaggregateRoles;
-		}
-		return aggregatedRoles;
-	}
-
-	/**
-	 * Removes roles
-	 * @param fromSet src
-	 * @param toSet dest 
-	 * @return set of roles
-	 */
-	private Set removeRoles(Set<Role> fromSet, Set<Role> toSet)
-	{
-		Set<Role> differnceRoles = new HashSet<Role>();
-		Iterator<Role> fromSetiterator = fromSet.iterator();
-		while (fromSetiterator.hasNext())
-		{
-			Role role1 = (Role) fromSetiterator.next();
-
-			Iterator<Role> toSetIterator = toSet.iterator();
-			while (toSetIterator.hasNext())
-			{
-				Role role2 = (Role) toSetIterator.next();
-
-				if (!role1.getId().equals(role2.getId()))
-				{
-					differnceRoles.add(role1);
-				}
-			}
-		}
-		return differnceRoles;
-	}
-
 	
 	/**
 	 * 
@@ -729,48 +640,7 @@ public class PrivilegeUtility
 	{
 		return securityManager.getGroupIdForRole(roleID);
 	}
-
-
-	/**
-	 * @param groupId id
-	 * @param roles roles
-	 * @param protectionGroup group
-	 * @throws SMException exc
-	 */
-	private void checkForSufficientParams(Long groupId, Set roles, ProtectionGroup protectionGroup)
-			throws SMException
-	{
-		if (groupId == null || roles == null || protectionGroup == null)
-		{
-			String mess = "One or more parameters are null";
-			Utility.getInstance().throwSMException(null, mess);
-		}
-	}
-
-	/**
-	 * @param protectionGroup group obj
-	 * @param protectionGroupRoleContextSet set
-	 * @return set of roles
-	 */
-	private Set getAggregatedRoles(ProtectionGroup protectionGroup,
-			Set protectionGroupRoleContextSet)
-	{
-		ProtectionGroupRoleContext protectionGroupRoleContext;
-		Set aggregatedRoles = new HashSet();
-		Iterator iterator = protectionGroupRoleContextSet.iterator();
-		while (iterator.hasNext())
-		{
-			protectionGroupRoleContext = (ProtectionGroupRoleContext) iterator.next();
-			if (protectionGroupRoleContext.getProtectionGroup().getProtectionGroupId().equals(
-					protectionGroup.getProtectionGroupId()))
-			{
-				aggregatedRoles.addAll(protectionGroupRoleContext.getRoles());
-				break;
-			}
-		}
-		return aggregatedRoles;
-	}
-
+	
 	/**
 	 * 
 	 * @param privilegeId priv Id

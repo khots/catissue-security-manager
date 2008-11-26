@@ -88,7 +88,7 @@ public class PrivilegeCache
 		catch (SMException e)
 		{
 			String message = "error in initialising cache "+e.getMessage();
-			e.printStackTrace();
+			logger.error(message);
 		//	edu.wustl.security.global.Utility.getInstance().throwSMException(e, message);
 		}
 	}

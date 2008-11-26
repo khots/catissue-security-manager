@@ -446,7 +446,6 @@ public class SecurityManager implements Permissions, ISecurityManager
 	{
 		checkForSufficientParams(userId, groupIds);
 
-		Group group = null;
 		try
 		{
 			UserProvisioningManager upManager = ProvisionManager.getInstance()
