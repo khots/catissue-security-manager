@@ -89,11 +89,11 @@ public class TestPrivilegeManager extends TestCase{
 	}
 	/**
 	 * Inserts a sample User.
-	 * @throws SMTransactionException 
+	 * @throws SMException 
 	 * 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser() throws SMTransactionException {
+	private void insertSampleCSMUser() throws SMException {
 		User user = new User();
 		String newVal = "test";
 		user.setDepartment(newVal);
@@ -114,11 +114,11 @@ public class TestPrivilegeManager extends TestCase{
 	}
 	/**
 	 * Inserts a sample User.
-	 * @throws SMTransactionException 
+	 * @throws SMException 
 	 * 
 	 * @throws Exception
 	 */
-	private void insertSampleCSMUser(String name) throws SMTransactionException {
+	private void insertSampleCSMUser(String name) throws SMException {
 		User user = new User();
 		String newVal = name;
 		user.setDepartment(newVal);

@@ -34,8 +34,10 @@ public class TestAll
 		suite.addTestSuite(TestPrivilegeCache.class);
 		suite.addTestSuite(TestPrivilegeManager.class);
 		suite.addTestSuite(TestPrivilegeUtility.class);
-		suite.addTestSuite(TestAuthorizationDAOImpl.class);
-	//	suite.addTestSuite(TestAuthorizationDAOImpl.class);
+			suite.addTestSuite(TestAuthorizationDAOImpl.class);
+			suite.addTestSuite(TestPrivilegeType.class);
+			suite.addTestSuite(TestPrivilege.class);
+			suite.addTestSuite(TestUtility.class);
 		return suite;
 	}
 }

@@ -50,7 +50,7 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			sFactory = ApplicationSessionFactory
 					.getSessionFactory(ctxName);
 			impl = new AuthorizationDAOImpl(sFactory,ctxName);
-			securityManager = SecurityManagerFactory.getSecurityManager(TestSecurityManager.class);
+			securityManager = SecurityManagerFactory.getSecurityManager();
 			
 			
 			removeAllUsers();
@@ -59,8 +59,6 @@ public class TestAuthorizationDAOImpl extends TestCase{
 			super.setUp();
 			
 		} catch (CSConfigurationException e) {
-			e.printStackTrace();
-		} catch (SMTransactionException e) {
 			e.printStackTrace();
 		} catch (SMException e) {
 			e.printStackTrace();
