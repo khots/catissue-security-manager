@@ -32,7 +32,7 @@
 		</path>
 
 	<target name="dbinit">
-		<delete dir="${db_unit.dir}/Build_Report"/>
+		<delete dir="${db_unit.dir}/Build_Report"  failonerror="false"/>
 		<mkdir dir="${db_temp.dir}"/>
 		<mkdir dir="${db_temp.dir}/Nightly_Build_Report"/>
 		<mkdir dir="${db_unit.dir}/Build_Report"/>
@@ -115,8 +115,8 @@
 	</target>
 	
 	<target name="RundbUnit" depends="dbclean, dbinit, configure_properties, build_jar" >
-		<antcall target="runJUnit">
-			<param name="classNames" value="**/Test*.java" />
+		<antcall target="runJUnitDB">
+			<param name="classNames" value="**/TestPr*y.java" />
 		</antcall>
 	</target>
 	
@@ -192,12 +192,12 @@
 				</fileset>
 			</batchtest>
 		</junit>
-		<!--<junitreport todir="${junit.report.dir}/Html_reports">
+		<junitreport todir="${junit.report.dir}/Html_reports">
 					<fileset dir="${junit.report.dir}/Html_reports">
 						<include name="*.xml" />
 					</fileset>
 					<report todir="${junit.report.dir}/Html_reports" />
-				</junitreport>-->
+		</junitreport>
 
 	</target>
 
@@ -363,5 +363,41 @@
 		 <antcall target="instrument" />
 		<antcall target="runJUnit" />
 		<antcall target="coverage_report" />
-	</target>	
+	</target>
+	<target name="runJUnitDB" depends="db_compile">
+			<echo message="Please see the test report at ${db_unit.dir}/Build_Report" />
+			<echo message="running test cases ${classNames}" />		
+			<junit printsummary="yes" haltonfailure="no">
+				  <formatter type="xml"/>
+				<classpath>
+					<fileset dir="${web_lib.dir}">
+						<include name="*.jar"/>
+					</fileset>
+
+					<fileset dir="${jboss.server.url}/lib">
+						<include name="jboss-j2ee.jar"/>
+						<include name="dom4j.jar"/>					
+						<include name="servlet-api.jar"/>
+
+					</fileset>
+
+					
+					<fileset dir="${db_lib.dir}">
+						<include name="*.jar"/>
+					</fileset>	
+
+					<!-- fileset dir="${tmp.smwar}/WEB-INF/classes">
+						<include name="**/*"/>
+					</fileset -->	
+
+					<pathelement path="${db_temp.dir}"/>
+				</classpath>
+				<batchtest todir="${db_unit.dir}/Build_Report">
+					<fileset dir="${db_src.dir}">
+						<include name="${classNames}"/>
+					</fileset>
+				</batchtest>
+			</junit>
+
+		</target>
 </project>
