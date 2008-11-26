@@ -63,6 +63,7 @@ public final class PrivilegeManager
 	private List<String> lazyObjects;
 	private List<String> classes;
 	private List<String> eagerObjects;
+	private static boolean isSuccessful = true;
 
 	/**
 	 * private constructor to make the class singleton
@@ -80,15 +81,22 @@ public final class PrivilegeManager
 		}
 		catch (SMException e)
 		{
+			isSuccessful = false;
 			logger.debug(e.getStackTrace());
 		}
 	}
 
 	/**
 	 * return the Singleton PrivilegeCacheManager instance.
+	 * @throws SMException ex
 	 */
-	public static PrivilegeManager getInstance()
+	public static PrivilegeManager getInstance() throws SMException
 	{
+		if(!isSuccessful)
+		{
+			String mess = "error occured in instantiation of PrivilegeManager";
+			Utility.getInstance().throwSMException(null,mess);
+		}
 		return instance;
 	}
 
