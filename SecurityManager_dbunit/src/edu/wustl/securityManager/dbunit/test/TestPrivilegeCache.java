@@ -15,6 +15,7 @@ import java.util.Set;
 import junit.framework.TestCase;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.SecurityManager;
 import edu.wustl.security.privilege.PrivilegeCache;
@@ -92,10 +93,18 @@ public class TestPrivilegeCache extends TestCase
 	 */
 	public void testHasPrivilege()
 	{
-		boolean hasPrivilege = cache.hasPrivilege("edu.wustl.catissuecore.domain.Participant",
-				"READ");
-		System.out.println("hasPrivilege" + hasPrivilege);
-		assertFalse(hasPrivilege);
+		boolean hasPrivilege;
+		try
+		{
+			hasPrivilege = cache.hasPrivilege("edu.wustl.catissuecore.domain.Participant",
+					"READ");
+			assertFalse(hasPrivilege);
+		}
+		catch (SMException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
