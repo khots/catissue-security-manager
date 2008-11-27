@@ -225,9 +225,18 @@ public class TestPrivilegeUtility extends TestCase
 	 */
 	public void testGetGroupIdForRole()
 	{
-		String grpId = privilegeUtility.getGroupIdForRole("1");
-		assertNotNull(grpId);
-		assertEquals("1", grpId);
+		String grpId;
+		try
+		{
+			grpId = privilegeUtility.getGroupIdForRole("1");
+			assertNotNull(grpId);
+			assertEquals("1", grpId);
+		}
+		catch (SMException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -409,7 +418,7 @@ public class TestPrivilegeUtility extends TestCase
 			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
 			usr.setLastName("dee1");
-			usr.setId(new Long(122));
+			usr.setId(new Long(32));
 			usr.setLoginName("dee1");
 			usr.setEmailAddress("dee1@dee.com");
 			csmUser.setLoginName(usr.getLoginName());

@@ -334,7 +334,7 @@ public class TestPrivilegeManager extends TestCase
 			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
 			usr.setLastName("dee1");
-			usr.setId(new Long(151));
+			usr.setId(new Long(14));
 			usr.setLoginName("dee1");
 			usr.setEmailAddress("dee1@dee.com");
 			csmUser.setLoginName(usr.getLoginName());
