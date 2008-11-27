@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -326,7 +325,8 @@ public class PrivilegeUtility
 	 * @param groups groups
 	 * @throws SMException 
 	 */
-	private void assignProtectionElementsToGroups(Set<ProtectionElement> protElems, String[] groups) throws SMException
+	private void assignProtectionElementsToGroups(Set<ProtectionElement> 
+	protElems, String[] groups) throws SMException
 	{
 		ProtectionElement protectionElement;
 		Iterator<ProtectionElement> iterator;
@@ -670,7 +670,7 @@ public class PrivilegeUtility
 	 * @return Role role
 	 * @throws CSException CSException
 	 * @throws SMException SMException
-	 */
+	 *//*
 	public Role getRoleByPrivilege(String privilegeName) throws CSException, SMException
 	{
 		String roleName;
@@ -684,5 +684,5 @@ public class PrivilegeUtility
 		}
 		return getRole(roleName);
 	}
-	
+	*/
 }

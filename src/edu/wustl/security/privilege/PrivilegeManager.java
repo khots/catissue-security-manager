@@ -82,7 +82,7 @@ public final class PrivilegeManager
 		catch (SMException e)
 		{
 			isSuccessful = false;
-			logger.debug(e.getStackTrace());
+			logger.error(e.getStackTrace());
 		}
 	}
 
@@ -153,10 +153,8 @@ public final class PrivilegeManager
 		try
 		{
 			Collection<PrivilegeCache> listOfPrivCaches = getPrivilegeCaches();
-
 			ProtectionElement protectionElement = privilegeUtility.getUserProvisioningManager()
 					.getProtectionElement(objectId);
-
 			Collection<ProtectionElement> protElements = new ArrayList<ProtectionElement>();
 			protElements.add(protectionElement);
 
@@ -165,7 +163,6 @@ public final class PrivilegeManager
 				Collection<ObjectPrivilegeMap> objPrivMapCol = privilegeUtility
 						.getUserProvisioningManager().getPrivilegeMap(
 								privilegeCache.getLoginName(), protElements);
-
 				if (!objPrivMapCol.isEmpty())
 				{
 					privilegeCache.addObject(objectId, objPrivMapCol.iterator().next()
@@ -204,7 +201,6 @@ public final class PrivilegeManager
 			String mess = "Exception in insertAuthorizationData:" + exception;
 			Utility.getInstance().throwSMException(exception, mess);
 		}
-
 		addObjectToPrivilegeCaches(objectId);
 	}
 
