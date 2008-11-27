@@ -91,7 +91,7 @@ public final class RoleGroupLocator
 		if(!isSuccess)
 		{
 			String mess = "error occured in instantiation of PrivilegeManager";
-			Utility.getInstance().throwSMException(null,mess);
+			Utility.getInstance().throwSMException(null,mess, null);
 		}
 		return locator;
 	}
@@ -116,7 +116,7 @@ public final class RoleGroupLocator
 				{
 					String mess = "error in creating role grp bean"+e.getMessage();
 				//	logger.error(mess);
-					Utility.getInstance().throwSMException(e, mess);
+					Utility.getInstance().throwSMException(e, mess, null);
 				}
 			}
 		}
@@ -153,12 +153,12 @@ public final class RoleGroupLocator
 		catch (CSException e)
 		{
 			String mess = "Error in initializing rolegroupNamevsId map";
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		catch (SMException e)
 		{
 			String mess = "Error in initializing rolegroupNamevsId map";
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 	}
 

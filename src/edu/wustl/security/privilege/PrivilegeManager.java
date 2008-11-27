@@ -95,7 +95,7 @@ public final class PrivilegeManager
 		if(!isSuccessful)
 		{
 			String mess = "error occured in instantiation of PrivilegeManager";
-			Utility.getInstance().throwSMException(null,mess);
+			Utility.getInstance().throwSMException(null,mess, null);
 		}
 		return instance;
 	}
@@ -172,11 +172,11 @@ public final class PrivilegeManager
 		}
 		catch (CSObjectNotFoundException e)
 		{
-			Utility.getInstance().throwSMException(e, e.getMessage());
+			Utility.getInstance().throwSMException(e, e.getMessage(), null);
 		}
 		catch (CSException e)
 		{
-			Utility.getInstance().throwSMException(e, e.getMessage());
+			Utility.getInstance().throwSMException(e, e.getMessage(), null);
 		}
 	}
 
@@ -199,7 +199,7 @@ public final class PrivilegeManager
 		catch (SMException exception)
 		{
 			String mess = "Exception in insertAuthorizationData:" + exception;
-			Utility.getInstance().throwSMException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess, null);
 		}
 		addObjectToPrivilegeCaches(objectId);
 	}
@@ -224,17 +224,17 @@ public final class PrivilegeManager
 		catch (ParserConfigurationException excp)
 		{
 			String mess = "DocumentBuilder cannot be created:";
-			Utility.getInstance().throwSMException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess, null);
 		}
 		catch (SAXException excp)
 		{
 			String mess = "Not able to parse xml file:" + fileName;
-			Utility.getInstance().throwSMException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess, null);
 		}
 		catch (IOException excp)
 		{
 			String mess = "Not able to parse xml file: IOException" + fileName;
-			Utility.getInstance().throwSMException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess, null);
 		}
 
 	}
@@ -352,7 +352,7 @@ public final class PrivilegeManager
 		catch (CSException excp)
 		{
 			String mess = "Not able to get instance of UserProvisioningManager:";
-			Utility.getInstance().throwSMException(excp, mess);
+			Utility.getInstance().throwSMException(excp, mess, null);
 		}
 		return result;
 	}

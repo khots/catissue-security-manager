@@ -54,8 +54,9 @@ public interface ISecurityManager
 	/**
 	 * @param roleID id
 	 * @return String
+	 * @throws SMException 
 	 */
-	String getGroupIdForRole(String roleID);
+	String getGroupIdForRole(String roleID) throws SMException;
 	/**
 	 * @param userID id
 	 * @return Role role
