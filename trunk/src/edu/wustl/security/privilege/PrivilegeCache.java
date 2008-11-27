@@ -89,7 +89,6 @@ public class PrivilegeCache
 		{
 			String message = "error in initialising cache "+e.getMessage();
 			logger.error(message);
-		//	edu.wustl.security.global.Utility.getInstance().throwSMException(e, message);
 		}
 	}
 
@@ -113,8 +112,10 @@ public class PrivilegeCache
 
 			if (!list.isEmpty())
 			{
+				System.out.println("list is not emp "+list.size());
 				objPrivMap = privilegeUtility.getUserProvisioningManager().getPrivilegeMap(
 						loginName, list);
+				System.out.println("objPrivMap "+objPrivMap);
 			}
 		}
 		catch (CSException excp)
@@ -142,7 +143,7 @@ public class PrivilegeCache
 		for (ObjectPrivilegeMap objectPrivilegeMap : objPrivMapCol)
 		{
 			String objectId = objectPrivilegeMap.getProtectionElement().getObjectId();
-
+			System.out.println("objectId "+objectId);
 			BitSet bitSet = new BitSet();
 
 			for (Object privilege : objectPrivilegeMap.getPrivileges())
@@ -287,8 +288,10 @@ public class PrivilegeCache
 	 */
 	private int getBitNumber(String privilegeName)
 	{
+		System.out.println("privilegeName "+privilegeName);
 		edu.wustl.security.privilege.Privilege privilege = PrivilegeLocator.getInstance()
 		.getPrivilegeByName(privilegeName);
+		System.out.println("prib " +privilege);
 		return privilege.getBitNumber();		
 	}
 

@@ -33,7 +33,7 @@ public class TestSecurityManager extends TestCase
 	static int count = 0;
 	static String loginName = "test";
 	static String configFile = "";
-	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
+	private final String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -388,7 +388,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
+	 * testGetUserById
 	 * 
 	 * @return void
 	 * 
@@ -710,12 +710,9 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
-	 * 
-	 * @return void
-	 * 
+	 * Test Login method fail 123
+	 * @return void 
 	 */
-
 	public void testLoginFail()
 	{
 		try

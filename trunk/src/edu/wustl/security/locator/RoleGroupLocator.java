@@ -59,7 +59,10 @@ public final class RoleGroupLocator
 	 *  The same instance will be returned whenever getInstance is called. 
 	 */
 	private static RoleGroupLocator locator = new RoleGroupLocator();
-
+	/**
+	 * 
+	 */
+	private static boolean isSuccess = true;
 	/**
 	 * Making the class singleton.
 	 */
@@ -67,23 +70,38 @@ public final class RoleGroupLocator
 	{
 		Document doc = XMLParserUtility.getDocument(CONF_FILE);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
-		createRoleGroupBeans(roleList);
+		try
+		{
+			createRoleGroupBeans(roleList);
+		}
+		catch (SMException e)
+		{
+			isSuccess = false;
+			logger.error(e.getMessage());
+		}
 	}
 
 	/**
 	 * Singleton class, will return the single object every time.
 	 * @return RoleGroupLocator instance
+	 * @throws SMException 
 	 */
-	public static RoleGroupLocator getInstance()
+	public static RoleGroupLocator getInstance() throws SMException
 	{
+		if(!isSuccess)
+		{
+			String mess = "error occured in instantiation of PrivilegeManager";
+			Utility.getInstance().throwSMException(null,mess);
+		}
 		return locator;
 	}
 
 	/**
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml.
 	 * @param roleList list
+	 * @throws SMException 
 	 */
-	private void createRoleGroupBeans(NodeList roleList)
+	private void createRoleGroupBeans(NodeList roleList) throws SMException
 	{
 		for (int s = 0; s < roleList.getLength(); s++)
 		{
@@ -97,8 +115,8 @@ public final class RoleGroupLocator
 				catch (SMException e)
 				{
 					String mess = "error in creating role grp bean"+e.getMessage();
-					logger.error(mess);
-					//Utility.getInstance().throwSMException(e, mess);
+				//	logger.error(mess);
+					Utility.getInstance().throwSMException(e, mess);
 				}
 			}
 		}
