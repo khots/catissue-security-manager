@@ -148,15 +148,12 @@ public class RoleGroupDetailsBean
 		if ((object != null) && object instanceof RoleGroupDetailsBean)
 		{
 			RoleGroupDetailsBean bean = (RoleGroupDetailsBean) object;
-			if (isObjectEqual(bean.getGroupId(), this.getGroupId())
+			equals = ( isObjectEqual(bean.getGroupId(), this.getGroupId())
 					|| isObjectEqual(bean.getGroupName(), this.getGroupName())
 					|| isObjectEqual(bean.getGroupType(), this.getGroupType())
 					|| isObjectEqual(bean.getRoleId(), this.getRoleId())
 					|| isObjectEqual(bean.getRoleName(), this.getRoleName())
-					|| isObjectEqual(bean.getRoleType(), this.getRoleType()))
-			{
-				equals = true;
-			}
+					|| isObjectEqual(bean.getRoleType(), this.getRoleType()) );
 		}
 		return equals;
 	}
