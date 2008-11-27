@@ -44,11 +44,11 @@ public class Constants
 	/**
 	 * constant for SUPER_ADMIN_ROLE.
 	 */
-	public static final String SUPER_ADMIN_ROLE = "SUPER_ADMIN_ROLE";
+	public static final String SUPER_ADMIN_ROLE = "SUPER_ADMINISTRATOR_ROLE";
 	/**
 	 * constant for ADMIN_ROLE.
 	 */
-	public static final String ADMIN_ROLE = "ADMIN_ROLE";
+	public static final String ADMIN_ROLE = "ADMINISTRATOR_ROLE";
 	/**
 	 * constant for SUPERVISOR_ROLE.
 	 */
@@ -64,15 +64,16 @@ public class Constants
 	/**
 	 * constant for ADMIN_GRP_ID.
 	 */
-	public static final String ADMIN_GRP_ID = "ADMIN_GRP_ID";
+	public static final String ADMIN_GRP_ID = "ADMINISTRATOR_GROUP_ID";
+	public static final String ADMINISTRATOR_GROUP_ID = "ADMINISTRATOR_GROUP_ID";
 	/**
 	 * constant for SUPERVISOR_GRP_ID.
 	 */
-	public static final String SUPERVISOR_GRP_ID = "SUPERVISOR_GRP_ID";
+	public static final String SUPERVISOR_GRP_ID = "SUPERVISOR_GROUP_ID";
 	/**
 	 * constant for TECH_GRP_ID.
 	 */
-	public static final String TECH_GRP_ID = "TECH_GRP_ID";
+	public static final String TECH_GRP_ID = "TECHNICIAN_GROUP_ID";
 	/**
 	 * constant for PUBLIC_GROUP_ID.
 	 */
@@ -80,7 +81,7 @@ public class Constants
 	/**
 	 * constant for SUPER_ADM_GRP_ID.
 	 */
-	public static final String SUPER_ADM_GRP_ID = "SUPER_ADM_GRP_ID";
+	public static final String SUPER_ADM_GRP_ID = "SUPER_ADMINISTRATOR_GROUP_ID";
 	/**
 	 * constant for SM_PROP_FILE.
 	 */
@@ -165,4 +166,20 @@ public class Constants
 	 * Constant for position3.
 	 */
 	public static final int POSITION3 = 3;
+	/**
+	 * name of the csm properties file
+	 */
+	public static final String CSM_PROPERTY_FILE = "csm.properties";
+	/**
+	 * REad denied objects
+	 */
+	public static final String READ_DENIED_OBJECTS = "readdeniedobjects";
+	/**
+	 * main protocol objects
+	 */
+	public static final String MAIN_PROTOCOL_OBJECT = "mainprotocolobject.classname";
+	/**
+	 * validator classname
+	 */
+	public static final String VALIDATOR_CLASSNAME = "validator.classname";
 }
