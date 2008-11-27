@@ -102,7 +102,7 @@ public class PrivilegeUtility
 		catch (CSException exception)
 		{
 			String mess = "The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwSMException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess, null);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class PrivilegeUtility
 							"To Protection Group ").append(
 							protectionGroup.getProtectionGroupId()).append(' ').append(
 							group.getGroupId()).append(' ').append(roleIds);
-					Utility.getInstance().throwSMException(ex, mess.toString());
+					Utility.getInstance().throwSMException(ex, mess.toString(), null);
 				}
 			}
 		}
@@ -244,7 +244,7 @@ public class PrivilegeUtility
 		catch (CSTransactionException e)
 		{
 			String mess = "Error in creating protection group in addProtElementToGroup"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		return protGroup;
 	}
@@ -371,7 +371,7 @@ public class PrivilegeUtility
 			String mess = "Error occured while creating Potection Element "
 					+ protectionElement.getProtectionElementName();
 			logger.warn(mess, ex);
-			Utility.getInstance().throwSMException(ex, mess);
+			Utility.getInstance().throwSMException(ex, mess, null);
 			//throw new CSException(mess, ex);
 		}
 		catch(CSException ex)
@@ -379,7 +379,7 @@ public class PrivilegeUtility
 			String mess = "Error occured while creating Potection Element "
 				+ protectionElement.getProtectionElementName();
 			logger.warn(mess, ex);
-			Utility.getInstance().throwSMException(ex, mess);
+			Utility.getInstance().throwSMException(ex, mess, null);
 			//throw new CSException(mess, ex);
 		}
 
@@ -430,7 +430,7 @@ public class PrivilegeUtility
 					" an error while associating protection group:")
 					.append(groupsName).append(" to protectionElement").append(
 							protectionElement.getProtectionElementName());
-			Utility.getInstance().throwSMException(e, mess.toString());
+			Utility.getInstance().throwSMException(e, mess.toString(), null);
 		}
 	}
 
@@ -546,7 +546,7 @@ public class PrivilegeUtility
 		if (roleName == null)
 		{
 			String mess = "Role name passed is null";
-			Utility.getInstance().throwSMException(null, mess);
+			Utility.getInstance().throwSMException(null, mess, null);
 		}
 
 		//Search for role by the name roleName
@@ -564,7 +564,7 @@ public class PrivilegeUtility
 		catch (SMException e)
 		{
 			String mess = "Role not found by name " + roleName;
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		return role;
 	}
@@ -585,7 +585,7 @@ public class PrivilegeUtility
 		catch (CSObjectNotFoundException e)
 		{
 			String mess = "Error in getting RolePrivileges"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		return privileges ;
 	}
@@ -604,7 +604,7 @@ public class PrivilegeUtility
 		if (pgName == null)
 		{
 			String mess = "pgName passed is null";
-			Utility.getInstance().throwSMException(null, mess);
+			Utility.getInstance().throwSMException(null, mess, null);
 		}
 
 		//Search for Protection Group of the name passed
@@ -635,8 +635,9 @@ public class PrivilegeUtility
 	 * 
 	 * @param roleID string
 	 * @return groupid string
+	 * @throws SMException exc
 	 */
-	public String getGroupIdForRole(String roleID)
+	public String getGroupIdForRole(String roleID) throws SMException
 	{
 		return securityManager.getGroupIdForRole(roleID);
 	}
@@ -659,7 +660,7 @@ public class PrivilegeUtility
 		catch (CSObjectNotFoundException e)
 		{
 			String mess = "Error in getting RolePrivileges"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		return privilegeById;
 	}

@@ -83,13 +83,18 @@ public final class Utility
 	 * Called when we need to throw SMException.
 	 * @param exc exception
 	 * @param mess message to be shown on error
+	 * @param errKey key from the prop file
 	 * @throws SMException exception
 	 */
-	public void throwSMException(Exception exc, String mess) throws SMException
+	public void throwSMException(Exception exc, String mess, String errKey) throws SMException
 	{
 		logger.error(mess, exc);
-		ErrorKey defaultErrorKey = ErrorKey.getDefaultErrorKey();
-		defaultErrorKey.setErrorMessage(mess);
-		throw new SMException(defaultErrorKey, exc, null);
+		ErrorKey errorKey = ErrorKey.getErrorKey(errKey);
+		if(errorKey == null)
+		{
+			errorKey = ErrorKey.getDefaultErrorKey();
+			errorKey.setErrorMessage(mess);
+		}
+		throw new SMException(errorKey, exc, mess);
 	}
 }

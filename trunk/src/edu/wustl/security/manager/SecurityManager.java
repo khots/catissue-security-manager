@@ -104,7 +104,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		{
 			StringBuffer mesg = new StringBuffer("Authentication fails for user").append(loginName)
 					.append("requestingClass:").append(requestingClass);
-			Utility.getInstance().throwSMException(exception, mesg.toString());
+			Utility.getInstance().throwSMException(exception, mesg.toString(), null);
 		}
 		return loginSuccess;
 	}
@@ -126,12 +126,12 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSTransactionException exception)
 		{
 			String mesg = "Unable to create user " + user.getEmailId();
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 		catch (CSException exception)
 		{
 			String mesg = "Unable to create user " + user.getEmailId();
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 	}
 
@@ -153,7 +153,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get user: " + loginName;
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 		return user;
 	}
@@ -170,14 +170,14 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSTransactionException ex)
 		{
 			String mesg = "Failed to find this user with userId:" + userId;
-			Utility.getInstance().throwSMException(ex, mesg);
+			Utility.getInstance().throwSMException(ex, mesg, null);
 		}
 		catch (CSException exception)
 		{
 			logger.debug("Unable to obtain Authorization Manager: Exception: "
 					+ exception.getMessage());
 			String mesg = "Failed to find this user with userId:" + userId;
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 	}
 
@@ -204,7 +204,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get roles: Exception:  ";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 		return roles;
 	}
@@ -247,11 +247,11 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "UNABLE TO ASSIGN ROLE TO USER: Exception: ";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 	}
 
-	public String getGroupIdForRole(String roleID)
+	public String getGroupIdForRole(String roleID) throws SMException
 	{
 		/*String roleName=null;
 		String groupType=null;*/
@@ -286,7 +286,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get roles: Exception:  ";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 		return role;
 	}
@@ -327,7 +327,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get roles: Exception: ";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 		return role;
 	}
@@ -348,7 +348,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to modify user: Exception:  ";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 	}
 
@@ -369,7 +369,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "Unable to get user by Id for : ";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 		return user;
 	}
@@ -407,7 +407,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mess = "The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwSMException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess, null);
 		}
 	}
 
@@ -432,7 +432,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		{
 			String mess = "The Security Service encountered a fatal exception.";
 			logger.fatal(mess, ex);
-			Utility.getInstance().throwSMException(ex, mess);
+			Utility.getInstance().throwSMException(ex, mess, null);
 		}
 	}
 
@@ -463,7 +463,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mesg = "The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwSMException(exception, mesg);
+			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 	}
 
@@ -509,7 +509,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		if (userId == null || groupIds == null || groupIds.length < 1)
 		{
 			String mesg = " Null or insufficient Parameters passed";
-			Utility.getInstance().throwSMException(null, mesg);
+			Utility.getInstance().throwSMException(null, mesg, null);
 		}
 	}
 
@@ -551,7 +551,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		catch (CSException exception)
 		{
 			String mess = "Unable to get protection group for Protection Element " + protElemName;
-			Utility.getInstance().throwSMException(exception, mess);
+			Utility.getInstance().throwSMException(exception, mess, null);
 		}
 		return names;
 
@@ -606,14 +606,14 @@ public class SecurityManager implements Permissions, ISecurityManager
 				catch (CSObjectNotFoundException e)
 				{
 					String mess = "Unable to get role by id" + e.getMessage();
-					Utility.getInstance().throwSMException(e, mess);
+					Utility.getInstance().throwSMException(e, mess, null);
 				}
 			}
 		}
 		return role;
 	}
 
-	private RoleGroupDetailsBean getRequiredBean(RoleGroupDetailsBean sampleBean)
+	private RoleGroupDetailsBean getRequiredBean(RoleGroupDetailsBean sampleBean) throws SMException
 	{
 		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = RoleGroupLocator.getInstance()
 				.getRoleGroupDetailsMap();
@@ -632,7 +632,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		if (userId == null || userGroupname == null)
 		{
 			String mesg = "Null or insufficient Parameters passed";
-			Utility.getInstance().throwSMException(null, mesg);
+			Utility.getInstance().throwSMException(null, mesg, null);
 		}
 	}
 

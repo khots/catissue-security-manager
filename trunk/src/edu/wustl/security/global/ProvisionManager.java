@@ -77,7 +77,7 @@ public final class ProvisionManager
 		catch (CSException e)
 		{
 			String mess = "Error in getting UserProvisioningManager"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess);
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		return upManager;
 	}
@@ -186,7 +186,7 @@ public final class ProvisionManager
 		{
 			logger.debug("searchCriteria is null");
 			String mesg = "searchCriteria is null";
-			Utility.getInstance().throwSMException(null, mesg);
+			Utility.getInstance().throwSMException(null, mesg, null);
 		}
 		UserProvisioningManager upManager = getUserProvisioningManager();
 		List list = upManager.getObjects(searchCriteria);
