@@ -3,14 +3,21 @@ package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import junit.framework.TestCase;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Roles;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManager;
@@ -44,7 +51,7 @@ public class TestPrivilegeManager extends TestCase
 
 		System.setProperty("javax.net.ssl.trustStore",
 				"E://jboss-4.2.2.GA//server//default//conf//chap8.keystore");
-		appService = ApplicationServiceProvider.getApplicationService();
+		/*appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
 		{
@@ -55,7 +62,7 @@ public class TestPrivilegeManager extends TestCase
 			ex.printStackTrace();
 			fail();
 			System.exit(1);
-		}
+		}*/
 		super.setUp();
 	}
 
@@ -302,5 +309,56 @@ public class TestPrivilegeManager extends TestCase
 		String userId = user.getUserId().toString();
 		securityManager.assignUserToGroup(groupName, userId);
 	}
+	/**
+	 * testInsertAuthData
+	 */
+	public void testInsertAuthData()
+	{
+		removeAllUsers();
+		List authorizationData = new ArrayList();
+		Set group = new HashSet();
+		String userId = "";
+		ISecurityManager securityManager;
+		try
+		{
+			securityManager = SecurityManagerFactory.getSecurityManager();
 
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
+			SecurityDataBean userGroupRoleProtectionGroupBean;
+			userGroupRoleProtectionGroupBean = new SecurityDataBean();
+			userGroupRoleProtectionGroupBean.setUser(userId);
+			userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
+			userGroupRoleProtectionGroupBean.setGroupName(ADMIN_GROUP);
+			userGroupRoleProtectionGroupBean.setGroup(group);
+			authorizationData.add(userGroupRoleProtectionGroupBean);
+			Set protectionObjects = new HashSet();
+			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
+			usr.setLastName("dee1");
+			usr.setId(new Long(151));
+			usr.setLoginName("dee1");
+			usr.setEmailAddress("dee1@dee.com");
+			csmUser.setLoginName(usr.getLoginName());
+			csmUser.setLastName(usr.getLastName());
+			csmUser.setFirstName(usr.getFirstName());
+			csmUser.setEmailId(usr.getEmailAddress());
+			csmUser.setStartDate(Calendar.getInstance().getTime());
+			securityManager.createUser(csmUser);
+			//assignGroupToUser(usr.getLoginName(), "PUBLIC_GROUP");
+			protectionObjects.add(usr);
+			final Map<String, String[]> protectionGroupsForObjectTypes = new HashMap<String, String[]>();
+			protectionGroupsForObjectTypes.put(User.class.getName(),
+					new String[]{"PUBLIC_DATA_GROUP"});
+			edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
+					.putAll(protectionGroupsForObjectTypes);
+			//	String[] protectionGroups = securityManager.getProtectionGroupByName(usr);
+			String[] protectionGroups = {"PUBLIC_DATA_GROUP"};
+			PrivilegeCache privilegeCache = privManager.getPrivilegeCache("test");
+			privManager.insertAuthorizationData(authorizationData, protectionObjects, protectionGroups,usr.getObjectId());
+		}
+		catch (SMException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
