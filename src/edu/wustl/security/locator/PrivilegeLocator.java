@@ -128,13 +128,11 @@ public final class PrivilegeLocator
 	{
 		String privName;
 		int bitNumber;
-		String roleName;
 		Privilege privilege;
 		Element privElmnt = (Element) privNode;
 		privName = privElmnt.getAttribute(ATTR_NAME);
 		bitNumber = Integer.parseInt(XMLParserUtility.getElementValue(privElmnt, ELE_BIT_NUM));
-		roleName = XMLParserUtility.getElementValue(privElmnt, ELE_ROLE_NAME);
-		privilege = new Privilege(privName, bitNumber, roleName);
+		privilege = new Privilege(privName, bitNumber);
 		namePrivMap.put(privName, privilege);
 		bitPrivMap.put(bitNumber, privilege);
 	}
