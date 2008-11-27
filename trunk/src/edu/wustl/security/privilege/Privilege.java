@@ -19,19 +19,19 @@ public class Privilege
 
 	/**
 	 * role Name.
-	 */
-	private String roleName;
+	 *//*
+	private String roleName;*/
 	/**
 	 * Constructor.
 	 * @param privilegeName Privilege Name
 	 * @param bitNumber bit number
 	 * @param roleName role name
 	 */
-	public Privilege(String privilegeName,int bitNumber,String roleName)
+	public Privilege(String privilegeName,int bitNumber)
 	{
 		this.privilegeName=privilegeName;
 		this.bitNumber=bitNumber;
-		this.roleName=roleName;
+		//this.roleName=roleName;
 	}
 
 	/**
@@ -67,16 +67,16 @@ public class Privilege
 	}
 	/**
 	 * @return the roleName
-	 */
+	 *//*
 	public String getRoleName()
 	{
 		return roleName;
 	}
-	/**
+	*//**
 	 * @param roleName the roleName to set
-	 */
+	 *//*
 	public void setRoleName(String roleName)
 	{
 		this.roleName = roleName;
-	}
+	}*/
 }
