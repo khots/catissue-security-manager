@@ -3,6 +3,8 @@ package edu.wustl.securityManager.dbunit.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,8 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.SecurityManager;
 import edu.wustl.security.privilege.PrivilegeCache;
+import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
+import gov.nih.nci.security.authorization.domainobjects.Privilege;
 
 public class TestPrivilegeCache extends TestCase
 {
@@ -107,6 +111,12 @@ public class TestPrivilegeCache extends TestCase
 	 */
 	public void testGetPrivilegesforPrefix()
 	{
+		Collection<ObjectPrivilegeMap> privileges = new ArrayList<ObjectPrivilegeMap>();
+		Collection<Privilege> privs = new ArrayList<Privilege>();
+		Privilege pr = new Privilege();
+		pr.setName("READ");
+		privs.add(pr);
+		cache.addObject("edu.wustl.catissuecore.domain.User_1", privs);
 
 		Map<String, List<NameValueBean>> privilegeMap = cache
 				.getPrivilegesforPrefix("edu.wustl.catissuecore.domain.Address");
@@ -124,19 +134,15 @@ public class TestPrivilegeCache extends TestCase
 	}
 	/**
 	 * 
-	 *//*
+	 */
 	public void testAddObject()
 	{
-
 		Collection<ObjectPrivilegeMap> privileges = new ArrayList<ObjectPrivilegeMap>();
-		Collection<Privilege> privs = null;
+		Collection<Privilege> privs = new ArrayList<Privilege>();
 		Privilege pr = new Privilege();
 		pr.setName("READ");
 		privs.add(pr);
-		pr = new Privilege();
-		pr.setName("READ");
-		privs.add(pr);
 		cache.addObject("edu.wustl.catissuecore.domain.User_1", privs);
-	}*/
+	}
 
 }
