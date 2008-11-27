@@ -13,20 +13,9 @@ public class TestPrivilege extends TestCase
 	 */
 	public void testGetPrivDetails()
 	{
-		Privilege priv = new Privilege("READ", 0, "READ");
+		Privilege priv = new Privilege("READ", 0);
 		assertEquals(0, priv.getBitNumber());
 		assertEquals("READ", priv.getPrivilegeName());
-		assertEquals("READ", priv.getRoleName());
-	}
-
-	/**
-	 * 
-	 */
-	public void testSetPrivDetails1()
-	{
-		Privilege priv = new Privilege("READ", 0, "READ");
-		priv.setRoleName(Constants.READ_DENIED);
-		assertEquals(Constants.READ_DENIED, priv.getRoleName());
 	}
 
 	/**
@@ -34,7 +23,7 @@ public class TestPrivilege extends TestCase
 	 */
 	public void testSetPrivDetails2()
 	{
-		Privilege priv = new Privilege("READ", 0, "READ");
+		Privilege priv = new Privilege("READ", 0);
 		priv.setPrivilegeName(Constants.READ_DENIED);
 		assertEquals(Constants.READ_DENIED, priv.getPrivilegeName());
 	}
@@ -44,7 +33,7 @@ public class TestPrivilege extends TestCase
 	 */
 	public void testSetPrivDetails()
 	{
-		Privilege priv = new Privilege("READ", 0, "READ");
+		Privilege priv = new Privilege("READ", 0);
 		priv.setBitNumber(1);
 		assertEquals(1, priv.getBitNumber());
 	}

@@ -92,7 +92,7 @@ public class TestPrivilegeUtility extends TestCase
 
 	/**
 	 * 
-	 */
+	 *//*
 	public void testGetRoleByPrivilege()
 	{
 		String privName = "READ";
@@ -111,7 +111,7 @@ public class TestPrivilegeUtility extends TestCase
 		{
 			logger.error(e.getStackTrace());
 		}
-	}
+	}*/
 
 	/**
 	 * 
@@ -383,7 +383,9 @@ public class TestPrivilegeUtility extends TestCase
 			logger.error(e.getStackTrace());
 		}
 	}
-
+	/**
+	 * testInsertAuthData
+	 */
 	public void testInsertAuthData()
 	{
 		removeAllUsers();
@@ -407,7 +409,7 @@ public class TestPrivilegeUtility extends TestCase
 			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
 			usr.setLastName("dee1");
-			usr.setId(new Long(231));
+			usr.setId(new Long(122));
 			usr.setLoginName("dee1");
 			usr.setEmailAddress("dee1@dee.com");
 			csmUser.setLoginName(usr.getLoginName());
