@@ -31,51 +31,54 @@
 		<bit-number>9</bit-number>
 	</privilege>
 	<privilege name="DEFINE_ANNOTATION">
-		<bit-number>17</bit-number>
+		<bit-number>10</bit-number>
 	</privilege>
 	<privilege name="DISTRIBUTION">
-		<bit-number>21</bit-number>
+		<bit-number>11</bit-number>
 	</privilege>
 	<privilege name="GENERAL_ADMINISTRATION">
-		<bit-number>29</bit-number>
+		<bit-number>12</bit-number>
 	</privilege>
 	<privilege name="GENERAL_SITE_ADMINISTRATION">
-		<bit-number>28</bit-number>
+		<bit-number>13</bit-number>
 	</privilege>
 	<privilege name="PARTICIPANT_SCG_ANNOTATION">
-		<bit-number>24</bit-number>
+		<bit-number>14</bit-number>
 	</privilege>
 	<privilege name="PROTOCOL_ADMINISTRATION">
-		<bit-number>23</bit-number>
+		<bit-number>15</bit-number>
 	</privilege>
 	<privilege name="QUERY">
 		<bit-number>16</bit-number>
 	</privilege>
 	<privilege name="REGISTRATION">
-		<bit-number>18</bit-number>
+		<bit-number>17</bit-number>
 	</privilege>
 	<privilege name="REPOSITORY_ADMINISTRATION">
-		<bit-number>14</bit-number>
+		<bit-number>18</bit-number>
 	</privilege>
 	<privilege name="SPECIMEN_ACCESSION">
-		<bit-number>20</bit-number>
+		<bit-number>19</bit-number>
 	</privilege>
 	<privilege name="SPECIMEN_ANNOTATION">
-		<bit-number>25</bit-number>
+		<bit-number>20</bit-number>
 	</privilege>
 	<privilege name="SPECIMEN_PROCESSING">
-		<bit-number>26</bit-number>
+		<bit-number>21</bit-number>
 	</privilege>
 	<privilege name="SPECIMEN_STORAGE">
-		<bit-number>27</bit-number>
+		<bit-number>22</bit-number>
 	</privilege>
 	<privilege name="STORAGE_ADMINISTRATION">
-		<bit-number>15</bit-number>
+		<bit-number>23</bit-number>
 	</privilege>
 	<privilege name="USER_PROVISIONING">
-		<bit-number>13</bit-number>
+		<bit-number>24</bit-number>
 	</privilege>
 	<privilege name="SHIPMENT_PROCESSING">
-		<bit-number>30</bit-number>
+		<bit-number>25</bit-number>
+	</privilege>
+	<privilege name="PHI_ACCESS">
+		<bit-number>26</bit-number>
 	</privilege>
 </privileges>
