@@ -16,7 +16,9 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.GroupSearchCriteria;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
 import gov.nih.nci.security.dao.SearchCriteria;
+import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
 /**
  * Class to provide required objects from csm apis.
@@ -27,12 +29,12 @@ public final class ProvisionManager
 {
 
 	/**
-	 * 
+	 * provManager.
 	 */
 	private static ProvisionManager provManager = new ProvisionManager();
 
 	/**
-	 * 
+	 * pri constructor.
 	 */
 	private ProvisionManager()
 	{
@@ -40,7 +42,6 @@ public final class ProvisionManager
 	}
 
 	/**
-	 * 
 	 * @return ProvisionManager single instance
 	 */
 	public static ProvisionManager getInstance()
@@ -53,11 +54,11 @@ public final class ProvisionManager
 	 */
 	private final org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 	/**
-	 * 
+	 * authTManager.
 	 */
 	private AuthenticationManager authTManager = null;
 	/**
-	 * 
+	 * authRManager.
 	 */
 	private AuthorizationManager authRManager = null;
 
@@ -70,15 +71,7 @@ public final class ProvisionManager
 	public UserProvisioningManager getUserProvisioningManager() throws SMException
 	{
 		UserProvisioningManager upManager = null;
-		try
-		{
-			upManager =  (UserProvisioningManager) getAuthorizationManager();
-		}
-		catch (CSException e)
-		{
-			String mess = "Error in getting UserProvisioningManager"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess, null);
-		}
+		upManager = (UserProvisioningManager) getAuthorizationManager();
 		return upManager;
 	}
 
@@ -107,16 +100,30 @@ public final class ProvisionManager
 	 * created.
 	 *
 	 * @return AuthenticationManager au
-	 * @throws	CSException exc
+	 * @throws	SMException exc
 	 */
-	public AuthorizationManager getAuthorizationManager() throws CSException
+	public AuthorizationManager getAuthorizationManager() throws SMException
 	{
 
 		if (authRManager == null)
 		{
-			authRManager = SecurityServiceProvider
-					.getAuthorizationManager(SecurityManagerPropertiesLocator.getInstance()
-							.getApplicationCtxName());
+			try
+			{
+				authRManager = SecurityServiceProvider
+						.getAuthorizationManager(
+								SecurityManagerPropertiesLocator.getInstance()
+								.getApplicationCtxName());
+			}
+			catch (CSConfigurationException e)
+			{
+				String mess = "error in geting getAuthorizationManager " + e.getMessage();
+				Utility.getInstance().throwSMException(e, mess, null);
+			}
+			catch (CSException e)
+			{
+				String mess = "error in geting getAuthorizationManager " + e.getMessage();
+				Utility.getInstance().throwSMException(e, mess, null);
+			}
 		}
 
 		return authRManager;
@@ -126,10 +133,9 @@ public final class ProvisionManager
 	* Returns group id from Group name.
 	* @param groupName name
 	* @return String str
-	* @throws CSException  exc
 	* @throws SMException  exc
 	*/
-	public String getGroupID(final String groupName) throws CSException, SMException
+	public String getGroupID(final String groupName) throws SMException
 	{
 		List<Group> list;
 		String groupId = null;
@@ -137,39 +143,55 @@ public final class ProvisionManager
 		group.setGroupName(groupName);
 		UserProvisioningManager upManager = getUserProvisioningManager();
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
-		group.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator
-				.getInstance().getApplicationCtxName()));
-		list = getObjects(searchCriteria);
-		if (!list.isEmpty())
+		String appCtxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
+		try
 		{
-			group = (Group) list.get(0);
-			groupId = group.getGroupId().toString();
+			group.setApplication(upManager.getApplication(appCtxName));
+			list = getObjects(searchCriteria);
+			if (!list.isEmpty())
+			{
+				group = (Group) list.get(0);
+				groupId = group.getGroupId().toString();
+			}
 		}
-
+		catch (CSObjectNotFoundException e)
+		{
+			String mess = "error in geting application according to app context name " + appCtxName
+					+ " " + e.getMessage();
+			Utility.getInstance().throwSMException(e, mess, null);
+		}
 		return groupId;
 	}
 
 	/**
 	 * Returns role id from role name.
 	 * @param roleName name
-	 * @throws CSException exc
-	 * @throws SMException exc
 	 * @return String roleid
+	 * @throws SMException exc
 	 */
-	public String getRoleID(final String roleName) throws CSException, SMException
+	public String getRoleID(final String roleName) throws SMException
 	{
 		String roleId = null;
 		Role role = new Role();
 		role.setName(roleName);
 		SearchCriteria searchCriteria = new RoleSearchCriteria(role);
 		UserProvisioningManager upManager = getUserProvisioningManager();
-		role.setApplication(upManager.getApplication(SecurityManagerPropertiesLocator.getInstance()
-				.getApplicationCtxName()));
-		List list = getObjects(searchCriteria);
-		if (!list.isEmpty())
+		String appCtxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
+		try
 		{
-			role = (Role) list.get(0);
-			roleId = role.getId().toString();
+			role.setApplication(upManager.getApplication(appCtxName));
+			List list = getObjects(searchCriteria);
+			if (!list.isEmpty())
+			{
+				role = (Role) list.get(0);
+				roleId = role.getId().toString();
+			}
+		}
+		catch (CSObjectNotFoundException e)
+		{
+			String mess = "error in geting application according to app context name " + appCtxName
+					+ " " + e.getMessage();
+			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		return roleId;
 	}

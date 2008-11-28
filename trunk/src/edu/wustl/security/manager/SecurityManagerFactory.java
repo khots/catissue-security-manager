@@ -1,7 +1,6 @@
 
 package edu.wustl.security.manager;
 
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
@@ -13,16 +12,10 @@ import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
  */
 public class SecurityManagerFactory
 {
-
 	/**
-	 * logger Logger - Generic logger.
-	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
-	/**
-	 * 
-	 * @param class1
-	 * @return
-	 * @throws SMException
+	 * Returns the instance of SM.
+	 * @return ISecurityManager sm instance
+	 * @throws SMException smexc
 	 */
 	public static ISecurityManager getSecurityManager() throws SMException
 	{
@@ -41,8 +34,9 @@ public class SecurityManagerFactory
 	}
 
 	/**
-	 * @param smClassName
-	 * @throws SMException
+	 * @param smClassName class name for SM.
+	 * @throws SMException exc
+	 * @return ISecurityManager sm instance
 	 */
 	private static ISecurityManager getSMInstance(String smClassName) throws SMException
 	{

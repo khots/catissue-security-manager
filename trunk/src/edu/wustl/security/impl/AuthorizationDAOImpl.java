@@ -38,7 +38,6 @@ import gov.nih.nci.security.util.StringUtilities;
 
 /**
  * @author aarti_sharma
- * 
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
@@ -50,7 +49,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(AuthorizationDAOImpl.class);
 	/**
-	 * sessionFact
+	 * sessionFact.
 	 */
 	private SessionFactory sessionFact = null;
 
@@ -70,7 +69,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	 * @param userName name
 	 * @param pEs pes
 	 * @throws CSException exc
-	 * @return List<ObjectPrivilegeMap>list
+	 * @return List of ObjectPrivilegeMap
 	 */
 	public List<ObjectPrivilegeMap> getPrivilegeMap(final String userName, final Collection pEs)
 			throws CSException
@@ -176,7 +175,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			}
 			while (resulSet.next())
 			{
-				String priv = resulSet.getString(1);
+				String priv = resulSet.getString(Constants.INDEX_ONE);
 				Privilege privilege = new Privilege();
 				privilege.setName(priv);
 				privs.add(privilege);
@@ -255,7 +254,6 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 	}
 	/**
-	 * 
 	 * @param session session
 	 * @param objectType objType
 	 * @param primaryKey pKey
@@ -307,5 +305,4 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 		stbr.append(str);
 	}
-
 }

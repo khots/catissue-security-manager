@@ -25,7 +25,6 @@ public class Privilege
 	 * Constructor.
 	 * @param privilegeName Privilege Name
 	 * @param bitNumber bit number
-	 * @param roleName role name
 	 */
 	public Privilege(String privilegeName,int bitNumber)
 	{

@@ -8,7 +8,7 @@ package edu.wustl.security.beans;
  *
  */
 public class RoleGroupDetailsBean
-{ 
+{
 	/**
 	 * roleName.
 	 */

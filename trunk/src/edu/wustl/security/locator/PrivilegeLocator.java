@@ -1,4 +1,3 @@
-
 package edu.wustl.security.locator;
 
 import java.util.HashMap;
@@ -52,11 +51,6 @@ public final class PrivilegeLocator
 	 * Element name for 'bit-number'.
 	 */
 	private static final String ELE_BIT_NUM = "bit-number";
-
-	/**
-	 * Element name for 'role-name'.
-	 */
-	private static final String ELE_ROLE_NAME = "role-name";
 
 	/**
 	 * Attribute name for 'name'.
