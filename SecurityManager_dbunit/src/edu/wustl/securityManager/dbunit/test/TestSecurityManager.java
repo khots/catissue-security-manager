@@ -13,6 +13,7 @@ import org.junit.Test;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Constants;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManager;
@@ -22,9 +23,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 
 /**
  * Test cases for SecurityManager class.
- * 
  * @author deepti_shelar
- * 
  */
 public class TestSecurityManager extends TestCase
 {
@@ -33,7 +32,7 @@ public class TestSecurityManager extends TestCase
 	static int count = 0;
 	static String loginName = "test";
 	static String configFile = "";
-	private final String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
+	private final String adminGroup = "ADMINISTRATOR_GROUP";
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -52,15 +51,15 @@ public class TestSecurityManager extends TestCase
 
 	static
 	{
-		Properties SECURITY_MANAGER_PROP;
+		Properties smProp;
 		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
 				.getResourceAsStream("smDBUnit.properties");
-		SECURITY_MANAGER_PROP = new Properties();
+		smProp = new Properties();
 		try
 		{
-			SECURITY_MANAGER_PROP.load(inputStream);
+			smProp.load(inputStream);
 			inputStream.close();
-			configFile = SECURITY_MANAGER_PROP.getProperty("gov.nih.nci.security.configFile");
+			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
 		}
 		catch (IOException exception)
 		{
@@ -70,8 +69,7 @@ public class TestSecurityManager extends TestCase
 
 	/**
 	 * Inserts a sample User.
-	 * @throws SMException 
-	 * @throws Exception
+	 * @throws SMException e
 	 */
 	private void insertSampleCSMUser() throws SMException
 	{
@@ -89,12 +87,10 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * assigns the given group name to the user with the given login name
-	 * 
-	 * @param loginName
-	 * @param groupName
-	 * @throws SMException 
-	 * @throws Exception
+	 * assigns the given group name to the user with the given login name.
+	 * @param loginName login name
+	 * @param groupName grp name
+	 * @throws SMException e
 	 */
 	private void assignGroupToUser(String loginName, String groupName) throws SMException
 	{
@@ -124,8 +120,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Returns the user matching with the login name
-	 * 
+	 * Returns the user matching with the login name.
 	 * @param loginName
 	 *            name
 	 * @return User
@@ -145,13 +140,13 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test GetProtectionGroupByName
+	 * Test GetProtectionGroupByName.
 	 */
 	@Test
 	public void testGetProtectionGroupByName()
 	{
 		AbstractDomainObject obj = new edu.wustl.catissuecore.domain.User();
-		obj.setId(Long.valueOf(1));
+		obj.setId(Long.valueOf(Constants.INDEX_ONE));
 
 		try
 		{
@@ -166,7 +161,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Create user method
+	 * Test Create user method.
 	 */
 	public void testCreateUser()
 	{
@@ -192,7 +187,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Create user method
+	 * Test Create user method.
 	 */
 	public void testCreateUserException()
 	{
@@ -218,10 +213,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test getUser method
-	 * 
-	 * @return void
-	 * 
+	 * Test getUser method.
 	 */
 	public void testGetUser()
 	{
@@ -237,10 +229,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test getUser method
-	 * 
-	 * @return void
-	 * 
+	 * Test getUser method.
 	 */
 	public void testGetUserException()
 	{
@@ -257,10 +246,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test RemoveUser
-	 * 
-	 * @return void
-	 * 
+	 * test RemoveUser.
 	 */
 	public void testRemoveUser()
 	{
@@ -282,10 +268,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test RemoveUser
-	 * 
-	 * @return void
-	 * 
+	 * test RemoveUser.
 	 */
 	public void testRemoveUserException()
 	{
@@ -308,10 +291,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test RemoveUser
-	 * 
-	 * @return void
-	 * 
+	 * test RemoveUser.
 	 */
 	public void testRemoveUserException1()
 	{
@@ -335,7 +315,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test getRoles()
+	 * test getRoles().
 	 */
 	public void testGetRoles()
 	{
@@ -351,7 +331,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test getRoles()
+	 * test getRoles().
 	 */
 	public void testGetRolesException()
 	{
@@ -368,7 +348,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test GetGroupIdForRole()
+	 * test GetGroupIdForRole().
 	 */
 	public void testGetGroupIdForRole()
 	{
@@ -388,10 +368,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * testGetUserById
-	 * 
-	 * @return void
-	 * 
+	 * testGetUserById.
 	 */
 	public void testGetUserById()
 	{
@@ -412,10 +389,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
-	 * 
-	 * @return void
-	 * 
+	 * Test Login method.
 	 */
 	public void testGetUserByIdException()
 	{
@@ -439,10 +413,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test getUsers method
-	 * 
-	 * @return void
-	 * 
+	 * Test getUsers method.
 	 */
 	public void testGetUsers()
 	{
@@ -458,10 +429,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test getUsers method
-	 * 
-	 * @return void
-	 * 
+	 * Test getUsers method.
 	 */
 	public void testGetUsersException()
 	{
@@ -479,7 +447,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test assign user to group
+	 * test assign user to group.
 	 */
 	public void testAssignUserToGroup()
 	{
@@ -501,7 +469,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test assign user to group
+	 * test assign user to group.
 	 */
 	public void testAssignUserToGroupException()
 	{
@@ -523,7 +491,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test remove user from group
+	 * test remove user from group.
 	 */
 	public void testRemoveUserFromGroup()
 	{
@@ -533,8 +501,8 @@ public class TestSecurityManager extends TestCase
 			for (User user : allUsers)
 			{
 				Long userId = user.getUserId();
-				assignGroupToUser(loginName + count, ADMIN_GROUP);
-				securityManager.removeUserFromGroup(ADMIN_GROUP, userId.toString());
+				assignGroupToUser(loginName + count, adminGroup);
+				securityManager.removeUserFromGroup(adminGroup, userId.toString());
 				String userGroup = securityManager.getRoleName(userId);
 				assertEquals(userGroup, "");
 			}
@@ -546,7 +514,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test modifyUser
+	 * Test modifyUser.
 	 */
 	public void testModifyUser()
 	{
@@ -569,7 +537,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test modifyUser
+	 * Test modifyUser.
 	 */
 	public void testModifyUserException()
 	{
@@ -593,7 +561,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test assignAdditionalGroupsToUser
+	 * test assignAdditionalGroupsToUser.
 	 */
 	public void testAssignAdditionalGroupsToUser()
 	{
@@ -615,7 +583,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test assignAdditionalGroupsToUser
+	 * test assignAdditionalGroupsToUser.
 	 */
 	public void testAssignAdditionalGroupsToUserException()
 	{
@@ -637,7 +605,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * test AssignRoleToUser()
+	 * test AssignRoleToUser().
 	 */
 
 	public void testAssignRoleToUser()
@@ -648,7 +616,7 @@ public class TestSecurityManager extends TestCase
 			for (User user : allUsers)
 			{
 				Long userId = user.getUserId();
-				assignGroupToUser(user.getLoginName(), ADMIN_GROUP);
+				assignGroupToUser(user.getLoginName(), adminGroup);
 				securityManager.assignRoleToUser(userId.toString(), "1");
 				Role userRole = securityManager.getUserRole(userId);
 				assertEquals("Administrator", userRole.getName());
@@ -661,10 +629,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
-	 * 
-	 * @return void
-	 * 
+	 * Test testGetGroupIdForRoleFromExistingUser.
 	 */
 
 	public void testGetGroupIdForRoleFromExistingUser()
@@ -675,7 +640,7 @@ public class TestSecurityManager extends TestCase
 			for (User user : allUsers)
 			{
 				Long userId = user.getUserId();
-				assignGroupToUser(loginName + count, ADMIN_GROUP);
+				assignGroupToUser(loginName + count, adminGroup);
 				String roleID = securityManager.getUserRole(userId).getId().toString();
 				String userGrp = securityManager.getGroupIdForRole(roleID);
 				assertEquals(userGrp, "1");
@@ -689,10 +654,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
-	 * 
-	 * @return void
-	 * 
+	 * Test Login method.
 	 */
 
 	public void testLogin()
@@ -710,8 +672,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method fail 123
-	 * @return void 
+	 * Test Login method fail.
 	 */
 	public void testLoginFail()
 	{
@@ -729,10 +690,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test getUserGroup1
-	 * 
-	 * @return void
-	 * 
+	 * Test testGetRoleName1.
 	 */
 
 	public void testGetRoleName1()
@@ -755,10 +713,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
-	 * 
-	 * @return void
-	 * 
+	 * Test testGetUserRole.
 	 */
 
 	public void testGetUserRole()
@@ -781,10 +736,7 @@ public class TestSecurityManager extends TestCase
 	}
 
 	/**
-	 * Test Login method
-	 * 
-	 * @return void
-	 * 
+	 * 	testGetUserRoleException.
 	 */
 
 	public void testGetUserRoleException()
@@ -814,7 +766,7 @@ public class TestSecurityManager extends TestCase
 		public void testGetRoleNameForAdmin() {
 			try {
 				User user = getUserByLoginName(loginName + count);
-				assignGroupToUser(loginName + count, ADMIN_GROUP);
+				assignGroupToUser(loginName + count, adminGroup);
 				String userGroup = securityManager.getRoleName(user.getUserId());
 				assertEquals("Administrator", userGroup);
 			} catch (Exception e) {

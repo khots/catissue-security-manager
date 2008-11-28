@@ -27,7 +27,11 @@ import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.system.ApplicationSessionFactory;
-
+/**
+ * Test class for AuthorizationDAOImpl.
+ * @author deepti_shelar
+ *
+ */
 public class TestAuthorizationDAOImpl extends TestCase
 {
 
@@ -39,8 +43,8 @@ public class TestAuthorizationDAOImpl extends TestCase
 	AuthorizationDAOImpl impl;
 	private transient ISecurityManager securityManager = null;
 	static String configFile = "";
-	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
-	final private String PUBLIC_GROUP = "PUBLIC_GROUP";
+	private final String adminGroup = "ADMINISTRATOR_GROUP";
+	private final String publicGroup = "publicGroup";
 
 	public void setUp()
 	{
@@ -76,15 +80,15 @@ public class TestAuthorizationDAOImpl extends TestCase
 
 	static
 	{
-		Properties SECURITY_MANAGER_PROP;
+		Properties smProp;
 		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
 				.getResourceAsStream("smDBUnit.properties");
-		SECURITY_MANAGER_PROP = new Properties();
+		smProp = new Properties();
 		try
 		{
-			SECURITY_MANAGER_PROP.load(inputStream);
+			smProp.load(inputStream);
 			inputStream.close();
-			configFile = SECURITY_MANAGER_PROP.getProperty("gov.nih.nci.security.configFile");
+			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
 		}
 		catch (IOException exception)
 		{
@@ -93,10 +97,8 @@ public class TestAuthorizationDAOImpl extends TestCase
 	}
 
 	/**
-	 * Returns the user matching with the login name
-	 * 
-	 * @param loginName
-	 *            name
+	 * Returns the user matching with the login name.
+	 * @param loginName name
 	 * @return User
 	 */
 	private User getUserByLoginName(String loginName)
@@ -115,8 +117,7 @@ public class TestAuthorizationDAOImpl extends TestCase
 
 	/**
 	 * Inserts a sample User.
-	 * @throws SMException 
-	 * @throws Exception
+	 * @throws SMException e
 	 */
 	private void insertSampleCSMUser() throws SMException
 	{
@@ -134,12 +135,10 @@ public class TestAuthorizationDAOImpl extends TestCase
 	}
 
 	/**
-	 * assigns the given group name to the user with the given login name
-	 * 
-	 * @param loginName
-	 * @param groupName
-	 * @throws SMException 
-	 * @throws Exception
+	 * assigns the given group name to the user with the given login name.
+	 * @param loginName login
+	 * @param groupName name
+	 * @throws SMException e
 	 */
 	private void assignGroupToUser(String loginName, String groupName) throws SMException
 	{
@@ -175,8 +174,8 @@ public class TestAuthorizationDAOImpl extends TestCase
 	{
 		try
 		{
-			assignGroupToUser("test", ADMIN_GROUP);
-			assignGroupToUser("test", PUBLIC_GROUP);
+			assignGroupToUser("test", adminGroup);
+			assignGroupToUser("test", publicGroup);
 			User user = getUserByLoginName("test");
 			Set groups = impl.getGroups(user.getUserId().toString());
 			assertEquals(2, groups.size());
@@ -198,8 +197,8 @@ public class TestAuthorizationDAOImpl extends TestCase
 	{
 		try
 		{
-			assignGroupToUser("test", ADMIN_GROUP);
-			assignGroupToUser("test", PUBLIC_GROUP);
+			assignGroupToUser("test", adminGroup);
+			assignGroupToUser("test", publicGroup);
 			User user = getUserByLoginName("test");
 			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 			ProtectionElement protectionElement = new ProtectionElement();
@@ -210,6 +209,7 @@ public class TestAuthorizationDAOImpl extends TestCase
 					.getObjects(protEleSearchCrit);
 
 			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(), list);
+			assertNotNull(map);
 		}
 		catch (SMException e)
 		{
@@ -228,8 +228,8 @@ public class TestAuthorizationDAOImpl extends TestCase
 	{
 		try
 		{
-			assignGroupToUser("test", ADMIN_GROUP);
-			assignGroupToUser("test", PUBLIC_GROUP);
+			assignGroupToUser("test", adminGroup);
+			assignGroupToUser("test", publicGroup);
 			User user = getUserByLoginName("test");
 			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 			ProtectionElement protectionElement = new ProtectionElement();
@@ -240,6 +240,7 @@ public class TestAuthorizationDAOImpl extends TestCase
 					.getObjects(protEleSearchCrit);
 
 			List<ObjectPrivilegeMap> map = impl.getPrivilegeMap(user.getLoginName(), list);
+			assertNotNull(map);
 
 		}
 		catch (SMException e)

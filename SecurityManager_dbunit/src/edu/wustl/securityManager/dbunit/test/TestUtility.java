@@ -9,7 +9,7 @@ import edu.wustl.common.util.global.Constants;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.privilege.PrivilegeType;
 /**
- * 
+ * Test case for Utility class.
  * @author deepti_shelar
  *
  */
