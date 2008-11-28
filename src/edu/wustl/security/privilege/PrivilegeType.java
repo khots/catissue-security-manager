@@ -1,29 +1,34 @@
-/**
- * 
- */
-
 package edu.wustl.security.privilege;
 
 import edu.wustl.security.global.Constants;
 
 /**
- * Enumeration that will contains different types of class level privileges. 
+ * Enumeration that will contains different types of class level privileges.
  * @author prafull_kadam
  *
  */
-public enum PrivilegeType 
+public enum PrivilegeType
 {
-	ObjectLevel(Constants.OBJECT_LEVEL_SECURE_RETRIEVE), 
-	InsecureLevel(Constants.INSECURE_RETRIEVE), 
+	/**
+	 *
+	 */
+	ObjectLevel(Constants.OBJECT_LEVEL_SECURE_RETRIEVE),
+	/**
+	 *
+	 */
+	InsecureLevel(Constants.INSECURE_RETRIEVE),
+	/**
+	 *
+	 */
 	ClassLevel(Constants.CLASS_LEVEL_SECURE_RETRIEVE);
 
 	/**
-	 * 
+	 * value.
 	 */
 	private int value;
 
-	/**                     
-	 * @param value The value
+	/**
+	 * @param val The value.
 	 */
 	PrivilegeType(int val)
 	{

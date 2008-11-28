@@ -23,32 +23,18 @@ public class UserProvisioningManagerImpl
 		extends
 			gov.nih.nci.security.provisioning.UserProvisioningManagerImpl
 {
-
-	/**
-	 * @param arg0
-	 * @throws CSConfigurationException 
-	 * @throws Exception
-	 *//*
-	public UserProvisioningManagerImpl(final String arg0) throws CSConfigurationException  
-	{
-		super(arg0);
-
-	}*/
-
 	/**
 	 * @throws CSConfigurationException exc
 	 */
-	public UserProvisioningManagerImpl() throws CSConfigurationException 
+	public UserProvisioningManagerImpl() throws CSConfigurationException
 	{
 		/** Modified by amit_doshi
-		 *  code reviewer abhijit_naik 
+		 *  code reviewer abhijit_naik
 		 */
-	
 		super(SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName());
 		String ctxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
 		SessionFactory sFactory = ApplicationSessionFactory
 				.getSessionFactory(ctxName);
 		super.setAuthorizationDAO(new AuthorizationDAOImpl(sFactory,ctxName));
 	}
-
 }

@@ -11,7 +11,6 @@ import edu.wustl.security.manager.SecurityManager;
 
 /**
  * Reads the SecurityManager.properties file and loads properties to be referred by SecurityManager.
- * 
  * @author deepti_shelar
  */
 public final class SecurityManagerPropertiesLocator
@@ -25,15 +24,15 @@ public final class SecurityManagerPropertiesLocator
 	/**
 	 * property names from SecurityManager.properties file .
 	 */
-	private String appCtxName = null;
+	private String appCtxName;
 	/**
-	 * 
+	 * class name.
 	 */
-	private String className = null;
+	private String className;
 
 	/**
-	 * Instantiating the class whenever loaded for the first time. 
-	 * The same instance will be returned whenever getInstance is called. 
+	 * Instantiating the class whenever loaded for the first time.
+	 * The same instance will be returned whenever getInstance is called
 	 */
 	private static SecurityManagerPropertiesLocator singleObj = new SecurityManagerPropertiesLocator();
 

@@ -96,7 +96,7 @@ public class PrivilegeCache
 	 * This method gets Object Privilege Map.
 	 * @param protEleObjId Protection Element Id
 	 * @return objPrivMap return objPrivMap.
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	private Collection getObjectPrivilegeMap(final String protEleObjId) throws SMException
 	{
@@ -112,10 +112,8 @@ public class PrivilegeCache
 
 			if (!list.isEmpty())
 			{
-				System.out.println("list is not emp "+list.size());
 				objPrivMap = privilegeUtility.getUserProvisioningManager().getPrivilegeMap(
 						loginName, list);
-				System.out.println("objPrivMap "+objPrivMap);
 			}
 		}
 		catch (CSException excp)
@@ -143,7 +141,6 @@ public class PrivilegeCache
 		for (ObjectPrivilegeMap objectPrivilegeMap : objPrivMapCol)
 		{
 			String objectId = objectPrivilegeMap.getProtectionElement().getObjectId();
-			System.out.println("objectId "+objectId);
 			BitSet bitSet = new BitSet();
 
 			for (Object privilege : objectPrivilegeMap.getPrivileges())
@@ -179,7 +176,7 @@ public class PrivilegeCache
 	 * @param classObj classObj
 	 * @param privilegeName privilege Name
 	 * @return return true if user has privilege, false otherwise.
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	public boolean hasPrivilege(Class classObj, String privilegeName) throws SMException
 	{
@@ -195,7 +192,7 @@ public class PrivilegeCache
 	 * @param aDObject aDObject is AbstractDomainObject.
 	 * @param privilegeName privilege Name.
 	 * @return return true if user has privilege, false otherwise.
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	public boolean hasPrivilege(AbstractDomainObject aDObject, String privilegeName) throws SMException
 	{
@@ -211,7 +208,7 @@ public class PrivilegeCache
 	 * @param privilegeName privilege Name.
 	 * @return return true
 	 * if user has privilege, false otherwise.
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	public boolean hasPrivilege(String objectId, String privilegeName) throws SMException
 	{
@@ -240,7 +237,7 @@ public class PrivilegeCache
 	 * This method gets Privileges From Database.
 	 * @param objectId object Id
 	 * @return BitSet return bitSet of Privileges from Database.
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	private BitSet getPrivilegesFromDatabase(String objectId) throws SMException
 	{
@@ -268,15 +265,13 @@ public class PrivilegeCache
 		return bitSet;
 	}
 
-	
-
 	/**
 	 * This method is used to refresh the Privilege Cache for the user A call to
 	 * this method forces CSM to go to the database & get the ProtectionElements
 	 * For more, please refer to the 'initialize' method above.
 	 *
 	 */
-	public void refresh() 
+	public void refresh()
 	{
 		initialize();
 	}
@@ -288,11 +283,9 @@ public class PrivilegeCache
 	 */
 	private int getBitNumber(String privilegeName)
 	{
-		System.out.println("privilegeName "+privilegeName);
 		edu.wustl.security.privilege.Privilege privilege = PrivilegeLocator.getInstance()
 		.getPrivilegeByName(privilegeName);
-		System.out.println("prib " +privilege);
-		return privilege.getBitNumber();		
+		return privilege.getBitNumber();
 	}
 
 	/**

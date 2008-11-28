@@ -1,6 +1,6 @@
 /**
- * PrivilegeCacheManager will manage all the instances of PrivilegeCache. 
- * This will be a singleton. 
+ * PrivilegeCacheManager will manage all the instances of PrivilegeCache.
+ * This will be a singleton.
  * Instances of PrivilegeCache can be accessed from the instance of PrivilegeCacheManager
  */
 
@@ -50,23 +50,38 @@ public final class PrivilegeManager
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(PrivilegeManager.class);
 
-	/* Singleton instance of PrivilegeCacheManager
+	/**
+	 * Singleton instance of PrivilegeCacheManager.
 	 */
 	private static PrivilegeManager instance = new PrivilegeManager();
 
-	/* the map of login name and corresponding PrivilegeCache  
+	/**
+	 * the map of login name and corresponding PrivilegeCache.
 	 */
 	private Map<String, PrivilegeCache> privilegeCaches;
-
+	/**
+	 * privilegeUtility.
+	 */
 	private PrivilegeUtility privilegeUtility;
-
+	/**
+	 * lazyobjs.
+	 */
 	private List<String> lazyObjects;
+	/**
+	 * classes.
+	 */
 	private List<String> classes;
+	/**
+	 * eager objects.
+	 */
 	private List<String> eagerObjects;
+	/**
+	 * isSuccessful false if ant exc occurs at instantiation.
+	 */
 	private static boolean isSuccessful = true;
 
 	/**
-	 * private constructor to make the class singleton
+	 * private constructor to make the class singleton.
 	 */
 	private PrivilegeManager()
 	{
@@ -89,6 +104,7 @@ public final class PrivilegeManager
 	/**
 	 * return the Singleton PrivilegeCacheManager instance.
 	 * @throws SMException ex
+	 * @return PrivilegeManager pManager
 	 */
 	public static PrivilegeManager getInstance() throws SMException
 	{
@@ -101,10 +117,9 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * to return the PrivilegeCache object from the Map of PrivilegeCaches
-	 * @param loginName
-	 * @return
-	 * @throws Exception
+	 * to return the PrivilegeCache object from the Map of PrivilegeCaches.
+	 * @param loginName login name
+	 * @return PrivilegeCache cache
 	 */
 	public PrivilegeCache getPrivilegeCache(String loginName)
 	{
@@ -120,9 +135,7 @@ public final class PrivilegeManager
 
 	/**
 	 * To get all PrivilegeCache objects.
-	 * 
-	 * @return
-	 * @throws Exception
+	 * @return Collection of cache
 	 */
 	public Collection<PrivilegeCache> getPrivilegeCaches()
 	{
@@ -130,9 +143,9 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * This method will generally be called from CatissueCoreSesssionListener.sessionDestroyed 
+	 * This method will generally be called from CatissueCoreSesssionListener.sessionDestroyed.
 	 * in order to remove the corresponding PrivilegeCache from the Session.
-	 * @param userId
+	 * @param userId user id
 	 */
 	public void removePrivilegeCache(String userId)
 	{
@@ -140,13 +153,13 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * This Utility method is called dynamically as soon as a 
+	 * This Utility method is called dynamically as soon as a
 	 * Site or CollectionProtocol object gets created through the UI
 	 * & adds detials regarding that object to the PrivilegeCaches of
 	 * appropriate users in Session.
 	 *
-	 * @param objectId
-	 * @throws SMException 
+	 * @param objectId id
+	 * @throws SMException e
 	 */
 	private void addObjectToPrivilegeCaches(String objectId) throws SMException
 	{
@@ -181,12 +194,11 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * 
 	 * @param authorizationData data
 	 * @param protectionObjects protObjs
 	 * @param dynamicGroups set
 	 * @param objectId id
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	public void insertAuthorizationData(List authorizationData, Set protectionObjects,
 			String[] dynamicGroups, String objectId) throws SMException
@@ -205,42 +217,22 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * 
 	 * @param fileName name of the file
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	private void readXmlFile(String fileName) throws SMException
 	{
-		try
+		Document doc = createDoc(fileName);
+		if (doc != null)
 		{
-			Document doc = createDoc(fileName);
-			if (doc != null)
-			{
-				Element root = doc.getDocumentElement();
-				getClasses(root);
-				getObjects(root);
-			}
+			Element root = doc.getDocumentElement();
+			getClasses(root);
+			getObjects(root);
 		}
-		catch (ParserConfigurationException excp)
-		{
-			String mess = "DocumentBuilder cannot be created:";
-			Utility.getInstance().throwSMException(excp, mess, null);
-		}
-		catch (SAXException excp)
-		{
-			String mess = "Not able to parse xml file:" + fileName;
-			Utility.getInstance().throwSMException(excp, mess, null);
-		}
-		catch (IOException excp)
-		{
-			String mess = "Not able to parse xml file: IOException" + fileName;
-			Utility.getInstance().throwSMException(excp, mess, null);
-		}
-
 	}
 
 	/**
-	 * @param root
+	 * @param root root
 	 */
 	private void getObjects(Element root)
 	{
@@ -266,7 +258,7 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * @param root
+	 * @param root root
 	 */
 	private void getClasses(Element root)
 	{
@@ -283,13 +275,11 @@ public final class PrivilegeManager
 	}
 
 	/**
-	 * @param fileName
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
+	 * @param fileName name of the file
+	 * @throws SMException e
+	 * @return Doc
 	 */
-	private Document createDoc(String fileName) throws ParserConfigurationException, SAXException,
-			IOException
+	private Document createDoc(String fileName) throws SMException
 	{
 		String xmlFileName = fileName;
 		Document doc = null;
@@ -303,34 +293,59 @@ public final class PrivilegeManager
 		else
 		{
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			doc = builder.parse(inputXmlFile);
+			DocumentBuilder builder;
+			try
+			{
+				builder = factory.newDocumentBuilder();
+				doc = builder.parse(inputXmlFile);
+			}
+			catch (ParserConfigurationException excp)
+			{
+				String mess = "DocumentBuilder cannot be created:";
+				Utility.getInstance().throwSMException(excp, mess, null);
+			}
+			catch (SAXException excp)
+			{
+				String mess = "Not able to parse xml file:" + fileName;
+				Utility.getInstance().throwSMException(excp, mess, null);
+			}
+			catch (IOException excp)
+			{
+				String mess = "Not able to parse xml file: IOException" + fileName;
+				Utility.getInstance().throwSMException(excp, mess, null);
+			}
 		}
 		return doc;
 	}
-
+	/**
+	 * @return List of classes
+	 */
 	public List<String> getClasses()
 	{
 		return Collections.unmodifiableList(classes);
 	}
-
+	/**
+	 * @return List of lazy objs
+	 */
 	public List<String> getLazyObjects()
 	{
 		return Collections.unmodifiableList(lazyObjects);
 	}
-
+	/**
+	 * @return List of eager objs
+	 */
 	public List<String> getEagerObjects()
 	{
 		return Collections.unmodifiableList(eagerObjects);
 	}
 
 	/**
-	 * get a set of login names of users having given privilege on given object
+	 * get a set of login names of users having given privilege on given object.
 	 *
-	 * @param objectId
-	 * @param privilege
-	 * @return
-	 * @throws CSException
+	 * @param objectId id
+	 * @param privilege priv
+	 * @return Set of users
+	 * @throws SMException e
 	 */
 	public Set<String> getAccesibleUsers(String objectId, String privilege) throws SMException
 	{

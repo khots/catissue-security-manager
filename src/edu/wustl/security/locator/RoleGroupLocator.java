@@ -18,16 +18,14 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.manager.SecurityManager;
-import gov.nih.nci.security.exceptions.CSException;
 
 /**
- * Reads SMRoleGroupConf.xml anad loads a map of bean objects having details of Role and group.
+ * Reads SMRoleGroupConf.xml and loads a map of bean objects having details of Role and group.
  * @author deepti_shelar
  *
  */
 public final class RoleGroupLocator
 {
-
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -42,25 +40,25 @@ public final class RoleGroupLocator
 	 */
 	private static final String ELE_ROLE = "Role";
 	/**
-	 * 
+	 * roleGrpMap.
 	 */
-	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGrpMap = 
+	private Map<RoleGroupDetailsBean, RoleGroupDetailsBean> roleGrpMap =
 		new HashMap<RoleGroupDetailsBean, RoleGroupDetailsBean>();
 	/**
-	 * 
+	 * roleIdList.
 	 */
 	private List<String> roleIdList = new ArrayList<String>();
 	/**
-	 * 
+	 * groupIdList.
 	 */
 	private List<String> groupIdList = new ArrayList<String>();
 	/**
 	 * Instantiating the class whenever loaded for the first time.
-	 *  The same instance will be returned whenever getInstance is called. 
+	 * The same instance will be returned whenever getInstance is called.
 	 */
 	private static RoleGroupLocator locator = new RoleGroupLocator();
 	/**
-	 * 
+	 * isSuccess to be set false if any exc occurs while instantiating.
 	 */
 	private static boolean isSuccess = true;
 	/**
@@ -84,7 +82,7 @@ public final class RoleGroupLocator
 	/**
 	 * Singleton class, will return the single object every time.
 	 * @return RoleGroupLocator instance
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	public static RoleGroupLocator getInstance() throws SMException
 	{
@@ -99,7 +97,7 @@ public final class RoleGroupLocator
 	/**
 	 * Creates bean objects for role and group details mentioned in RoleGroupConf xml.
 	 * @param roleList list
-	 * @throws SMException 
+	 * @throws SMException e
 	 */
 	private void createRoleGroupBeans(NodeList roleList) throws SMException
 	{
@@ -125,7 +123,7 @@ public final class RoleGroupLocator
 	/**
 	 * Creates a bean object for role and group details.
 	 * @param role role
-	 * @throws SMException exc 
+	 * @throws SMException exc
 	 */
 	private void createRoleGroupBean(Node role) throws SMException
 	{
@@ -149,11 +147,6 @@ public final class RoleGroupLocator
 			roleIdList.add(roleId);
 			groupIdList.add(groupId);
 			roleGrpMap.put(bean, bean);
-		}
-		catch (CSException e)
-		{
-			String mess = "Error in initializing rolegroupNamevsId map";
-			Utility.getInstance().throwSMException(e, mess, null);
 		}
 		catch (SMException e)
 		{

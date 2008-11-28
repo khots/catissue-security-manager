@@ -65,7 +65,6 @@ public class Constants
 	 * constant for ADMIN_GRP_ID.
 	 */
 	public static final String ADMIN_GRP_ID = "ADMINISTRATOR_GROUP_ID";
-	public static final String ADMINISTRATOR_GROUP_ID = "ADMINISTRATOR_GROUP_ID";
 	/**
 	 * constant for SUPERVISOR_GRP_ID.
 	 */
@@ -139,10 +138,6 @@ public class Constants
 	 */
 	public static final String READ_DENIED = "READ_DENIED";
 	/**
-	 * constant for ALLOW_OPERATION.
-	 */
-	public static final String ALLOW_OPERATION = "allowOperation";
-	/**
 	 * constant for BDATE_TAG_NAME.
 	 */
 	public static final String BDATE_TAG_NAME = "IS_BIRTH_DATE";
@@ -167,19 +162,23 @@ public class Constants
 	 */
 	public static final int POSITION3 = 3;
 	/**
-	 * name of the csm properties file
+	 * name of the csm properties file.
 	 */
 	public static final String CSM_PROPERTY_FILE = "csm.properties";
 	/**
-	 * REad denied objects
+	 * REad denied objects.
 	 */
 	public static final String READ_DENIED_OBJECTS = "readdeniedobjects";
 	/**
-	 * main protocol objects
+	 * main protocol objects.
 	 */
 	public static final String MAIN_PROTOCOL_OBJECT = "mainprotocolobject.classname";
 	/**
-	 * validator classname
+	 * validator classname.
 	 */
 	public static final String VALIDATOR_CLASSNAME = "validator.classname";
+	/**
+	 * Constant for length one.
+	 */
+	public static final int INDEX_ONE = 1;
 }

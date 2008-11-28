@@ -23,6 +23,7 @@ import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Constants;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.RoleGroupLocator;
@@ -55,31 +56,47 @@ import gov.nih.nci.security.exceptions.CSTransactionException;
  * <p>
  * Company: Washington University, School of Medicine, St. Louis.
  * </p>
- * 
  * @author Aarti Sharma
  * @version 1.0
  */
 
 public class SecurityManager implements Permissions, ISecurityManager
 {
-
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
-
-	private Class requestingClass = null;
-
-	public static final String ADMIN_GROUP = "ADMIN_GROUP";
-	public static final String SUPER_ADMIN_GROUP = "SUPER_ADMIN_GROUP";
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	/**
+	 * ADMIN_GROUP.
+	 */
+	public static final String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
+	/**
+	 * SUPER_ADMIN_GROUP.
+	 */
+	public static final String SUPER_ADMIN_GROUP = "SUPER_ADMINISTRATOR_GROUP";
+	/**
+	 * SUPERVISOR_GROUP.
+	 */
 	public static final String SUPERVISOR_GROUP = "SUPERVISOR_GROUP";
+	/**
+	 * TECHNICIAN_GROUP.
+	 */
 	public static final String TECHNICIAN_GROUP = "TECHNICIAN_GROUP";
+	/**
+	 * PUBLIC_GROUP.
+	 */
 	public static final String PUBLIC_GROUP = "PUBLIC_GROUP";
-
+	/**
+	 * CLASS_NAME.
+	 */
 	public static final String CLASS_NAME = "CLASS_NAME";
-
+	/**
+	 * TABLE_NAME.
+	 */
 	public static final String TABLE_NAME = "TABLE_NAME";
-
+	/**
+	 * TABLE_ALIAS_NAME.
+	 */
 	public static final String TABLE_ALIAS_NAME = "TABLE_ALIAS_NAME";
 
 	/**
@@ -87,8 +104,8 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * @param requestingClass
 	 * @param loginName login name
 	 * @param password password
-	 * @return
-	 * @throws CSException
+	 * @return boolean flag
+	 * @throws SMException ex
 	 */
 
 	public boolean login(final String loginName, final String password) throws SMException
@@ -102,20 +119,18 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			StringBuffer mesg = new StringBuffer("Authentication fails for user").append(loginName)
-					.append("requestingClass:").append(requestingClass);
+			StringBuffer mesg = new StringBuffer("Authentication fails for user")
+			.append(loginName);
 			Utility.getInstance().throwSMException(exception, mesg.toString(), null);
 		}
 		return loginSuccess;
 	}
 
 	/**
-	 * This method creates a new User in the database based on the data passed
-	 * 
+	 * This method creates a new User in the database based on the data passed.
 	 * @param user
 	 *            user to be created
-	 * @throws SMTException
-	 *             If there is any exception in creating the User
+	 * @throws SMException        If there is any exception in creating the User
 	 */
 	public void createUser(User user) throws SMException
 	{
@@ -128,11 +143,6 @@ public class SecurityManager implements Permissions, ISecurityManager
 			String mesg = "Unable to create user " + user.getEmailId();
 			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
-		catch (CSException exception)
-		{
-			String mesg = "Unable to create user " + user.getEmailId();
-			Utility.getInstance().throwSMException(exception, mesg, null);
-		}
 	}
 
 	/**
@@ -141,25 +151,17 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 *
 	 * @param loginName Login name of the user
 	 * @return User
-	 * @throws SMException
+	 * @throws SMException ec
 	 */
 	public User getUser(final String loginName) throws SMException
 	{
-		User user = null;
-		try
-		{
-			user = ProvisionManager.getInstance().getAuthorizationManager().getUser(loginName);
-		}
-		catch (CSException exception)
-		{
-			String mesg = "Unable to get user: " + loginName;
-			Utility.getInstance().throwSMException(exception, mesg, null);
-		}
+		User user = ProvisionManager.getInstance().getAuthorizationManager().getUser(loginName);
 		return user;
 	}
 
 	/**
-	 * 
+	 * @param userId id
+	 * @throws SMException ex
 	 */
 	public void removeUser(final String userId) throws SMException
 	{
@@ -172,21 +174,13 @@ public class SecurityManager implements Permissions, ISecurityManager
 			String mesg = "Failed to find this user with userId:" + userId;
 			Utility.getInstance().throwSMException(ex, mesg, null);
 		}
-		catch (CSException exception)
-		{
-			logger.debug("Unable to obtain Authorization Manager: Exception: "
-					+ exception.getMessage());
-			String mesg = "Failed to find this user with userId:" + userId;
-			Utility.getInstance().throwSMException(exception, mesg, null);
-		}
 	}
 
 	/**
 	 * This method returns Vactor of all the role objects defined for the
-	 * application from the database
-	 * 
-	 * @return @throws
-	 *         SMException
+	 * application from the database.
+	 * @return List of roles
+	 * @throws SMException ex
 	 */
 	public List<Role> getRoles() throws SMException
 	{
@@ -210,11 +204,10 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * Assigns a Role to a User
-	 * 
-	 * @param userName - the User Name to to whom the Role will be assigned
+	 * Assigns a Role to a User.
+	 * @param userID - the User Name to to whom the Role will be assigned
 	 * @param roleID -	The id of the Role which is to be assigned to the user
-	 * @throws SMException
+	 * @throws SMException sx
 	 */
 	public void assignRoleToUser(final String userID, final String roleID) throws SMException
 	{
@@ -250,7 +243,11 @@ public class SecurityManager implements Permissions, ISecurityManager
 			Utility.getInstance().throwSMException(exception, mesg, null);
 		}
 	}
-
+	/**
+	 * @param roleID role id
+	 * @return String grp id
+	 * @throws SMException ex
+	 */
 	public String getGroupIdForRole(String roleID) throws SMException
 	{
 		/*String roleName=null;
@@ -271,7 +268,11 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		return roleGroupId;
 	}
-
+	/**
+	 * @param userID id
+	 * @return Role role
+	 * @throws SMException ex
+	 */
 	public Role getUserRole(long userID) throws SMException
 	{
 		Set<Group> groups;
@@ -292,15 +293,15 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * Name : Virender Mehta
+	 * Name : Virender Mehta.
 	 * Reviewer: Sachin Lale
 	 * Bug ID: 3842
 	 * Patch ID: 3842_2
 	 * See also: 3842_1
 	 * Description: This function will return the Role name(Administrator, Scientist, Technician, Supervisor )
-	 * @param userID
+	 * @param userID id
 	 * @return Role Name
-	 * @throws SMException
+	 * @throws SMException ex
 	 */
 	public String getRoleName(long userID) throws SMException
 	{
@@ -315,7 +316,8 @@ public class SecurityManager implements Permissions, ISecurityManager
 			{
 				Group group = (Group) iter.next();
 				if (group.getApplication().getApplicationName().equals(
-						SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName()))
+						SecurityManagerPropertiesLocator.getInstance()
+						.getApplicationCtxName()))
 				{
 					RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
 					sampleBean.setGroupName(group.getGroupName());
@@ -375,8 +377,8 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * @throws SMException
-	 *  
+	 * @throws SMException exc
+	 *  @return List of users
 	 */
 	public List getUsers() throws SMException
 	{
@@ -387,30 +389,30 @@ public class SecurityManager implements Permissions, ISecurityManager
 				searchCriteria);
 		return list;
 	}
-
+	/**
+	 * @param userGroupname grp name
+	 * @param userId usr id
+	 * @throws SMException scx
+	 */
 	public void assignUserToGroup(String userGroupname, String userId) throws SMException
 	{
 		checkForSufficientParamaters(userGroupname, userId);
-		try
+		Group group = getUserGroup(userGroupname);
+		if (group == null)
 		{
-			Group group = getUserGroup(userGroupname);
-			if (group == null)
-			{
-				logger.debug("No user group with name " + userGroupname + " is present");
-			}
-			else
-			{
-				String[] groupIds = {group.getGroupId().toString()};
-				assignAdditionalGroupsToUser(userId, groupIds);
-			}
+			logger.debug("No user group with name " + userGroupname + " is present");
 		}
-		catch (CSException exception)
+		else
 		{
-			String mess = "The Security Service encountered a fatal exception.";
-			Utility.getInstance().throwSMException(exception, mess, null);
+			String[] groupIds = {group.getGroupId().toString()};
+			assignAdditionalGroupsToUser(userId, groupIds);
 		}
 	}
-
+	/**
+	 * @param userGroupname grp name
+	 * @param userId usr id
+	 * @throws SMException scx
+	 */
 	public void removeUserFromGroup(String userGroupname, String userId) throws SMException
 	{
 		checkForSufficientParamaters(userGroupname, userId);
@@ -437,7 +439,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * Assigns additional groups to user
+	 * Assigns additional groups to user.
 	 * @param userId string userId
 	 * @param groupIds string[]
 	 * @throws SMException exception
@@ -469,59 +471,64 @@ public class SecurityManager implements Permissions, ISecurityManager
 
 	/**
 	 * Adds existing and required groups together in a Set.
-	 * @param userId
-	 * @param groupIds
-	 * @param upManager
-	 * @return
-	 * @throws CSObjectNotFoundException
+	 * @param userId id of the user
+	 * @param groupIds grpIds
+	 * @param upManager manager instance
+	 * @return Set of all grp names
+	 * @throws SMException exc
 	 */
 	private Set<String> addAllGroups(String userId, String[] groupIds,
-			UserProvisioningManager upManager) throws CSObjectNotFoundException
+			UserProvisioningManager upManager) throws SMException
 	{
 		Group group;
-		Set<Group> conGrps = upManager.getGroups(userId);
+		Set<Group> conGrps;
 		Set<String> conGrpIds = new HashSet<String>();
-		if (null != conGrps)
+		try
 		{
-			Iterator<Group> iter = conGrps.iterator();
-			while (iter.hasNext())
+			conGrps = upManager.getGroups(userId);
+			if (null != conGrps)
 			{
-				group = iter.next();
-				Long groupId = group.getGroupId();
-				conGrpIds.add(String.valueOf(groupId));
+				Iterator<Group> iter = conGrps.iterator();
+				while (iter.hasNext())
+				{
+					group = iter.next();
+					Long groupId = group.getGroupId();
+					conGrpIds.add(String.valueOf(groupId));
+				}
+			}
+			//Consolidating all the Groups
+			for (int i = 0; i < groupIds.length; i++)
+			{
+				conGrpIds.add(groupIds[i]);
 			}
 		}
-		//Consolidating all the Groups
-		for (int i = 0; i < groupIds.length; i++)
+		catch (CSObjectNotFoundException e)
 		{
-			conGrpIds.add(groupIds[i]);
+			String message = "Error in getting groups "+e.getMessage();
+			Utility.getInstance().throwSMException(e, message, null);
 		}
 		return conGrpIds;
 	}
 
 	/**
-	 * @param userId
-	 * @param groupIds
-	 * @throws SMException
+	 * @param userId id of the user
+	 * @param groupIds grp ids
+	 * @throws SMException sxc
 	 */
 	private void checkForSufficientParams(String userId, String[] groupIds) throws SMException
 	{
-		if (userId == null || groupIds == null || groupIds.length < 1)
+		if (userId == null || groupIds == null || groupIds.length < Constants.INDEX_ONE)
 		{
 			String mesg = " Null or insufficient Parameters passed";
 			Utility.getInstance().throwSMException(null, mesg, null);
 		}
 	}
-
-	
-
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
 	 * Protection Element and whose name consists of string nameConsistingOf.
-	 * 
-	 * @param obj
-	 * @param nameConsistingOf
-	 * @return @throws SMException
+	 * @param obj obj
+	 * @return String array
+	 * @throws SMException e
 	 */
 	public String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException
 	{
@@ -556,8 +563,6 @@ public class SecurityManager implements Permissions, ISecurityManager
 		return names;
 
 	}
-
-	
 	/**
 	 * Checks whether an object type has any identified data associated with
 	 * it or not.
@@ -577,12 +582,10 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * @param groups
-	 * @param upManager
-	 * @param role
-	 * @return
-	 * @throws SMException 
-	 * @throws CSObjectNotFoundException
+	 * @param groups grps
+	 * @param upManager manager
+	 * @return Role role
+	 * @throws SMException e
 	 */
 	private Role getRole(Set groups, UserProvisioningManager upManager) throws SMException
 
@@ -612,7 +615,11 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		return role;
 	}
-
+	/**
+	 * @param sampleBean bean
+	 * @return RoleGroupDetailsBean bean
+	 * @throws SMException e
+	 */
 	private RoleGroupDetailsBean getRequiredBean(RoleGroupDetailsBean sampleBean) throws SMException
 	{
 		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = RoleGroupLocator.getInstance()
@@ -621,10 +628,9 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * 
-	 * @param userGroupname
-	 * @param userId
-	 * @throws SMException
+	 * @param userGroupname name
+	 * @param userId id
+	 * @throws SMException e
 	 */
 	private void checkForSufficientParamaters(String userGroupname, String userId)
 			throws SMException
@@ -637,12 +643,11 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 
 	/**
-	 * @param userGroupname
-	 * @return
-	 * @throws SMException
-	 * @throws CSException
+	 * @param userGroupname name
+	 * @return Group grp
+	 * @throws SMException e
 	 */
-	private Group getUserGroup(String userGroupname) throws SMException, CSException
+	private Group getUserGroup(String userGroupname) throws SMException
 	{
 		Group group = new Group();
 		group.setGroupName(userGroupname);
@@ -653,8 +658,6 @@ public class SecurityManager implements Permissions, ISecurityManager
 		{
 			userGrp = (Group) list.get(0);
 		}
-
 		return userGrp;
 	}
-
 }
