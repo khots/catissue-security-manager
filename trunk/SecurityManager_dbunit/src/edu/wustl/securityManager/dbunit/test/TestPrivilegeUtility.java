@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import junit.framework.TestCase;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -30,19 +29,33 @@ import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.dao.RoleSearchCriteria;
-import gov.nih.nci.security.exceptions.CSException;
-
+/**
+ * Test case for PrivilegeUtility.
+ * @author deepti_shelar
+ *
+ */
 public class TestPrivilegeUtility extends TestCase
 {
-
+	/**
+	 * privilegeUtility.
+	 */
 	PrivilegeUtility privilegeUtility;
-	final private String ADMIN_GROUP = "ADMINISTRATOR_GROUP";
+	/**
+	 * adminGroup.
+	 */
+	private final String adminGroup = "ADMINISTRATOR_GROUP";
+	/**
+	 * configFile.
+	 */
 	static String configFile = "";
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
-
+	/**
+	 * set up.
+	 * @throws Exception e
+	 */
 	public void setUp() throws Exception
 	{
 		privilegeUtility = new PrivilegeUtility();
@@ -51,15 +64,15 @@ public class TestPrivilegeUtility extends TestCase
 
 	static
 	{
-		Properties SECURITY_MANAGER_PROP;
+		Properties smProp;
 		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
 				.getResourceAsStream("smDBUnit.properties");
-		SECURITY_MANAGER_PROP = new Properties();
+		smProp = new Properties();
 		try
 		{
-			SECURITY_MANAGER_PROP.load(inputStream);
+			smProp.load(inputStream);
 			inputStream.close();
-			configFile = SECURITY_MANAGER_PROP.getProperty("gov.nih.nci.security.configFile");
+			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
 		}
 		catch (IOException exception)
 		{
@@ -68,7 +81,7 @@ public class TestPrivilegeUtility extends TestCase
 	}
 
 	/**
-	 * 
+	 * testGetRole.
 	 */
 	public void testGetRole()
 	{
@@ -78,43 +91,16 @@ public class TestPrivilegeUtility extends TestCase
 			Role role = privilegeUtility.getRole(roleName);
 			assertEquals("Administrator", role.getName());
 			assertEquals("1", role.getId().toString());
-
 		}
 		catch (SMException e)
-		{
-			logger.error(e.getStackTrace());
-		}
-		catch (CSException e)
 		{
 			logger.error(e.getStackTrace());
 		}
 	}
 
-	/**
-	 * 
-	 *//*
-	public void testGetRoleByPrivilege()
-	{
-		String privName = "READ";
-		try
-		{
-			Role role = privilegeUtility.getRoleByPrivilege(privName);
-			assertEquals("READ_DENIED", role.getName());
-			assertEquals("10", role.getId().toString());
-
-		}
-		catch (SMException e)
-		{
-			logger.error(e.getStackTrace());
-		}
-		catch (CSException e)
-		{
-			logger.error(e.getStackTrace());
-		}
-	}*/
 
 	/**
-	 * 
+	 * testGetRolePrivileges.
 	 */
 	public void testGetRolePrivileges()
 	{
@@ -131,7 +117,7 @@ public class TestPrivilegeUtility extends TestCase
 	}
 
 	/**
-	 * 
+	 * testGetUserProvisioningManager.
 	 */
 	public void testGetUserProvisioningManager()
 	{
@@ -209,10 +195,6 @@ public class TestPrivilegeUtility extends TestCase
 					.getProtectionGroup("ADMINISTRATOR_PROTECTION_GROUP");
 			assertNotNull(protectionGroup);
 			assertEquals("ADMINISTRATOR_PROTECTION_GROUP", protectionGroup.getProtectionGroupName());
-		}
-		catch (CSException e)
-		{
-			logger.error(e.getStackTrace());
 		}
 		catch (SMException e)
 		{
@@ -393,7 +375,7 @@ public class TestPrivilegeUtility extends TestCase
 		}
 	}
 	/**
-	 * testInsertAuthData
+	 * testInsertAuthData.
 	 */
 	public void testInsertAuthData()
 	{
@@ -405,20 +387,20 @@ public class TestPrivilegeUtility extends TestCase
 		try
 		{
 			securityManager = SecurityManagerFactory.getSecurityManager();
-
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
+			gov.nih.nci.security.authorization.domainobjects.User csmUser 
+			= new gov.nih.nci.security.authorization.domainobjects.User();
 			SecurityDataBean userGroupRoleProtectionGroupBean;
 			userGroupRoleProtectionGroupBean = new SecurityDataBean();
 			userGroupRoleProtectionGroupBean.setUser(userId);
 			userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
-			userGroupRoleProtectionGroupBean.setGroupName(ADMIN_GROUP);
+			userGroupRoleProtectionGroupBean.setGroupName(adminGroup);
 			userGroupRoleProtectionGroupBean.setGroup(group);
 			authorizationData.add(userGroupRoleProtectionGroupBean);
 			PrivilegeUtility util = new PrivilegeUtility();
 			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
 			usr.setLastName("dee1");
-			usr.setId(new Long(32));
+			usr.setId(new Long(55));
 			usr.setLoginName("dee1");
 			usr.setEmailAddress("dee1@dee.com");
 			csmUser.setLoginName(usr.getLoginName());
@@ -427,39 +409,19 @@ public class TestPrivilegeUtility extends TestCase
 			csmUser.setEmailId(usr.getEmailAddress());
 			csmUser.setStartDate(Calendar.getInstance().getTime());
 			securityManager.createUser(csmUser);
-			//assignGroupToUser(usr.getLoginName(), "PUBLIC_GROUP");
 			protectionObjects.add(usr);
-			final Map<String, String[]> protectionGroupsForObjectTypes = new HashMap<String, String[]>();
+			final Map<String, String[]> protectionGroupsForObjectTypes =
+				new HashMap<String, String[]>();
 			protectionGroupsForObjectTypes.put(User.class.getName(),
 					new String[]{"PUBLIC_DATA_GROUP"});
 			edu.wustl.security.global.Constants.STATIC_PG_FOR_OBJ_TYPES
 					.putAll(protectionGroupsForObjectTypes);
-			//	String[] protectionGroups = securityManager.getProtectionGroupByName(usr);
 			String[] protectionGroups = {"PUBLIC_DATA_GROUP"};
 			util.insertAuthorizationData(authorizationData, protectionObjects, protectionGroups);
 		}
 		catch (SMException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-
-	/**
-	 * assigns the given group name to the user with the given login name
-	 * 
-	 * @param loginName
-	 * @param groupName
-	 * @throws SMException 
-	 * @throws Exception
-	 */
-	private void assignGroupToUser(String loginName, String groupName) throws SMException
-	{
-		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
-		User user = securityManager.getUser(loginName);
-		String userId = user.getUserId().toString();
-		securityManager.assignUserToGroup(groupName, userId);
-	}
-
 }

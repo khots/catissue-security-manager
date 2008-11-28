@@ -4,12 +4,15 @@ package edu.wustl.securityManager.dbunit.test;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.security.privilege.Privilege;
 import junit.framework.TestCase;
-
+/**
+ * test case for Privilege.
+ * @author deepti_shelar
+ *
+ */
 public class TestPrivilege extends TestCase
 {
-
 	/**
-	 * 
+	 * testGetPrivDetails.
 	 */
 	public void testGetPrivDetails()
 	{
@@ -19,7 +22,7 @@ public class TestPrivilege extends TestCase
 	}
 
 	/**
-	 * 
+	 * testSetPrivDetails2.
 	 */
 	public void testSetPrivDetails2()
 	{
@@ -29,12 +32,12 @@ public class TestPrivilege extends TestCase
 	}
 
 	/**
-	 * 
+	 * testSetPrivDetails.
 	 */
 	public void testSetPrivDetails()
 	{
 		Privilege priv = new Privilege("READ", 0);
-		priv.setBitNumber(1);
-		assertEquals(1, priv.getBitNumber());
+		priv.setBitNumber(edu.wustl.security.global.Constants.INDEX_ONE);
+		assertEquals(edu.wustl.security.global.Constants.INDEX_ONE, priv.getBitNumber());
 	}
 }

@@ -9,8 +9,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * @author prafull_kadam
- * Test Suite for testing all Query Interface related classes.
+ * @author deepti_shelar
+ * Test Suite for testing all Security Manager classes
  */
 public class TestAll
 {
@@ -23,7 +23,6 @@ public class TestAll
 	{
 		junit.swingui.TestRunner.run(TestAll.class);
 	}
-
 	/**
 	 *
 	 * @return Test object.

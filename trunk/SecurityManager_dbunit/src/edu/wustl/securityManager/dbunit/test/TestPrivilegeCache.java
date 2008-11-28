@@ -18,9 +18,12 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.SecurityManager;
 import edu.wustl.security.privilege.PrivilegeCache;
-import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
-
+/**
+ * Test case for PrivilegeCache.
+ * @author deepti_shelar
+ *
+ */
 public class TestPrivilegeCache extends TestCase
 {
 
@@ -35,18 +38,17 @@ public class TestPrivilegeCache extends TestCase
 	{
 
 	}
-
 	static
 	{
-		Properties SECURITY_MANAGER_PROP;
+		Properties smProp;
 		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
 				.getResourceAsStream("smDBUnit.properties");
-		SECURITY_MANAGER_PROP = new Properties();
+		smProp = new Properties();
 		try
 		{
-			SECURITY_MANAGER_PROP.load(inputStream);
+			smProp.load(inputStream);
 			inputStream.close();
-			configFile = SECURITY_MANAGER_PROP.getProperty("gov.nih.nci.security.configFile");
+			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
 			System.setProperty("gov.nih.nci.security.configFile", configFile);
 			cache = new PrivilegeCache("test");
 		}
@@ -111,7 +113,6 @@ public class TestPrivilegeCache extends TestCase
 	 */
 	public void testGetPrivilegesforPrefix()
 	{
-		Collection<ObjectPrivilegeMap> privileges = new ArrayList<ObjectPrivilegeMap>();
 		Collection<Privilege> privs = new ArrayList<Privilege>();
 		Privilege pr = new Privilege();
 		pr.setName("READ");
@@ -137,7 +138,6 @@ public class TestPrivilegeCache extends TestCase
 	 */
 	public void testAddObject()
 	{
-		Collection<ObjectPrivilegeMap> privileges = new ArrayList<ObjectPrivilegeMap>();
 		Collection<Privilege> privs = new ArrayList<Privilege>();
 		Privilege pr = new Privilege();
 		pr.setName("READ");
