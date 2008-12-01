@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
@@ -36,6 +37,7 @@ import gov.nih.nci.security.dao.SearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
+import edu.wustl.common.util.Identifiable;
 
 /**
  * Utility class for methods related to CSM.
@@ -113,7 +115,7 @@ public class PrivilegeUtility
 			{
 		ProtectionElement protElems;
 		Set<ProtectionElement> pElements = new HashSet<ProtectionElement>();
-		AbstractDomainObject protectionObject;
+		Identifiable protectionObject;
 		Iterator<AbstractDomainObject> iterator;
 		UserProvisioningManager upManager;
 		upManager = getUserProvisioningManager();
@@ -123,7 +125,7 @@ public class PrivilegeUtility
 			for (iterator = protectionObjects.iterator(); iterator.hasNext();)
 			{
 				protElems = new ProtectionElement();
-				protectionObject = (AbstractDomainObject) iterator.next();
+				protectionObject = (Identifiable) iterator.next();
 				protElems.setObjectId(protectionObject.getObjectId());
 				populateProtectionElement(protElems, protectionObject, upManager);
 				pElements.add(protElems);
@@ -347,7 +349,7 @@ public class PrivilegeUtility
 	 * @throws SMException exc
 	 */
 	private void populateProtectionElement(ProtectionElement protectionElement,
-			AbstractDomainObject protectionObject, UserProvisioningManager upManager)
+			Identifiable protectionObject, UserProvisioningManager upManager)
 			throws SMException
 	{
 		try

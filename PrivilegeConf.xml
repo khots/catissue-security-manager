@@ -81,4 +81,7 @@
 	<privilege name="PHI_ACCESS">
 		<bit-number>26</bit-number>
 	</privilege>
+	<privilege name="EXECUTE_QUERY">
+		<bit-number>27</bit-number>
+	</privilege>
 </privileges>
