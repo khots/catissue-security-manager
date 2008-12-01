@@ -1,6 +1,8 @@
 
 package edu.wustl.security.privilege;
 
+import java.util.List;
+
 import edu.wustl.common.beans.SessionDataBean;
 /**
  *
@@ -22,5 +24,12 @@ public interface IValidator
 	 * @return boolean flag
 	 */
 	boolean hasPrivilegeToViewGlobalParticipant(SessionDataBean sessionDataBean);
-
+	/**
+	 * 
+	 * @param tqColumnMetadataList tq columns
+	 * @param row row
+	 * @param isAuthorizedUser boolean
+	 * @return boolean
+	 */
+	public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,List<String> row,boolean isAuthorizedUser);
 }
