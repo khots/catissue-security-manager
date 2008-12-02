@@ -19,7 +19,7 @@ public final class SecurityManagerPropertiesLocator
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManagerPropertiesLocator.class);
 
 	/**
 	 * property names from SecurityManager.properties file .

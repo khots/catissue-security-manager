@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.sun.corba.se.spi.ior.Identifiable;
 
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -37,7 +38,6 @@ import gov.nih.nci.security.dao.SearchCriteria;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
-import edu.wustl.common.util.Identifiable;
 
 /**
  * Utility class for methods related to CSM.

@@ -21,7 +21,7 @@ public final class Utility
 	 * logger -Generic Logger.
 	 */
 
-	private static org.apache.log4j.Logger logger = Logger.getLogger(PrivilegeManager.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(Utility.class);
 	/**
 	 * creates a single obj.
 	 */

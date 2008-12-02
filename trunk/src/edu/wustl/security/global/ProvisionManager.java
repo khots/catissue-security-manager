@@ -52,7 +52,7 @@ public final class ProvisionManager
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private final org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	private final org.apache.log4j.Logger logger = Logger.getLogger(ProvisionManager.class);
 	/**
 	 * authTManager.
 	 */

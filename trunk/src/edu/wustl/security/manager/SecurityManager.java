@@ -17,13 +17,12 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.query.AbstractClient;
-import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Constants;
+import edu.wustl.security.global.Permissions;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.RoleGroupLocator;
