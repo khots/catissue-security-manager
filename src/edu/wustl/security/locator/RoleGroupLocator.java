@@ -29,7 +29,7 @@ public final class RoleGroupLocator
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(RoleGroupLocator.class);
 
 	/**
 	 * File name for privilege configuration.
