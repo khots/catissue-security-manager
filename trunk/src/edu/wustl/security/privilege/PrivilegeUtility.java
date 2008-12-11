@@ -9,9 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.sun.corba.se.spi.ior.Identifiable;
-
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Identifiable;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;

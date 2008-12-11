@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.security.exception.SMException;
+import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
@@ -109,4 +110,10 @@ public interface ISecurityManager
 	 * @throws SMException ex
 	 */
 	String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
+	/**
+	 * @param userGroupname name
+	 * @return Group grp
+	 * @throws SMException e
+	 */
+	Group getUserGroup(String userGroupname) throws SMException;
 }

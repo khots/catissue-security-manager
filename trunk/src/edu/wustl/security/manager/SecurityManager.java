@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.query.AbstractClient;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
@@ -646,7 +647,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * @return Group grp
 	 * @throws SMException e
 	 */
-	private Group getUserGroup(String userGroupname) throws SMException
+	public Group getUserGroup(String userGroupname) throws SMException
 	{
 		Group group = new Group();
 		group.setGroupName(userGroupname);
