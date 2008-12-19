@@ -17,7 +17,6 @@ import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
-import edu.wustl.security.manager.SecurityManager;
 
 /**
  * Reads SMRoleGroupConf.xml and loads a map of bean objects having details of Role and group.
