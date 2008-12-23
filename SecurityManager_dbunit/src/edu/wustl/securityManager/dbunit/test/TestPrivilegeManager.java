@@ -317,9 +317,9 @@ public class TestPrivilegeManager extends TestCase
 			authorizationData.add(userGroupRoleProtectionGroupBean);
 			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
-			usr.setLastName("dee1");
-			usr.setId(new Long(54));
-			usr.setLoginName("dee1");
+			usr.setLastName("dee12");
+			usr.setId(new Long(5412));
+			usr.setLoginName("dee21");
 			usr.setEmailAddress("dee1@dee.com");
 			csmUser.setLoginName(usr.getLoginName());
 			csmUser.setLastName(usr.getLastName());
