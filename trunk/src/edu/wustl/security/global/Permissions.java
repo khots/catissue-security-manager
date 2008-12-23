@@ -10,7 +10,6 @@ package edu.wustl.security.global;
  */
 public interface Permissions
 {
-
 	/**
 	 * READ String read permission.
 	 */
@@ -120,7 +119,7 @@ public interface Permissions
 	 */
 	String SHIPMENT_PROCESSING = "SHIPMENT_PROCESSING";
 	/**
-	 * EXECUTE_QUERY
+	 * EXECUTE_QUERY.
 	 */
-	public static final String EXECUTE_QUERY = "EXECUTE_QUERY";
+	String EXECUTE_QUERY = "EXECUTE_QUERY";
 }

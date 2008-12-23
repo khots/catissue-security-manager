@@ -11,7 +11,6 @@ package edu.wustl.security.global;
  */
 public interface Roles
 {
-
 	/**
 	 * ADMINISTRATOR String role of administrator.
 	 */
@@ -40,5 +39,4 @@ public interface Roles
 	 * UPDATE_ONLY String update only.
 	 */
 	String UPDATE_ONLY = "UPDATE_ONLY";
-
 }

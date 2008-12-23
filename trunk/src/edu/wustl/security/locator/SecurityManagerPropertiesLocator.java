@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.global.Constants;
-import edu.wustl.security.manager.SecurityManager;
 
 /**
  * Reads the SecurityManager.properties file and loads properties to be referred by SecurityManager.
