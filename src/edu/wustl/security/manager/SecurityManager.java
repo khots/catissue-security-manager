@@ -558,18 +558,20 @@ public class SecurityManager implements Permissions, ISecurityManager
 	}
 	/**
 	 * This method returns name of the Protection groupwhich consists of obj as
-	 * Protection Element and whose name consists of string nameConsistingOf
+	 * Protection Element and whose name consists of string nameConsistingOf.
 	 * 
-	 * @param obj
-	 * @param nameConsistingOf
-	 * @return @throws
-	 *         SMException
+	 * @param obj object
+	 * @param nameConsistingOf string
+	 * @return String grpname
+	 * @throws SMException smexception
 	 */
 	public String getProtectionGroupByName(AbstractDomainObject obj,
-			String nameConsistingOf) throws SMException {
+			String nameConsistingOf) throws SMException 
+			{
 		String name = null;
 		String protElemName = obj.getObjectId();
-		try {
+		try 
+		{
 			AuthorizationManager authManager = ProvisionManager.getInstance()
 			.getAuthorizationManager();
 			ProtectionElement protectionElement = authManager.getProtectionElement(
@@ -579,14 +581,16 @@ public class SecurityManager implements Permissions, ISecurityManager
 			for (ProtectionGroup protectionGroup : protectionGroups)
 			{
 				name = protectionGroup.getProtectionGroupName();
-				if (name.indexOf(nameConsistingOf) != -1) {
+				if (name.indexOf(nameConsistingOf) != -1) 
+				{
 					logger.debug("protection group by name "
 							+ nameConsistingOf + " for Protection Element "
 							+ protElemName + " is " + name);
 					return name;
 				}
 			}
-		} catch (CSException exception)
+		} 
+		catch (CSException exception)
 		{
 			String mess = "Unable to get protection group for Protection Element " + protElemName;
 			Utility.getInstance().throwSMException(exception, mess, null);
