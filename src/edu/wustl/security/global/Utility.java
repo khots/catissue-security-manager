@@ -7,7 +7,6 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.security.privilege.PrivilegeType;
 
 /**

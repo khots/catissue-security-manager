@@ -25,11 +25,12 @@ public interface IValidator
 	 */
 	boolean hasPrivilegeToViewGlobalParticipant(SessionDataBean sessionDataBean);
 	/**
-	 * 
+	 *
 	 * @param tqColumnMetadataList tq columns
 	 * @param row row
 	 * @param isAuthorizedUser boolean
 	 * @return boolean
 	 */
-	public boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,List<String> row,boolean isAuthorizedUser);
+	boolean hasPrivilegeToViewTemporalColumn(List tqColumnMetadataList,List<String> row,
+			boolean isAuthorizedUser);
 }
