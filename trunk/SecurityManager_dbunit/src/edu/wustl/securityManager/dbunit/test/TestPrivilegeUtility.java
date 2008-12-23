@@ -400,8 +400,8 @@ public class TestPrivilegeUtility extends TestCase
 			Set protectionObjects = new HashSet();
 			edu.wustl.catissuecore.domain.User usr = new edu.wustl.catissuecore.domain.User();
 			usr.setLastName("dee1");
-			usr.setId(new Long(55));
-			usr.setLoginName("dee1");
+			usr.setId(new Long(551));
+			usr.setLoginName("dee11");
 			usr.setEmailAddress("dee1@dee.com");
 			csmUser.setLoginName(usr.getLoginName());
 			csmUser.setLastName(usr.getLastName());
