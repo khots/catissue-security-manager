@@ -532,27 +532,20 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 */
 	public String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException
 	{
-		Set<ProtectionGroup> protectionGroups;
-		Iterator<ProtectionGroup> iter;
-		ProtectionGroup protectionGroup;
-		ProtectionElement protectionElement;
 		String[] names = null;
 		String protElemName = obj.getObjectId();
 		try
 		{
 			AuthorizationManager authManager = ProvisionManager.getInstance()
 					.getAuthorizationManager();
-			protectionElement = authManager.getProtectionElement(protElemName);
-			protectionGroups = authManager.getProtectionGroups(protectionElement
+			ProtectionElement protectionElement = authManager.getProtectionElement(protElemName);
+			Set<ProtectionGroup> protectionGroups = authManager.getProtectionGroups(protectionElement
 					.getProtectionElementId().toString());
-			iter = protectionGroups.iterator();
 			names = new String[protectionGroups.size()];
 			int cnt = 0;
-			while (iter.hasNext())
+			for (ProtectionGroup protectionGroup : protectionGroups)
 			{
-				protectionGroup = (ProtectionGroup) iter.next();
 				names[cnt++] = protectionGroup.getProtectionGroupName();
-
 			}
 		}
 		catch (CSException exception)
@@ -561,6 +554,44 @@ public class SecurityManager implements Permissions, ISecurityManager
 			Utility.getInstance().throwSMException(exception, mess, null);
 		}
 		return names;
+
+	}
+	/**
+	 * This method returns name of the Protection groupwhich consists of obj as
+	 * Protection Element and whose name consists of string nameConsistingOf
+	 * 
+	 * @param obj
+	 * @param nameConsistingOf
+	 * @return @throws
+	 *         SMException
+	 */
+	public String getProtectionGroupByName(AbstractDomainObject obj,
+			String nameConsistingOf) throws SMException {
+		String name = null;
+		String protElemName = obj.getObjectId();
+		try {
+			AuthorizationManager authManager = ProvisionManager.getInstance()
+			.getAuthorizationManager();
+			ProtectionElement protectionElement = authManager.getProtectionElement(
+					protElemName);
+			Set<ProtectionGroup> protectionGroups = authManager.getProtectionGroups(
+					protectionElement.getProtectionElementId().toString());
+			for (ProtectionGroup protectionGroup : protectionGroups)
+			{
+				name = protectionGroup.getProtectionGroupName();
+				if (name.indexOf(nameConsistingOf) != -1) {
+					logger.debug("protection group by name "
+							+ nameConsistingOf + " for Protection Element "
+							+ protElemName + " is " + name);
+					return name;
+				}
+			}
+		} catch (CSException exception)
+		{
+			String mess = "Unable to get protection group for Protection Element " + protElemName;
+			Utility.getInstance().throwSMException(exception, mess, null);
+		}
+		return name;
 
 	}
 	/**
