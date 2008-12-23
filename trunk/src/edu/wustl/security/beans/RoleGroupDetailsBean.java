@@ -142,7 +142,7 @@ public class RoleGroupDetailsBean
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(final Object object) // NOPMD by deepti_shelar on 11/17/08 5:35 PM
+	public boolean equals(final Object object) 
 	{
 		boolean equals = false;
 		if ((object != null) && object instanceof RoleGroupDetailsBean)
