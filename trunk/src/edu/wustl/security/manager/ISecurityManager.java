@@ -111,6 +111,13 @@ public interface ISecurityManager
 	 */
 	String[] getProtectionGroupByName(AbstractDomainObject obj) throws SMException;
 	/**
+	 * @param obj obj
+	 * @param String className
+	 * @return String array
+	 * @throws SMException ex
+	 */
+	String getProtectionGroupByName(AbstractDomainObject obj,String className) throws SMException;
+	/**
 	 * @param userGroupname name
 	 * @return Group grp
 	 * @throws SMException e

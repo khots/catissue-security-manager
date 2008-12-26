@@ -29,13 +29,17 @@ import org.xml.sax.SAXException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Utility;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
+import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
+import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
  * @author ravindra_jain
@@ -371,5 +375,83 @@ public final class PrivilegeManager
 		}
 		return result;
 	}
+	/**
+	 * Creates a ROle object.
+	 * @param roleName rolename
+	 * @param privileges set of privileges
+	 * @throws SMException 
+	 */
+	public void createRole(String roleName,Set<String>privileges) throws SMException
+	{
+		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+		Role role=null;
+		try
+		{
+		    role = privilegeUtility.getRole(roleName);
+		}
+		catch(Exception e)
+		{
+			role = new Role();
+			role.setName(roleName);
+			role.setDesc("Dynamically created role");
+			role.setApplication(privilegeUtility.getApplication(SecurityManagerPropertiesLocator.
+					getInstance().getApplicationCtxName()));
+			Set<Privilege> privilegeList = new HashSet<Privilege>();
+			try
+			{
+			for (String privilegeId : privileges)
+			{
+				Privilege privilege = privilegeUtility.getUserProvisioningManager().
+				getPrivilegeById(privilegeId);
+				privilegeList.add(privilege);
+			}
+			role.setPrivileges(privilegeList);
+			UserProvisioningManager userProvisioningManager = privilegeUtility
+			.getUserProvisioningManager();
+			
+				userProvisioningManager.createRole(role);
+			}
+			catch (CSObjectNotFoundException e1)
+			{
+				Utility.getInstance().throwSMException(e1, e1.getMessage(), "sm.operation.error");
+			}
+			catch (CSTransactionException e2)
+			{
+				Utility.getInstance().throwSMException(e2, e2.getMessage(), "sm.operation.error");
+			}
+		}
+	}
+	/**
+	 * This is a temporary method written for StorageContainer - special case
+	 * Used for StorageContainerBizLogic.isDeAssignable() method.
+	 * @param roleId roleid
+	 * @param objectId obj id
+	 * @param privilegeName name of the priv
+	 * @return boolean whether has privilege
+	 * @throws SMException 
+	 */
+	public boolean hasGroupPrivilege(String roleId, String objectId, String privilegeName) throws SMException
+	{
+		boolean hasPriv = true;
+		PrivilegeUtility utility = new PrivilegeUtility();
+		String groupId = utility.getGroupIdForRole(roleId);
+		Set<User> users;
+		try
+		{
+			users = utility.getUserProvisioningManager().getUsers(groupId);
 
+			for (User user : users)
+			{
+				if (!getPrivilegeCache(user.getLoginName()).hasPrivilege(objectId, privilegeName))
+				{
+					hasPriv = false;
+				}
+			}
+		}
+		catch (CSObjectNotFoundException e)
+		{
+			Utility.getInstance().throwSMException(e, e.getMessage(), "sm.operation.error");
+		}
+		return hasPriv;
+	}
 }
