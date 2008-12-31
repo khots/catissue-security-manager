@@ -134,8 +134,9 @@ public final class RoleGroupLocator
 			String groupName = XMLParserUtility.getElementValue(roleElement, "GroupName");
 			String groupType = XMLParserUtility.getElementValue(roleElement, "GroupType");
 
-			String roleId = ProvisionManager.getInstance().getRoleID(roleName);
-			String groupId = ProvisionManager.getInstance().getGroupID(groupName);
+			ProvisionManager instance = ProvisionManager.getInstance();
+			String roleId = instance.getRoleID(roleName);
+			String groupId = instance.getGroupID(groupName);
 			RoleGroupDetailsBean bean = new RoleGroupDetailsBean();
 			bean.setGroupType(groupType);
 			bean.setRoleName(roleName);

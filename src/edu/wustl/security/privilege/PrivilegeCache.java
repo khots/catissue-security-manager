@@ -283,7 +283,8 @@ public class PrivilegeCache
 	 */
 	private int getBitNumber(String privilegeName)
 	{
-		edu.wustl.security.privilege.Privilege privilege = PrivilegeLocator.getInstance()
+		PrivilegeLocator instance = PrivilegeLocator.getInstance();
+		edu.wustl.security.privilege.Privilege privilege = instance
 		.getPrivilegeByName(privilegeName);
 		return privilege.getBitNumber();
 	}
