@@ -115,7 +115,7 @@ public final class PrivilegeManager
 		if(!isSuccessful)
 		{
 			String mess = "error occured in instantiation of PrivilegeManager";
-			Utility.getInstance().throwSMException(null,mess, null);
+			Utility.getInstance().throwSMException(null,mess, "sm.operation.error");
 		}
 		return instance;
 	}
@@ -189,11 +189,11 @@ public final class PrivilegeManager
 		}
 		catch (CSObjectNotFoundException e)
 		{
-			Utility.getInstance().throwSMException(e, e.getMessage(), null);
+			Utility.getInstance().throwSMException(e, e.getMessage(), "sm.operation.error");
 		}
 		catch (CSException e)
 		{
-			Utility.getInstance().throwSMException(e, e.getMessage(), null);
+			Utility.getInstance().throwSMException(e, e.getMessage(), "sm.operation.error");
 		}
 	}
 
@@ -215,7 +215,7 @@ public final class PrivilegeManager
 		catch (SMException exception)
 		{
 			String mess = "Exception in insertAuthorizationData:" + exception;
-			Utility.getInstance().throwSMException(exception, mess, null);
+			Utility.getInstance().throwSMException(exception, mess, "sm.operation.error");
 		}
 		addObjectToPrivilegeCaches(objectId);
 	}
@@ -306,17 +306,17 @@ public final class PrivilegeManager
 			catch (ParserConfigurationException excp)
 			{
 				String mess = "DocumentBuilder cannot be created:";
-				Utility.getInstance().throwSMException(excp, mess, null);
+				Utility.getInstance().throwSMException(excp, mess, "sm.operation.error");
 			}
 			catch (SAXException excp)
 			{
 				String mess = "Not able to parse xml file:" + fileName;
-				Utility.getInstance().throwSMException(excp, mess, null);
+				Utility.getInstance().throwSMException(excp, mess, "sm.operation.error");
 			}
 			catch (IOException excp)
 			{
 				String mess = "Not able to parse xml file: IOException" + fileName;
-				Utility.getInstance().throwSMException(excp, mess, null);
+				Utility.getInstance().throwSMException(excp, mess, "sm.operation.error");
 			}
 		}
 		return doc;
@@ -371,7 +371,7 @@ public final class PrivilegeManager
 		catch (CSException excp)
 		{
 			String mess = "Not able to get instance of UserProvisioningManager:";
-			Utility.getInstance().throwSMException(excp, mess, null);
+			Utility.getInstance().throwSMException(excp, mess, "sm.operation.error");
 		}
 		return result;
 	}

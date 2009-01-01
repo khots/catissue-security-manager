@@ -82,7 +82,7 @@ public final class Utility
 	 * Called when we need to throw SMException.
 	 * @param exc exception
 	 * @param mess message to be shown on error
-	 * @param errKey key from the prop file
+	 * @param errKey TODO
 	 * @throws SMException exception
 	 */
 	public void throwSMException(Exception exc, String mess, String errKey) throws SMException
