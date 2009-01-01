@@ -116,12 +116,12 @@ public final class ProvisionManager
 			catch (CSConfigurationException e)
 			{
 				String mess = "error in geting getAuthorizationManager " + e.getMessage();
-				Utility.getInstance().throwSMException(e, mess, null);
+				Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 			}
 			catch (CSException e)
 			{
 				String mess = "error in geting getAuthorizationManager " + e.getMessage();
-				Utility.getInstance().throwSMException(e, mess, null);
+				Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 			}
 		}
 
@@ -157,7 +157,7 @@ public final class ProvisionManager
 		{
 			String mess = "error in geting application according to app context name " + appCtxName
 					+ " " + e.getMessage();
-			Utility.getInstance().throwSMException(e, mess, null);
+			Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 		}
 		return groupId;
 	}
@@ -190,7 +190,7 @@ public final class ProvisionManager
 		{
 			String mess = "error in geting application according to app context name " + appCtxName
 					+ " " + e.getMessage();
-			Utility.getInstance().throwSMException(e, mess, null);
+			Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 		}
 		return roleId;
 	}
@@ -207,7 +207,7 @@ public final class ProvisionManager
 		{
 			logger.debug("searchCriteria is null");
 			String mesg = "searchCriteria is null";
-			Utility.getInstance().throwSMException(null, mesg, null);
+			Utility.getInstance().throwSMException(null, mesg, "sm.operation.error");
 		}
 		UserProvisioningManager upManager = getUserProvisioningManager();
 		List list = upManager.getObjects(searchCriteria);

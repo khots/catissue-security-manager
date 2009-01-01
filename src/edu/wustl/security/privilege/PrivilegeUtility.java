@@ -183,7 +183,7 @@ public class PrivilegeUtility
 							"To Protection Group ").append(
 							protectionGroup.getProtectionGroupId()).append(' ').append(
 							group.getGroupId()).append(' ').append(roleIds);
-					Utility.getInstance().throwSMException(ex, mess.toString(), null);
+					Utility.getInstance().throwSMException(ex, mess.toString(), "sm.operation.error");
 				}
 			}
 		}
@@ -234,7 +234,7 @@ public class PrivilegeUtility
 		catch (CSTransactionException e)
 		{
 			String mess = "Error in creating protection group in addProtElementToGroup"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess, null);
+			Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 		}
 		return protGroup;
 	}
@@ -309,7 +309,7 @@ public class PrivilegeUtility
 			catch (CSTransactionException e)
 			{
 				String mess = "error in creating group object "+e.getMessage();
-				Utility.getInstance().throwSMException(e, mess, null);
+				Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 			}
 		}
 		return grp;
@@ -370,7 +370,7 @@ public class PrivilegeUtility
 			String mess = "Error occured while creating Potection Element "
 					+ protectionElement.getProtectionElementName();
 			logger.warn(mess, ex);
-			Utility.getInstance().throwSMException(ex, mess, null);
+			Utility.getInstance().throwSMException(ex, mess, "sm.operation.error");
 			//throw new CSException(mess, ex);
 		}
 		catch(CSException ex)
@@ -378,7 +378,7 @@ public class PrivilegeUtility
 			String mess = "Error occured while creating Potection Element "
 				+ protectionElement.getProtectionElementName();
 			logger.warn(mess, ex);
-			Utility.getInstance().throwSMException(ex, mess, null);
+			Utility.getInstance().throwSMException(ex, mess, "sm.operation.error");
 			//throw new CSException(mess, ex);
 		}
 
@@ -429,7 +429,7 @@ public class PrivilegeUtility
 					" an error while associating protection group:")
 					.append(groupsName).append(" to protectionElement").append(
 							protectionElement.getProtectionElementName());
-			Utility.getInstance().throwSMException(e, mess.toString(), null);
+			Utility.getInstance().throwSMException(e, mess.toString(), "sm.operation.error");
 		}
 	}
 
@@ -542,7 +542,7 @@ public class PrivilegeUtility
 		if (roleName == null)
 		{
 			String mess = "Role name passed is null";
-			Utility.getInstance().throwSMException(null, mess, null);
+			Utility.getInstance().throwSMException(null, mess, "sm.operation.error");
 		}
 
 		//Search for role by the name roleName
@@ -560,7 +560,7 @@ public class PrivilegeUtility
 		catch (SMException e)
 		{
 			String mess = "Role not found by name " + roleName;
-			Utility.getInstance().throwSMException(e, mess, null);
+			Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 		}
 		return role;
 	}
@@ -581,7 +581,7 @@ public class PrivilegeUtility
 		catch (CSObjectNotFoundException e)
 		{
 			String mess = "Error in getting RolePrivileges"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess, null);
+			Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 		}
 		return privileges ;
 	}
@@ -598,7 +598,7 @@ public class PrivilegeUtility
 		if (pgName == null)
 		{
 			String mess = "pgName passed is null";
-			Utility.getInstance().throwSMException(null, mess, null);
+			Utility.getInstance().throwSMException(null, mess, "sm.operation.error");
 		}
 		ProtectionGroup protGrp = null;
 		//Search for Protection Group of the name passed
@@ -627,7 +627,7 @@ public class PrivilegeUtility
 			catch (CSTransactionException e1)
 			{
 				String mess = "error in creating protection grp for name "+pgName;
-				Utility.getInstance().throwSMException(e, mess, null);
+				Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 			}
 		}
 		return protGrp;
@@ -656,7 +656,7 @@ public class PrivilegeUtility
 		catch (CSObjectNotFoundException e)
 		{
 			String mess = "Error in getting RolePrivileges"+e.getMessage();
-			Utility.getInstance().throwSMException(e, mess, null);
+			Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 		}
 		return privilegeById;
 	}
