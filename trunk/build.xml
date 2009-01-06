@@ -44,6 +44,7 @@
 				<fileset dir="${target.dir}">
 					<include name="**/*" />
 				</fileset>
+				<fileset dir="${base.dir}" includes="**/PrivilegeConf.xml" />
 				<manifest>
 					<attribute name="Built-At-Time" value="${TODAY} ${TSTAMP}" />
 				</manifest>
