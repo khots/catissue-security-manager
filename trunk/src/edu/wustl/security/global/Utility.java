@@ -4,7 +4,6 @@ package edu.wustl.security.global;
 import java.util.Map;
 
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeType;
@@ -69,7 +68,7 @@ public final class Utility
 		{
 			String tagValue = tagKeyValueMap
 					.get(edu.wustl.security.global.Constants.BDATE_TAG_NAME);
-			if (tagValue.equalsIgnoreCase(Constants.TRUE))
+			if (tagValue.equalsIgnoreCase(Boolean.valueOf(true).toString()))
 			{
 				isBirthDate = true;
 			}
@@ -92,7 +91,7 @@ public final class Utility
 		if(errorKey == null)
 		{
 			errorKey = ErrorKey.getDefaultErrorKey();
-			errorKey.setErrorMessage(mess);
+			//errorKey.setErrorMessage(mess);
 		}
 		throw new SMException(errorKey, exc, mess);
 	}

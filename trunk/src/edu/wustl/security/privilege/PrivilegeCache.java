@@ -31,7 +31,7 @@ import gov.nih.nci.security.exceptions.CSException;
  */
 public class PrivilegeCache
 {
-
+	
 	/**
 	 * logger Logger - Generic logger.
 	 */

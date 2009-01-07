@@ -1,12 +1,17 @@
 package edu.wustl.security.locator;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import edu.wustl.common.util.global.XMLParserUtility;
 import edu.wustl.security.privilege.Privilege;
@@ -92,9 +97,25 @@ public final class PrivilegeLocator
 	 */
 	public void init()
 	{
-		Document doc = XMLParserUtility.getDocument(PRIV_CONF_FILE);
+		try {
+		InputStream inputStream = PrivilegeLocator.class.getClassLoader()
+		.getResourceAsStream(PRIV_CONF_FILE);
+		Document doc;
+	
+			doc = XMLParserUtility.getDocument(inputStream);
+		
 		NodeList privNodeLst = doc.getElementsByTagName(ELE_PRIVILEGE);
 		populateMaps(privNodeLst);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
