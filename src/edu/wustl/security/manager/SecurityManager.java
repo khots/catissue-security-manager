@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.query.AbstractClient;
+import edu.wustl.common.util.global.AbstractClient;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;

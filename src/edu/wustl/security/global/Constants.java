@@ -181,4 +181,8 @@ public class Constants
 	 * Constant for length one.
 	 */
 	public static final int INDEX_ONE = 1;
+	/**
+	 * Privilege tag name.
+	 */
+	public static final String PRIVILEGE_TAG_NAME = "PRIVILEGE_ID";
 }

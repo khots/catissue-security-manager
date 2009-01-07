@@ -1,15 +1,20 @@
 
 package edu.wustl.security.locator;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import edu.wustl.common.util.global.XMLParserUtility;
 import edu.wustl.common.util.logger.Logger;
@@ -65,16 +70,27 @@ public final class RoleGroupLocator
 	 */
 	private RoleGroupLocator()
 	{
-		Document doc = XMLParserUtility.getDocument(CONF_FILE);
-		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		try
 		{
+		InputStream inputStream = RoleGroupLocator.class.getClassLoader()
+		.getResourceAsStream(CONF_FILE);
+		Document doc = XMLParserUtility.getDocument(inputStream);
+		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
+		
 			createRoleGroupBeans(roleList);
 		}
 		catch (SMException e)
 		{
 			isSuccess = false;
 			logger.error(e.getMessage());
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
