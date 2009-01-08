@@ -116,7 +116,7 @@
 	
 	<target name="RundbUnit" depends="dbclean, dbinit, configure_properties, build_jar" >
 		<antcall target="runJUnitDB">
-			<param name="classNames" value="**/TestPr*y.java" />
+			<param name="classNames" value="**/Test*.java" />
 		</antcall>
 	</target>
 	
