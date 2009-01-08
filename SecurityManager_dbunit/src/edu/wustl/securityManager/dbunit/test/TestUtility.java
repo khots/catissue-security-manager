@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.security.global.Constants;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.privilege.PrivilegeType;
 /**
@@ -51,7 +51,7 @@ public class TestUtility extends TestCase
 	public void testIsBirthDateTrue()
 	{
 		Map<String, String> tagKeyValueMap = new HashMap<String, String>();
-		tagKeyValueMap.put(edu.wustl.security.global.Constants.BDATE_TAG_NAME, Constants.TRUE);
+		tagKeyValueMap.put(edu.wustl.security.global.Constants.BDATE_TAG_NAME, Boolean.TRUE.toString());
 		boolean isBirthDate = Utility.getInstance().getIsBirthDate(tagKeyValueMap);
 		assertTrue(isBirthDate);
 	}
@@ -61,7 +61,7 @@ public class TestUtility extends TestCase
 	public void testIsBirthDateFalse()
 	{
 		Map<String, String> tagKeyValueMap = new HashMap<String, String>();
-		tagKeyValueMap.put(edu.wustl.security.global.Constants.BDATE_TAG_NAME, Constants.FALSE);
+		tagKeyValueMap.put(edu.wustl.security.global.Constants.BDATE_TAG_NAME, Boolean.FALSE.toString());
 		boolean isBirthDate = Utility.getInstance().getIsBirthDate(tagKeyValueMap);
 		assertFalse(isBirthDate);
 	}
