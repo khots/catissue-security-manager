@@ -1,7 +1,7 @@
 
 package edu.wustl.securityManager.dbunit.test;
 
-import edu.wustl.common.util.global.Constants;
+import edu.wustl.security.global.Constants;
 import edu.wustl.security.privilege.PrivilegeType;
 import junit.framework.TestCase;
 /**
