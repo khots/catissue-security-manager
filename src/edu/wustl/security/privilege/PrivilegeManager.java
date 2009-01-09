@@ -359,12 +359,15 @@ public final class PrivilegeManager
 			UserProvisioningManager userProvManager = privilegeUtility.getUserProvisioningManager();
 
 			List<Group> list = userProvManager.getAccessibleGroups(objectId, privilege);
-			for (Group group : list)
+			if(list != null)
 			{
-				Set<User> users = group.getUsers();
-				for (User user : users)
+				for (Group group : list)
 				{
-					result.add(user.getLoginName());
+					Set<User> users = group.getUsers();
+					for (User user : users)
+					{
+						result.add(user.getLoginName());
+					}
 				}
 			}
 		}

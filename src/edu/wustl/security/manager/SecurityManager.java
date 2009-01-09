@@ -625,7 +625,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	{
 		Role role = null;
 		Iterator<Group> iter = groups.iterator();
-		if (iter.hasNext())
+		while (iter.hasNext())
 		{
 			Group group = (Group) iter.next();
 			if (group.getApplication().getApplicationName().equals(
@@ -634,15 +634,18 @@ public class SecurityManager implements Permissions, ISecurityManager
 				RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
 				sampleBean.setGroupName(group.getGroupName());
 				RoleGroupDetailsBean requiredBean = getRequiredBean(sampleBean);
-				String roleId = requiredBean.getRoleId();
-				try
+				if(requiredBean !=null)
 				{
-					role = upManager.getRoleById(roleId);
-				}
-				catch (CSObjectNotFoundException e)
-				{
-					String mess = "Unable to get role by id" + e.getMessage();
-					Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
+					String roleId = requiredBean.getRoleId();
+					try
+					{
+						role = upManager.getRoleById(roleId);
+					}
+					catch (CSObjectNotFoundException e)
+					{
+						String mess = "Unable to get role by id" + e.getMessage();
+						Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
+					}
 				}
 			}
 		}
