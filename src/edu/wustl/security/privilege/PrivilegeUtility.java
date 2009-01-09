@@ -304,7 +304,7 @@ public class PrivilegeUtility
 			{
 				upManager.createGroup(group);
 				list = getObjects(grpSrchCri);
-				grp = (Group) list.get(0);
+				//grp = (Group) list.get(0);
 			}
 			catch (CSTransactionException e)
 			{
@@ -312,6 +312,7 @@ public class PrivilegeUtility
 				Utility.getInstance().throwSMException(e, mess, "sm.operation.error");
 			}
 		}
+		grp = (Group) list.get(0);
 		return grp;
 	}
 
@@ -429,7 +430,6 @@ public class PrivilegeUtility
 					" an error while associating protection group:")
 					.append(groupsName).append(" to protectionElement").append(
 							protectionElement.getProtectionElementName());
-			Utility.getInstance().throwSMException(e, mess.toString(), "sm.operation.error");
 		}
 	}
 
