@@ -321,7 +321,10 @@ public class SecurityManager implements Permissions, ISecurityManager
 					RoleGroupDetailsBean sampleBean = new RoleGroupDetailsBean();
 					sampleBean.setGroupName(group.getGroupName());
 					RoleGroupDetailsBean requiredBean = getRequiredBean(sampleBean);
-					role = requiredBean.getRoleName();
+					if(requiredBean != null)
+					{
+						role = requiredBean.getRoleName();
+					}
 				}
 			}
 		}
