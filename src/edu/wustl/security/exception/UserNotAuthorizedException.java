@@ -69,13 +69,13 @@ public class UserNotAuthorizedException extends SMException
 	/**
 	 *
 	 * @param errorKey eror key
-	 * @param throwable exc
+	 * @param exception exc
 	 * @param msgValues meg
 	 */
-	public UserNotAuthorizedException(final ErrorKey errorKey, final Throwable throwable,
+	public UserNotAuthorizedException(final ErrorKey errorKey, final Exception exception,
 			final String msgValues)
 	{
-		super(errorKey, throwable, msgValues);
+		super(errorKey, exception, msgValues);
 	}
 
 	/**
