@@ -15,12 +15,12 @@ public class SMException extends ApplicationException
 	/**
 	 *
 	 * @param errorKey eror key
-	 * @param throwable exc
+	 * @param exception exc
 	 * @param msgValues meg
 	 */
-	public SMException(final ErrorKey errorKey, final Throwable throwable, final String msgValues)
+	public SMException(final ErrorKey errorKey, final Exception exception, final String msgValues)
 	{
-		super(errorKey, throwable, msgValues);
+		super(errorKey, exception, msgValues);
 	}
 
 	/**

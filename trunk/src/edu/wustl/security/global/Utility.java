@@ -90,7 +90,7 @@ public final class Utility
 		ErrorKey errorKey = ErrorKey.getErrorKey(errKey);
 		if(errorKey == null)
 		{
-			errorKey = ErrorKey.getDefaultErrorKey();
+			errorKey = ErrorKey.getErrorKey("sm.operation.error");
 			//errorKey.setErrorMessage(mess);
 		}
 		throw new SMException(errorKey, exc, mess);
