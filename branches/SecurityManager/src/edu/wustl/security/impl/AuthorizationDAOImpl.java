@@ -162,14 +162,16 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				if (pElement.getAttribute() == null)
 				{
 					pstmt2.setString(Constants.POSITION1, pElement.getObjectId());
-					pstmt2.setString(Constants.POSITION2, userName);
+					pstmt2.setString(Constants.POSITION2, pElement.getApplication().getApplicationId().toString());
+					pstmt2.setString(Constants.POSITION3, userName);
 					resulSet = pstmt2.executeQuery();
 				}
 				else
 				{
 					pstmt.setString(Constants.POSITION1, pElement.getObjectId());
 					pstmt.setString(Constants.POSITION2, pElement.getAttribute());
-					pstmt.setString(Constants.POSITION3, userName);
+					pstmt.setString(Constants.POSITION3, pElement.getApplication().getApplicationId().toString());
+					pstmt.setString(Constants.POSITION4, userName);
 					resulSet = pstmt.executeQuery();
 				}
 			}
@@ -298,7 +300,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 				" and pe.attribute " + attributeVal
 				+ " and pg.protection_group_id = ugrpg.protection_group_id "
-				+ " and (( ugrpg.group_id = g.group_id" + " and ug.group_id= g.group_id"
+				+ "and pg.APPLICATION_ID=? and (( ugrpg.group_id = g.group_id" + " and ug.group_id= g.group_id"
 				+ "       and ug.user_id = u.user_id)" + "       or "
 				+ "     (ugrpg.user_id = u.user_id))" + " and u.login_name=?"
 				+ " and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id";
