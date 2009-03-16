@@ -161,6 +161,8 @@ public class Constants
 	 * Constant for position3.
 	 */
 	public static final int POSITION3 = 3;
+	
+	public static final int POSITION4 = 4;
 	/**
 	 * name of the csm properties file.
 	 */
