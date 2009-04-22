@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.common.audit.LoginAuditManager;
+import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.AbstractClient;
 import edu.wustl.common.util.global.TextConstants;
@@ -698,5 +700,43 @@ public class SecurityManager implements Permissions, ISecurityManager
 			userGrp = (Group) list.get(0);
 		}
 		return userGrp;
+	}
+	
+	/**
+	 * Returns true or false depending on the person gets authenticated or not.
+	 * Also audits the login attempt
+	 * @param requestingClass
+	 * @param loginName login name
+	 * @param loginEvent
+	 * @param password password
+	 * @return @throws CSException
+	 */
+	public boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException 
+	{
+		boolean loginSuccess = false;
+		LoginAuditManager loginAuditManager=new LoginAuditManager(loginDetails);
+		try 
+		{
+			Logger.out.debug("login name: " + loginName + " passowrd: " + password);
+			//AuthenticationManager authMngr = getAuthenticationManager();
+			AuthenticationManager authMngr = ProvisionManager.getInstance().getAuthenticationManager();
+			loginSuccess = authMngr.login(loginName, password);
+		} 
+		catch (CSException ex) 
+		{
+			
+			String mesg = "Authentication|"
+				+ "|"
+				+ loginName
+				+ "|login|Success| Authentication is not successful for user "
+				+ loginName + "|" + ex.getMessage();
+			Utility.getInstance().throwSMException(ex, mesg, "sm.operation.error");
+		}
+		finally
+		{
+			
+			loginAuditManager.audit(loginSuccess);
+		}
+		return loginSuccess;
 	}
 }
