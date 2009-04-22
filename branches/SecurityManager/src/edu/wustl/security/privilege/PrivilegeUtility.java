@@ -264,11 +264,20 @@ public class PrivilegeUtility
 	{
 		User user;
 		Set userGroup = bean.getGroup();
-		for (Iterator it = userGroup.iterator(); it.hasNext();)
+		
+		if(userGroup != null)
 		{
-			user = (User) it.next();
-			assignAdditionalGroupsToUser(String.valueOf(user.getUserId()), new String[]{String
-					.valueOf(group.getGroupId())});
+			Iterator it = userGroup.iterator();
+			while(it.hasNext())
+			{
+				user = (User) it.next();
+				if(user != null)
+				{
+					assignAdditionalGroupsToUser(String.valueOf(user.getUserId()), new String[]{String
+						.valueOf(group.getGroupId())});
+				}
+			
+			}
 		}
 	}
 
@@ -313,6 +322,7 @@ public class PrivilegeUtility
 			}
 		}
 		grp = (Group) list.get(0);
+	
 		return grp;
 	}
 

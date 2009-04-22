@@ -12,7 +12,6 @@ import org.w3c.dom.NodeList;
 
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.XMLParserUtility;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.global.CSMGroup;
