@@ -60,7 +60,7 @@ public final class RoleGroupLocator
 	 * Instantiating the class whenever loaded for the first time.
 	 * The same instance will be returned whenever getInstance is called.
 	 */
-	private static RoleGroupLocator locator = new RoleGroupLocator();
+	private static RoleGroupLocator locator;
 	/**
 	 * isSuccess to be set false if any exc occurs while instantiating.
 	 */
@@ -68,7 +68,7 @@ public final class RoleGroupLocator
 	/**
 	 * Making the class singleton.
 	 */
-	private RoleGroupLocator()
+	private RoleGroupLocator(ProvisionManager provisionManager)
 	{
 		try
 		{
@@ -77,7 +77,7 @@ public final class RoleGroupLocator
 		Document doc = XMLParserUtility.getDocument(inputStream);
 		NodeList roleList = doc.getElementsByTagName(ELE_ROLE);
 		
-			createRoleGroupBeans(roleList);
+			createRoleGroupBeans(provisionManager,roleList);
 		}
 		catch (SMException e)
 		{
@@ -99,8 +99,9 @@ public final class RoleGroupLocator
 	 * @return RoleGroupLocator instance
 	 * @throws SMException e
 	 */
-	public static RoleGroupLocator getInstance() throws SMException
+	public static RoleGroupLocator getInstance(ProvisionManager provisionManager) throws SMException
 	{
+		locator=new RoleGroupLocator(provisionManager);
 		if(!isSuccess)
 		{
 			String mess = "error occured in instantiation of PrivilegeManager";
@@ -114,7 +115,7 @@ public final class RoleGroupLocator
 	 * @param roleList list
 	 * @throws SMException e
 	 */
-	private void createRoleGroupBeans(NodeList roleList) throws SMException
+	private void createRoleGroupBeans(ProvisionManager provisionManager,NodeList roleList) throws SMException
 	{
 		for (int s = 0; s < roleList.getLength(); s++)
 		{
@@ -123,7 +124,7 @@ public final class RoleGroupLocator
 			{
 				try
 				{
-					createRoleGroupBean(role);
+					createRoleGroupBean(provisionManager,role);
 				}
 				catch (SMException e)
 				{
@@ -140,7 +141,7 @@ public final class RoleGroupLocator
 	 * @param role role
 	 * @throws SMException exc
 	 */
-	private void createRoleGroupBean(Node role) throws SMException
+	private void createRoleGroupBean(ProvisionManager provisionManager,Node role) throws SMException
 	{
 		try
 		{
@@ -150,9 +151,8 @@ public final class RoleGroupLocator
 			String groupName = XMLParserUtility.getElementValue(roleElement, "GroupName");
 			String groupType = XMLParserUtility.getElementValue(roleElement, "GroupType");
 
-			ProvisionManager instance = ProvisionManager.getInstance();
-			String roleId = instance.getRoleID(roleName);
-			String groupId = instance.getGroupID(groupName);
+			String roleId = provisionManager.getRoleID(roleName);
+			String groupId = provisionManager.getGroupID(groupName);
 			RoleGroupDetailsBean bean = new RoleGroupDetailsBean();
 			bean.setGroupType(groupType);
 			bean.setRoleName(roleName);
@@ -193,7 +193,6 @@ public final class RoleGroupLocator
 	 */
 	public List<String> getAllGroupIds()
 	{
-
 		return groupIdList;
 	}
 }

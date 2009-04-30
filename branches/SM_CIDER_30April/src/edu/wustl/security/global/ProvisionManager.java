@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
@@ -26,27 +25,42 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
  */
 public final class ProvisionManager
 {
-
 	/**
-	 * provManager.
+	 * Multiple CSM Setups
+	 * Remove static, make it singleton
+	 * for ctx name
 	 */
-	private static ProvisionManager provManager = new ProvisionManager();
+	
 
-	/**
-	 * pri constructor.
-	 */
-	private ProvisionManager()
-	{
-
-	}
+//	/**
+//	 * provManager.
+//	 */
+//	private static ProvisionManager provManager = new ProvisionManager();
+//
+//	/**
+//	 * pri constructor.
+//	 */
+//	private ProvisionManager()
+//	{
+//
+//	}
 
 	/**
 	 * @return ProvisionManager single instance
 	 */
-	public static ProvisionManager getInstance()
+//	public static ProvisionManager getInstance()
+//	{
+//		return provManager;
+//	}
+	
+	private String appCtxName;
+	
+	public ProvisionManager(String appCtxName)
 	{
-		return provManager;
+		this.appCtxName=appCtxName;
 	}
+	
+	
 
 	/**
 	 * logger Logger - Generic logger.
@@ -87,8 +101,7 @@ public final class ProvisionManager
 		if (authTManager == null)
 		{
 			authTManager = SecurityServiceProvider
-					.getAuthenticationManager(SecurityManagerPropertiesLocator.getInstance()
-							.getApplicationCtxName());
+					.getAuthenticationManager(this.appCtxName);
 		}
 		return authTManager;
 	}
@@ -109,9 +122,7 @@ public final class ProvisionManager
 			try
 			{
 				authRManager = SecurityServiceProvider
-						.getAuthorizationManager(
-								SecurityManagerPropertiesLocator.getInstance()
-								.getApplicationCtxName());
+						.getAuthorizationManager(appCtxName);
 			}
 			catch (CSConfigurationException e)
 			{
@@ -142,10 +153,9 @@ public final class ProvisionManager
 		group.setGroupName(groupName);
 		UserProvisioningManager upManager = getUserProvisioningManager();
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
-		String appCtxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
 		try
 		{
-			group.setApplication(upManager.getApplication(appCtxName));
+			group.setApplication(upManager.getApplication(this.appCtxName));
 			list = getObjects(searchCriteria);
 			if (!list.isEmpty())
 			{
@@ -175,10 +185,9 @@ public final class ProvisionManager
 		role.setName(roleName);
 		SearchCriteria searchCriteria = new RoleSearchCriteria(role);
 		UserProvisioningManager upManager = getUserProvisioningManager();
-		String appCtxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
 		try
 		{
-			role.setApplication(upManager.getApplication(appCtxName));
+			role.setApplication(upManager.getApplication(this.appCtxName));
 			List list = getObjects(searchCriteria);
 			if (!list.isEmpty())
 			{

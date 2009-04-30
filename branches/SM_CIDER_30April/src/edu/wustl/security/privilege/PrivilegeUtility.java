@@ -15,7 +15,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Constants;
-import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.ISecurityManager;
@@ -54,7 +53,7 @@ public class PrivilegeUtility
 	 * instance of SecurityManager.
 	 */
 	private static ISecurityManager securityManager = null;
-
+	
 	/**
 	 * PrivilegeUtility.
 	 */
@@ -63,6 +62,21 @@ public class PrivilegeUtility
 		try
 		{
 			securityManager = SecurityManagerFactory.getSecurityManager();
+		}
+		catch (SMException e)
+		{
+			logger.error(e.getStackTrace());
+		}
+	}
+	
+	/**
+	 * PrivilegeUtility.
+	 */
+	public PrivilegeUtility(String smCtxName)
+	{
+		try
+		{
+			securityManager = SecurityManagerFactory.getSecurityManager(smCtxName);
 		}
 		catch (SMException e)
 		{
@@ -267,7 +281,7 @@ public class PrivilegeUtility
 		for (Iterator it = userGroup.iterator(); it.hasNext();)
 		{
 			user = (User) it.next();
-			assignAdditionalGroupsToUser(String.valueOf(user.getUserId()), new String[]{String
+			securityManager.assignAdditionalGroupsToUser(String.valueOf(user.getUserId()), new String[]{String
 					.valueOf(group.getGroupId())});
 		}
 	}
@@ -390,10 +404,10 @@ public class PrivilegeUtility
 	 * @param groupIds array
 	 * @throws SMException exc
 	 */
-	public void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException
-	{
-		securityManager.assignAdditionalGroupsToUser(userId, groupIds);
-	}
+//	public void assignAdditionalGroupsToUser(String userId, String[] groupIds) throws SMException
+//	{
+//		securityManager.assignAdditionalGroupsToUser(userId, groupIds);
+//	}
 
 	/**
 	 * Returns list of objects corresponding to the searchCriteria passed.
@@ -407,7 +421,7 @@ public class PrivilegeUtility
 	 */
 	public List getObjects(SearchCriteria searchCriteria) throws SMException
 	{
-		return ProvisionManager.getInstance().getObjects(searchCriteria);
+		return securityManager.getProvisionManager().getObjects(searchCriteria);
 	}
 
 	/**
@@ -489,7 +503,7 @@ public class PrivilegeUtility
 	 */
 	public UserProvisioningManager getUserProvisioningManager() throws SMException
 	{
-		return ProvisionManager.getInstance().getUserProvisioningManager();
+		return securityManager.getProvisionManager().getUserProvisioningManager();
 	}
 
 	/**
@@ -500,7 +514,7 @@ public class PrivilegeUtility
 	 */
 	protected AuthorizationManager getAuthorizationManager() throws SMException
 	{
-		return ProvisionManager.getInstance().getAuthorizationManager();
+		return securityManager.getProvisionManager().getAuthorizationManager();
 	}
 
 	/**
@@ -511,10 +525,10 @@ public class PrivilegeUtility
 	 * @return User user
 	 * @throws SMException exc
 	 */
-	public User getUser(String loginName) throws SMException
-	{
-		return securityManager.getUser(loginName);
-	}
+//	public User getUser(String loginName) throws SMException
+//	{
+//		return securityManager.getUser(loginName);
+//	}
 
 	/**
 	 * Returns the User object for the passed User id.
@@ -525,10 +539,10 @@ public class PrivilegeUtility
 	 * @throws SMException
 	 *             if the User object is not found for the given id
 	 */
-	public User getUserById(String userId) throws SMException
-	{
-		return securityManager.getUserById(userId);
-	}
+//	public User getUserById(String userId) throws SMException
+//	{
+//		return securityManager.getUserById(userId);
+//	}
 
 	/**
 	 * This method returns role corresponding to the rolename passed.
@@ -637,10 +651,10 @@ public class PrivilegeUtility
 	 * @return groupid string
 	 * @throws SMException exc
 	 */
-	public String getGroupIdForRole(String roleID) throws SMException
-	{
-		return securityManager.getGroupIdForRole(roleID);
-	}
+//	public String getGroupIdForRole(String roleID) throws SMException
+//	{
+//		return securityManager.getGroupIdForRole(roleID);
+//	}
 	/**
 	 * @param privilegeId priv Id
 	 * @return Privilege priv

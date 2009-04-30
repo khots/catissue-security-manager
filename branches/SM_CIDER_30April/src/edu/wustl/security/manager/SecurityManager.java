@@ -28,6 +28,7 @@ import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.RoleGroupLocator;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.privilege.PrivilegeUtility;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.UserProvisioningManager;
@@ -62,6 +63,10 @@ import gov.nih.nci.security.exceptions.CSTransactionException;
 
 public class SecurityManager implements Permissions, ISecurityManager
 {
+	private ProvisionManager provisionManager;
+
+	private String appCtxName;
+	
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -98,6 +103,22 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * TABLE_ALIAS_NAME.
 	 */
 	public static final String TABLE_ALIAS_NAME = "TABLE_ALIAS_NAME";
+	
+	public void setProvisionManager(ProvisionManager provisionManager) {
+		this.provisionManager = provisionManager;
+	}
+	
+	public ProvisionManager getProvisionManager() {
+		return provisionManager;
+	}
+	
+	public String getAppCtxName() {
+		return appCtxName;
+	}
+	
+	public void setAppCtxName(String appCtxName) {
+		this.appCtxName = appCtxName;
+	}
 
 	/**
 	 * Returns true or false depending on the person gets authenticated or not.
@@ -113,8 +134,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		boolean loginSuccess = false;
 		try
 		{
-			AuthenticationManager authMngr = ProvisionManager.getInstance()
-					.getAuthenticationManager();
+			AuthenticationManager authMngr = this.provisionManager.getAuthenticationManager();
 			loginSuccess = authMngr.login(loginName, password);
 		}
 		catch (CSException exception)
@@ -136,7 +156,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getUserProvisioningManager().createUser(user);
+			this.provisionManager.getUserProvisioningManager().createUser(user);
 		}
 		catch (CSTransactionException exception)
 		{
@@ -155,7 +175,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 */
 	public User getUser(final String loginName) throws SMException
 	{
-		return ProvisionManager.getInstance().getAuthorizationManager().getUser(loginName);
+		return this.provisionManager.getAuthorizationManager().getUser(loginName);
 	}
 
 	/**
@@ -166,7 +186,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getUserProvisioningManager().removeUser(userId);
+			this.provisionManager.getUserProvisioningManager().removeUser(userId);
 		}
 		catch (CSTransactionException ex)
 		{
@@ -187,8 +207,8 @@ public class SecurityManager implements Permissions, ISecurityManager
 		UserProvisioningManager upManager = null;
 		try
 		{
-			upManager = ProvisionManager.getInstance().getUserProvisioningManager();
-			List<String> roleIdList = RoleGroupLocator.getInstance().getAllRoleIds();
+			upManager = this.provisionManager.getUserProvisioningManager();
+			List<String> roleIdList = RoleGroupLocator.getInstance(provisionManager).getAllRoleIds();
 			for (String roleId : roleIdList)
 			{
 				roles.add(upManager.getRoleById(roleId));
@@ -212,13 +232,12 @@ public class SecurityManager implements Permissions, ISecurityManager
 	{
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance()
-					.getUserProvisioningManager();
+			UserProvisioningManager upManager = this.provisionManager.getUserProvisioningManager();
 			User user = upManager.getUserById(userID);
 
 			//Remove user from any other role if he is assigned some
 			String userId = String.valueOf(user.getUserId());
-			List<String> allGroupIds = RoleGroupLocator.getInstance().getAllGroupIds();
+			List<String> allGroupIds = RoleGroupLocator.getInstance(provisionManager).getAllGroupIds();
 			for (String grpId : allGroupIds)
 			{
 				upManager.removeUserFromGroup(grpId, userId);
@@ -279,7 +298,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		Role role = null;
 		try
 		{
-			upManager = ProvisionManager.getInstance().getUserProvisioningManager();
+			upManager = this.provisionManager.getUserProvisioningManager();
 			groups = upManager.getGroups(String.valueOf(userID));
 			role = getRole(groups, upManager);
 		}
@@ -307,8 +326,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		String role = TextConstants.EMPTY_STRING;
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance()
-					.getUserProvisioningManager();
+			UserProvisioningManager upManager = this.provisionManager.getUserProvisioningManager();
 			Set groups = upManager.getGroups(String.valueOf(userID));
 			Iterator iter = groups.iterator();
 			while (iter.hasNext())
@@ -347,7 +365,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	{
 		try
 		{
-			ProvisionManager.getInstance().getUserProvisioningManager().modifyUser(user);
+			this.provisionManager.getUserProvisioningManager().modifyUser(user);
 		}
 		catch (CSException exception)
 		{
@@ -368,7 +386,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		User user = null;
 		try
 		{
-			user = ProvisionManager.getInstance().getUserProvisioningManager().getUserById(userId);
+			user = this.provisionManager.getUserProvisioningManager().getUserById(userId);
 		}
 		catch (CSException exception)
 		{
@@ -387,7 +405,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		List list = null;
 		User user = new User();
 		SearchCriteria searchCriteria = new UserSearchCriteria(user);
-		list = ProvisionManager.getInstance().getUserProvisioningManager().getObjects(
+		list = this.provisionManager.getUserProvisioningManager().getObjects(
 				searchCriteria);
 		return list;
 	}
@@ -420,8 +438,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		checkForSufficientParamaters(userGroupname, userId);
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance()
-					.getUserProvisioningManager();
+			UserProvisioningManager upManager = this.provisionManager.getUserProvisioningManager();
 			Group group = getUserGroup(userGroupname);
 			if (group == null)
 			{
@@ -452,8 +469,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 
 		try
 		{
-			UserProvisioningManager upManager = ProvisionManager.getInstance()
-					.getUserProvisioningManager();
+			UserProvisioningManager upManager = this.provisionManager.getUserProvisioningManager();
 			Set conGrpIds = addAllGroups(userId, groupIds, upManager);
 			String[] finalUserGroupIds = new String[conGrpIds.size()];
 			Iterator iter = conGrpIds.iterator();
@@ -538,8 +554,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		String protElemName = obj.getObjectId();
 		try
 		{
-			AuthorizationManager authManager = ProvisionManager.getInstance()
-					.getAuthorizationManager();
+			AuthorizationManager authManager = this.provisionManager.getAuthorizationManager();
 			ProtectionElement protectionElement = authManager.getProtectionElement(protElemName);
 			Set<ProtectionGroup> protectionGroups = authManager.getProtectionGroups(protectionElement
 					.getProtectionElementId().toString());
@@ -573,8 +588,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		String protElemName = obj.getObjectId();
 		try
 		{
-			AuthorizationManager authManager = ProvisionManager.getInstance()
-			.getAuthorizationManager();
+			AuthorizationManager authManager =this.provisionManager.getAuthorizationManager();
 			ProtectionElement protectionElement = authManager.getProtectionElement(
 					protElemName);
 			Set<ProtectionGroup> protectionGroups = authManager.getProtectionGroups(
@@ -661,7 +675,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 */
 	private RoleGroupDetailsBean getRequiredBean(RoleGroupDetailsBean sampleBean) throws SMException
 	{
-		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = RoleGroupLocator.getInstance()
+		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = RoleGroupLocator.getInstance(provisionManager)
 				.getRoleGroupDetailsMap();
 		return map.get(sampleBean);
 	}
@@ -692,7 +706,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		group.setGroupName(userGroupname);
 		SearchCriteria searchCriteria = new GroupSearchCriteria(group);
 		Group userGrp = null;
-		List list = ProvisionManager.getInstance().getObjects(searchCriteria);
+		List list = this.provisionManager.getObjects(searchCriteria);
 		if (!list.isEmpty())
 		{
 			userGrp = (Group) list.get(0);
