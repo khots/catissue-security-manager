@@ -86,6 +86,13 @@ public class Constants
 	 * constant for SM_PROP_FILE.
 	 */
 	public static final String SM_PROP_FILE = "SecurityManager.properties";
+	
+	/**
+	 * constant for SM_PROP_XML.
+	 * Contains the ctx name and class for multiple applications
+	 */
+	public static final String SM_PROP_XML = "SecurityManagerApplications.xml";
+	
 	/**
 	 * constant for APP_CTX_NAME.
 	 */
