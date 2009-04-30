@@ -4,6 +4,7 @@ package edu.wustl.security.global;
 import java.util.HashMap;
 
 /**
+ * Testing checkins
  * Class specific to constants used in SecurityManager.
  *
  * @author deepti_shelar
