@@ -30,6 +30,8 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
+import edu.wustl.security.manager.ISecurityManager;
+import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
@@ -437,7 +439,9 @@ public final class PrivilegeManager
 	{
 		boolean hasPriv = true;
 		PrivilegeUtility utility = new PrivilegeUtility();
-		String groupId = utility.getGroupIdForRole(roleId);
+		
+		ISecurityManager securityManager=SecurityManagerFactory.getSecurityManager();
+		String groupId = securityManager.getGroupIdForRole(roleId);
 		Set<User> users;
 		try
 		{

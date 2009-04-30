@@ -1,7 +1,11 @@
 
 package edu.wustl.security.manager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 
@@ -13,14 +17,25 @@ import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 public class SecurityManagerFactory
 {
 	/**
+	 * Multiple CSM Setups
+	 * Add an overloaded method accepting the ctx name and returning the required SecurityManager instantce.
+	 */
+	
+	/**
+	 * Static variable to store all the SM Instances and return the required instance when
+	 * getSecurityManager() method is called.
+	 */
+	public static Map<String, ISecurityManager> securityManagersMap=new HashMap<String, ISecurityManager>();
+	
+	/**
 	 * Returns the instance of SM.
 	 * @return ISecurityManager sm instance
 	 * @throws SMException smexc
 	 */
 	public static ISecurityManager getSecurityManager() throws SMException
 	{
-		String smClassName = SecurityManagerPropertiesLocator.getInstance()
-				.getSecurityMgrClassName();
+		String appCtxName=SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
+		String smClassName = SecurityManagerPropertiesLocator.getInstance().getSecurityMgrClassName();
 		ISecurityManager securityManager = null;
 		if (smClassName == null)
 		{
@@ -29,6 +44,30 @@ public class SecurityManagerFactory
 		else
 		{
 			securityManager = getSMInstance(smClassName);
+			securityManager.setAppCtxName(appCtxName);
+			securityManager.setProvisionManager(new ProvisionManager(appCtxName));
+		}
+		return securityManager;
+	}
+	
+	/**
+	 * Returns the instance of SM.
+	 * @return ISecurityManager sm instance
+	 * @throws SMException smexc
+	 */
+	public static ISecurityManager getSecurityManager(String appCtxName) throws SMException
+	{
+		String smClassName = SecurityManagerPropertiesLocator.getInstance().getSecurityMgrClassName(appCtxName);
+		ISecurityManager securityManager = null;
+		if (smClassName == null)
+		{
+			Utility.getInstance().throwSMException(null, "Could not get the className ", "sm.operation.error");
+		}
+		else
+		{
+			securityManager = getSMInstance(smClassName);
+			securityManager.setAppCtxName(appCtxName);
+			securityManager.setProvisionManager(new ProvisionManager(appCtxName));
 		}
 		return securityManager;
 	}
