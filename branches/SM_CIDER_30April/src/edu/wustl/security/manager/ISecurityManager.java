@@ -3,14 +3,13 @@ package edu.wustl.security.manager;
 
 import java.util.List;
 
+import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
-import edu.wustl.security.privilege.PrivilegeUtility;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
-import gov.nih.nci.security.dao.SearchCriteria;
 
 /**
  * Interface for SecurityManager.
@@ -28,6 +27,9 @@ public interface ISecurityManager
 	 * @return boolean flag
 	 */
 	boolean login(String loginName, String password) throws SMException;
+	
+	boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException;
+	
 	/**
 	 * @param user user
 	 * @throws SMException ex

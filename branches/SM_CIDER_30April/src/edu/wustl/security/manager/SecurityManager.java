@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.common.audit.LoginAuditManager;
+import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.AbstractClient;
 import edu.wustl.common.util.global.TextConstants;
@@ -142,6 +144,42 @@ public class SecurityManager implements Permissions, ISecurityManager
 			StringBuffer mesg = new StringBuffer("Authentication fails for user")
 			.append(loginName);
 			Utility.getInstance().throwSMException(exception, mesg.toString(), "sm.operation.error");
+		}
+		return loginSuccess;
+	}
+	
+	/**
+	 * Returns true or false depending on the person gets authenticated or not.
+	 * Also audits the login attempt
+	 * @param requestingClass
+	 * @param loginName login name
+	 * @param loginEvent
+	 * @param password password
+	 * @return @throws CSException
+	 */
+	public boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException 
+	{
+		boolean loginSuccess = false;
+		LoginAuditManager loginAuditManager=new LoginAuditManager(loginDetails);
+		try 
+		{
+			logger.debug("login name: " + loginName + " passowrd: " + password);
+			AuthenticationManager authMngr = this.provisionManager.getAuthenticationManager();
+			loginSuccess = authMngr.login(loginName, password);
+		} 
+		catch (CSException exception) 
+		{
+			StringBuffer mesg = new StringBuffer("Authentication|"
+					+ CLASS_NAME
+					+ "|"
+					+ loginName
+					+ "|login|Success| Authentication is not successful for user "
+					+ loginName + "|" + exception.getMessage());
+			Utility.getInstance().throwSMException(exception, mesg.toString(), "sm.operation.error");
+		}
+		finally
+		{
+			loginAuditManager.audit(loginSuccess);
 		}
 		return loginSuccess;
 	}
