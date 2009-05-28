@@ -16,11 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.wustl.common.audit.LoginAuditManager;
-import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.AbstractClient;
-import edu.wustl.common.util.global.TextConstants;
+import edu.wustl.common.util.global.CommonConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.beans.RoleGroupDetailsBean;
 import edu.wustl.security.exception.SMException;
@@ -110,6 +108,14 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * @throws SMException ex
 	 */
 
+	/**
+	 * Returns true or false depending on the person gets authenticated or not.
+	 * @param requestingClass
+	 * @param loginName login name
+	 * @param password password
+	 * @return boolean flag
+	 * @throws SMException ex
+	 */
 	public boolean login(final String loginName, final String password) throws SMException
 	{
 		boolean loginSuccess = false;
@@ -121,9 +127,13 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			StringBuffer mesg = new StringBuffer("Authentication fails for user")
-			.append(loginName);
-			Utility.getInstance().throwSMException(exception, mesg.toString(), "sm.operation.error");
+			
+			String mesg = "Authentication|"
+				+ "|"
+				+ loginName
+				+ "|login|Success| Authentication is not successful for user "
+				+ loginName + "|" + exception.getMessage();
+			Utility.getInstance().throwSMException(exception, mesg, "sm.operation.error");
 		}
 		return loginSuccess;
 	}
@@ -306,7 +316,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 */
 	public String getRoleName(long userID) throws SMException
 	{
-		String role = TextConstants.EMPTY_STRING;
+		String role = CommonConstants.EMPTY_STRING;
 		try
 		{
 			UserProvisioningManager upManager = ProvisionManager.getInstance()
@@ -701,8 +711,8 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		return userGrp;
 	}
-	
-	/**
+	/*
+	*//**
 	 * Returns true or false depending on the person gets authenticated or not.
 	 * Also audits the login attempt
 	 * @param requestingClass
@@ -711,7 +721,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * @param password password
 	 * @return @throws CSException
 	 */
-	public boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException 
+	/*public boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException 
 	{
 		boolean loginSuccess = false;
 		LoginAuditManager loginAuditManager=new LoginAuditManager(loginDetails);
@@ -738,5 +748,5 @@ public class SecurityManager implements Permissions, ISecurityManager
 			loginAuditManager.audit(loginSuccess);
 		}
 		return loginSuccess;
-	}
+	}*/
 }
