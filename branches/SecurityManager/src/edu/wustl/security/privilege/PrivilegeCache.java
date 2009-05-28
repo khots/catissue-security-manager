@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.PrivilegeLocator;
@@ -356,7 +356,7 @@ public class PrivilegeCache
 				NameValueBean nmv = new NameValueBean();
 				nmv.setName(PrivilegeLocator.getInstance().
 						getPrivilegeByBit(i).getPrivilegeName());
-				for (Object o : Utility.getAllPrivileges())
+				for (Object o : CommonUtilities.getAllPrivileges())
 				{
 					NameValueBean privilege = (NameValueBean) o;
 					if (privilege.getName().equals(nmv.getName()))
