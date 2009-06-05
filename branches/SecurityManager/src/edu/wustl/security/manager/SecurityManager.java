@@ -233,7 +233,10 @@ public class SecurityManager implements Permissions, ISecurityManager
 			List<String> allGroupIds = RoleGroupLocator.getInstance().getAllGroupIds();
 			for (String grpId : allGroupIds)
 			{
-				upManager.removeUserFromGroup(grpId, userId);
+				if(grpId != null)
+				{
+					upManager.removeUserFromGroup(grpId, userId);
+				}
 			}
 			//Add user to corresponding group
 			String groupId = getGroupIdForRole(roleID);
