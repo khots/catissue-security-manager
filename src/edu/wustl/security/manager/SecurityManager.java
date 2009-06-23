@@ -30,7 +30,6 @@ import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
 import edu.wustl.security.locator.RoleGroupLocator;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
-import edu.wustl.security.privilege.PrivilegeUtility;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.UserProvisioningManager;
@@ -106,6 +105,29 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 */
 	public static final String TABLE_ALIAS_NAME = "TABLE_ALIAS_NAME";
 	
+	/**
+	 * RoleGroupLocator
+	 */
+	private RoleGroupLocator roleGroupLocator;
+
+	/**
+	 * To getRoleGroupLocator
+	 * @return roleGroupLocator RoleGroupLocator
+	 */
+	public RoleGroupLocator getRoleGroupLocator()
+	{
+		return roleGroupLocator;
+	}
+	
+	/**
+	 * To setRoleGroupLocator
+	 * @param roleGroupLocator RoleGroupLocator
+	 */
+	public void setRoleGroupLocator(RoleGroupLocator roleGroupLocator)
+	{
+		this.roleGroupLocator = roleGroupLocator;
+	}
+
 	public void setProvisionManager(ProvisionManager provisionManager) {
 		this.provisionManager = provisionManager;
 	}
@@ -246,7 +268,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		try
 		{
 			upManager = this.provisionManager.getUserProvisioningManager();
-			List<String> roleIdList = RoleGroupLocator.getInstance(provisionManager).getAllRoleIds();
+			List<String> roleIdList = this.roleGroupLocator.getAllRoleIds();
 			for (String roleId : roleIdList)
 			{
 				roles.add(upManager.getRoleById(roleId));
@@ -275,7 +297,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 
 			//Remove user from any other role if he is assigned some
 			String userId = String.valueOf(user.getUserId());
-			List<String> allGroupIds = RoleGroupLocator.getInstance(provisionManager).getAllGroupIds();
+			List<String> allGroupIds = this.roleGroupLocator.getAllGroupIds();
 			for (String grpId : allGroupIds)
 			{
 				upManager.removeUserFromGroup(grpId, userId);
@@ -713,7 +735,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 */
 	private RoleGroupDetailsBean getRequiredBean(RoleGroupDetailsBean sampleBean) throws SMException
 	{
-		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = RoleGroupLocator.getInstance(provisionManager)
+		Map<RoleGroupDetailsBean, RoleGroupDetailsBean> map = this.roleGroupLocator
 				.getRoleGroupDetailsMap();
 		return map.get(sampleBean);
 	}
