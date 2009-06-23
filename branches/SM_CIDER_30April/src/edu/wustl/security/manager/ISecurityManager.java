@@ -7,6 +7,7 @@ import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.locator.RoleGroupLocator;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -132,6 +133,10 @@ public interface ISecurityManager
 	ProvisionManager getProvisionManager();
 	
 	void setProvisionManager(ProvisionManager provisionManager);
+	
+	RoleGroupLocator getRoleGroupLocator();
+	
+	void setRoleGroupLocator(RoleGroupLocator roleGroupLocator);
 	
 	String getAppCtxName();
 	
