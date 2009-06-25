@@ -38,15 +38,22 @@ public class SecurityManagerFactory
 		String appCtxName=SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
 		String smClassName = SecurityManagerPropertiesLocator.getInstance().getSecurityMgrClassName();
 		ISecurityManager securityManager = null;
-		if (smClassName == null)
+		securityManager = securityManagersMap.get(appCtxName);
+		if(securityManager == null)
 		{
-			Utility.getInstance().throwSMException(null, "Could not get the className ", "sm.operation.error");
-		}
-		else
-		{
-			securityManager = getSMInstance(smClassName);
-			securityManager.setAppCtxName(appCtxName);
-			securityManager.setProvisionManager(new ProvisionManager(appCtxName));
+			if (smClassName == null)
+			{
+				Utility.getInstance().throwSMException(null, "Could not get the className ", "sm.operation.error");
+			}
+			else
+			{
+				securityManager = getSMInstance(smClassName);
+				securityManager.setAppCtxName(appCtxName);
+				ProvisionManager provisionManager = new ProvisionManager(appCtxName);
+				securityManager.setProvisionManager(provisionManager);
+				securityManager.setRoleGroupLocator(RoleGroupLocator.getInstance(provisionManager));
+			}
+			securityManagersMap.put(appCtxName, securityManager);
 		}
 		return securityManager;
 	}
