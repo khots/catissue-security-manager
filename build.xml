@@ -2,6 +2,7 @@
 
 <!--Ant Script for create Build for SecurityManager-->
 <project name="SecurityManager" default="compile">
+	<property file="sm.properties"/>
 	<property name="base.dir" value="." />
 	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="build.dir" value="${base.dir}/build" />
@@ -24,6 +25,12 @@
 		<pathelement location="lib/log4j-1.2.9.jar" />
 	</path>
 
+	<loadfile property="dist.revision" srcFile="./.svn/entries">  
+			<filterchain>  
+				<headfilter lines="1" skip="4"/>
+			</filterchain>  
+	</loadfile>
+	
 	<target name="compile" depends="init">
 		<javac destdir="${target.dir}" includes="**/*.*" debug="on" includeAntRuntime="false" target="1.5">
 			<src path="${src.dir}" />
@@ -60,19 +67,24 @@
 			<fileset dir="${build.dir}" includes="**/*" />
 		</delete>
 		<tstamp />
-		<jar taskname="build_jar" jarfile="${build.dir}/securityManager.jar">
+		<jar taskname="build_jar" jarfile="${build.dir}/securityManager-${sm.jar.version}.jar">
 			<fileset dir="${target.dir}">
 				<include name="**/*" />
 			</fileset>
 			<manifest>
-				<attribute name="Built-At-Time" value="${TODAY} ${TSTAMP}" />
+			   	<section name="${sm.jar.details}">
+			   	   <attribute name="Version" value="${sm.jar.version}"/>
+			   	   <attribute name="Built-By" value="${sm.jar.creator}" />   	   			   	   					
+				   <attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+			   	   <attribute name="SVN-URL" value="${dist.revision}" />
+				</section>   	   					
 			</manifest>
 		</jar>
 
 		<antcall target="build_code_zip" />
 	</target>
 	<target name="build_code_zip" depends="compile">
-		<zip destfile="${build.dir}/securityManager-src.zip">
+		<zip destfile="${build.dir}/securityManager-${sm.jar.version}-src.zip">
 			<fileset dir="${src.dir}" includes="**/*" />
 		</zip>
 	</target>
