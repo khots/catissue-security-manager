@@ -1,0 +1,21 @@
+<security-manager-properties>
+	<application-list>
+		<application is-default="true">
+			<context-name>
+				washu
+			</context-name>
+			<sm-class-name>
+				edu.wustl.security.manager.SecurityManager
+			</sm-class-name>
+		</application>
+		<application is-default="false">
+			<context-name>
+				cider
+			</context-name>
+			<sm-class-name>
+				edu.wustl.security.manager.SecurityManager
+			</sm-class-name>
+		</application>
+	</application-list>
+	<default-application name="cider"/>
+</security-manager-properties>
