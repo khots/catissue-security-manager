@@ -9,7 +9,7 @@ import edu.wustl.security.privilege.Privilege;
  * @author deepti_shelar
  *
  */
-public class TestPrivilege extends TestCase
+public class TestPrivilege extends SecurityManagerBaseTestCase
 {
 	/**
 	 * testGetPrivDetails.

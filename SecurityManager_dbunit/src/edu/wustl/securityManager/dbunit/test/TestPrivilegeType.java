@@ -9,7 +9,7 @@ import junit.framework.TestCase;
  * @author deepti_shelar
  *
  */
-public class TestPrivilegeType extends TestCase
+public class TestPrivilegeType extends SecurityManagerBaseTestCase
 {
 	/**
 	 * testGetPrivilegeTypeClass.

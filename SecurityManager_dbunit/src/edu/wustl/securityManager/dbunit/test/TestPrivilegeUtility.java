@@ -34,7 +34,7 @@ import gov.nih.nci.security.dao.RoleSearchCriteria;
  * @author deepti_shelar
  *
  */
-public class TestPrivilegeUtility extends TestCase
+public class TestPrivilegeUtility extends SecurityManagerBaseTestCase
 {
 	/**
 	 * privilegeUtility.
@@ -59,25 +59,6 @@ public class TestPrivilegeUtility extends TestCase
 	public void setUp() throws Exception
 	{
 		privilegeUtility = new PrivilegeUtility();
-		System.setProperty("gov.nih.nci.security.configFile", configFile);
-	}
-
-	static
-	{
-		Properties smProp;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
-				.getResourceAsStream("smDBUnit.properties");
-		smProp = new Properties();
-		try
-		{
-			smProp.load(inputStream);
-			inputStream.close();
-			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
-		}
-		catch (IOException exception)
-		{
-			logger.error(exception.getStackTrace());
-		}
 	}
 
 	/**

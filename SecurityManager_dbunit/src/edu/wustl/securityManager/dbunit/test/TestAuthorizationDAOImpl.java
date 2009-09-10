@@ -32,7 +32,7 @@ import gov.nih.nci.security.system.ApplicationSessionFactory;
  * @author deepti_shelar
  *
  */
-public class TestAuthorizationDAOImpl extends TestCase
+public class TestAuthorizationDAOImpl extends SecurityManagerBaseTestCase
 {
 
 	/**
@@ -44,7 +44,7 @@ public class TestAuthorizationDAOImpl extends TestCase
 	private transient ISecurityManager securityManager = null;
 	static String configFile = "";
 	private final String adminGroup = "ADMINISTRATOR_GROUP";
-	private final String publicGroup = "publicGroup";
+	private final String publicGroup = "PUBLIC_GROUP";
 
 	public void setUp()
 	{
@@ -52,7 +52,6 @@ public class TestAuthorizationDAOImpl extends TestCase
 		SessionFactory sFactory;
 		try
 		{
-			System.setProperty("gov.nih.nci.security.configFile", configFile);
 			sFactory = ApplicationSessionFactory.getSessionFactory(ctxName);
 			impl = new AuthorizationDAOImpl(sFactory, ctxName);
 			securityManager = SecurityManagerFactory.getSecurityManager();
@@ -76,24 +75,6 @@ public class TestAuthorizationDAOImpl extends TestCase
 			e.printStackTrace();
 		}
 
-	}
-
-	static
-	{
-		Properties smProp;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
-				.getResourceAsStream("smDBUnit.properties");
-		smProp = new Properties();
-		try
-		{
-			smProp.load(inputStream);
-			inputStream.close();
-			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
-		}
-		catch (IOException exception)
-		{
-			logger.error(exception.getStackTrace());
-		}
 	}
 
 	/**

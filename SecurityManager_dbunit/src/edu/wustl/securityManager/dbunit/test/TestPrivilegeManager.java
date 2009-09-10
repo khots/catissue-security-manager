@@ -25,29 +25,27 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 import gov.nih.nci.security.authorization.domainobjects.User;
-import gov.nih.nci.system.applicationservice.ApplicationService;
 /**
  * test case for PrivilegeManager.
  * @author deepti_shelar
  *
  */
-public class TestPrivilegeManager extends TestCase
+public class TestPrivilegeManager extends SecurityManagerBaseTestCase
 {
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
-	static ApplicationService appService = null;
+	
 	PrivilegeManager privManager;
 	static String configFile = "";
 	private final String adminGroup = "ADMINISTRATOR_GROUP";
 
-	protected void setUp() throws Exception
+	public void setUp() throws Exception
 	{
 
 		privManager = PrivilegeManager.getInstance();
-		System.setProperty("gov.nih.nci.security.configFile", configFile);
 		removeAllUsers();
 		insertSampleCSMUser();
 
@@ -66,24 +64,6 @@ public class TestPrivilegeManager extends TestCase
 			System.exit(1);
 		}*/
 		super.setUp();
-	}
-
-	static
-	{
-		Properties smProp;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
-				.getResourceAsStream("smDBUnit.properties");
-		smProp = new Properties();
-		try
-		{
-			smProp.load(inputStream);
-			inputStream.close();
-			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
-		}
-		catch (IOException exception)
-		{
-			logger.error(exception.getStackTrace());
-		}
 	}
 
 	/**
