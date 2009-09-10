@@ -6,13 +6,14 @@ package edu.wustl.securityManager.dbunit.test;
  */
 
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
  * @author deepti_shelar
  * Test Suite for testing all Security Manager classes
  */
-public class TestAll
+public class TestAll extends TestCase
 {
 
 	/**
@@ -21,7 +22,7 @@ public class TestAll
 	 */
 	public static void main(String[] args)
 	{
-		junit.swingui.TestRunner.run(TestAll.class);
+		junit.textui.TestRunner.run(TestAll.class);
 	}
 	/**
 	 *

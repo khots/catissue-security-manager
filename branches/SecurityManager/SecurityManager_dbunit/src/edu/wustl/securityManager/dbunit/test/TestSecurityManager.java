@@ -1,12 +1,7 @@
 
 package edu.wustl.securityManager.dbunit.test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
-
-import junit.framework.TestCase;
 
 import org.junit.Test;
 
@@ -14,8 +9,6 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Constants;
-import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
-import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -25,47 +18,26 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  * Test cases for SecurityManager class.
  * @author deepti_shelar
  */
-public class TestSecurityManager extends TestCase
+public class TestSecurityManager extends SecurityManagerBaseTestCase
 {
 
-	private transient ISecurityManager securityManager = null;
-	static int count = 0;
-	static String loginName = "test";
-	static String configFile = "";
-	private final String adminGroup = "ADMINISTRATOR_GROUP";
+	
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	protected static org.apache.log4j.Logger logger = Logger.getLogger(SecurityManager.class);
 
-	protected void setUp() throws Exception
+	public void setUp() throws Exception
 	{
 
 		count++;
 		securityManager = SecurityManagerFactory.getSecurityManager();
-		System.setProperty("gov.nih.nci.security.configFile", configFile);
 		removeAllUsers();
 		insertSampleCSMUser();
 		super.setUp();
 	}
 
-	static
-	{
-		Properties smProp;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
-				.getResourceAsStream("smDBUnit.properties");
-		smProp = new Properties();
-		try
-		{
-			smProp.load(inputStream);
-			inputStream.close();
-			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
-		}
-		catch (IOException exception)
-		{
-			logger.error(exception.getStackTrace());
-		}
-	}
+	
 
 	/**
 	 * Inserts a sample User.
@@ -742,9 +714,10 @@ public class TestSecurityManager extends TestCase
 	public void testGetUserRoleException()
 	{
 		Role userRole = null;
-		System.setProperty("gov.nih.nci.security.configFile", null);
+		
 		try
 		{
+			System.setProperty("gov.nih.nci.security.configFile", null);
 			List<User> allUsers = securityManager.getUsers();
 			for (User user : allUsers)
 			{

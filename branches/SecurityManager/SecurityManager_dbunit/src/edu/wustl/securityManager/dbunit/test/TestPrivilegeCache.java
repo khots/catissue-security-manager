@@ -24,7 +24,7 @@ import gov.nih.nci.security.authorization.domainobjects.Privilege;
  * @author deepti_shelar
  *
  */
-public class TestPrivilegeCache extends TestCase
+public class TestPrivilegeCache extends SecurityManagerBaseTestCase
 {
 
 	/**
@@ -40,22 +40,7 @@ public class TestPrivilegeCache extends TestCase
 	}
 	static
 	{
-		Properties smProp;
-		InputStream inputStream = SecurityManagerPropertiesLocator.class.getClassLoader()
-				.getResourceAsStream("smDBUnit.properties");
-		smProp = new Properties();
-		try
-		{
-			smProp.load(inputStream);
-			inputStream.close();
-			configFile = smProp.getProperty("gov.nih.nci.security.configFile");
-			System.setProperty("gov.nih.nci.security.configFile", configFile);
 			cache = new PrivilegeCache("test");
-		}
-		catch (IOException exception)
-		{
-			logger.error(exception.getStackTrace());
-		}
 	}
 
 	/**
@@ -142,7 +127,7 @@ public class TestPrivilegeCache extends TestCase
 		Privilege pr = new Privilege();
 		pr.setName("READ");
 		privs.add(pr);
-		cache.addObject("edu.wustl.catissuecore.domain.User_1", privs);
+		cache.addObject("edu.wustl.catissuecore.domain.Participant", privs);
 	}
 
 }

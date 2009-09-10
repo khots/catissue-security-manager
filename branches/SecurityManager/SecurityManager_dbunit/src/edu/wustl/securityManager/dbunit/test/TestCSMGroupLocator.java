@@ -5,7 +5,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.locator.CSMGroupLocator;
 
 
-public class TestCSMGroupLocator extends TestCase
+public class TestCSMGroupLocator extends SecurityManagerBaseTestCase
 {
 	/**
 	 * Generic Logger.

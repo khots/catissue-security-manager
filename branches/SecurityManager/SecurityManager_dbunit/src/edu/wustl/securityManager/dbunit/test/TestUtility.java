@@ -13,7 +13,7 @@ import edu.wustl.security.privilege.PrivilegeType;
  * @author deepti_shelar
  *
  */
-public class TestUtility extends TestCase
+public class TestUtility extends SecurityManagerBaseTestCase
 {
 	/**
 	 * getPrivilegeType for obj.
