@@ -2,12 +2,12 @@
 
 <!--Ant Script for create Build for SecurityManager-->
 <project name="SecurityManager" default="compile">
-	<property file="sm.properties"/>
+	<property file="./src/conf/sm.properties"/>
 	<property name="base.dir" value="." />
 	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="build.dir" value="${base.dir}/build" />
-	<property name="src.dir" value="${base.dir}/src" />
-	<property name="target.dir" value="${base.dir}/classes" />
+	<property name="src.dir" value="${base.dir}/src/java" />
+	<property name="target.dir" value="${build.dir}/classes" />
 	<property name="generateforce" value="true" />
 	<property name="junit.dir" value="${base.dir}/junit" />
 	<property name="junit.report.dir" value="${junit.dir}/reports" />
@@ -63,9 +63,7 @@
 		<mkdir dir="${junit.classes.dir}" />
 	</target>
 	<target name="build_jar" depends="compile">
-		<delete>
-			<fileset dir="${build.dir}" includes="**/*" />
-		</delete>
+		
 		<tstamp />
 		<jar taskname="build_jar" jarfile="${build.dir}/securityManager-${sm.jar.version}.jar">
 			<fileset dir="${target.dir}">
@@ -88,6 +86,11 @@
 			<fileset dir="${src.dir}" includes="**/*" />
 		</zip>
 	</target>
+	
+	<target name="dist" depends="build_jar">
+			
+	</target>
+	
 	<target name="Generate_Report_Cobertura" depends="compile">			 
 	 	<antcall target="instrument" />
 		<antcall target="runJunit" />
