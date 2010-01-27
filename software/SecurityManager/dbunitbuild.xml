@@ -6,7 +6,7 @@
 	</taskdef>
 	
 	<property environment="env" />	
-	<import file="build-properties.xml"/>
+	<import file="./src/conf/build-properties.xml"/>
 	<property name="base.dir" value="." />
 	<property name="junit.dir" value="${base.dir}/junit" />
 		<property name="junit.report.dir" value="${junit.dir}/reports" />
@@ -20,8 +20,8 @@
 	<property name="web_lib.dir" value="${tmp.smwar}/WEB-INF/lib" />
 	<property name="lib_dir" value="${base.dir}/lib" />
 	<property name="build.dir" value="${base.dir}/build" />
-	<property name="target.dir" value="${base.dir}/classes" />
-	<property name="src.dir" value="${base.dir}/src" />
+	<property name="target.dir" value="${build.dir}/classes" />
+	<property name="src.dir" value="${base.dir}/src/java" />
 	<property name="code.coverage.report.dir" value="${junit.dir}/coverage-reports" />
 	<property name="instrumented.classes.dir" value="${junit.dir}/instrumented-classes" />
 	<path id="junit.classpath">		
@@ -52,8 +52,27 @@
 	</target>
 	
 	
-
-	<target name="db_compile">
+<target name="db_compile">
+			<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*.*" debug="on" includeAntRuntime="false" target="1.5">
+				<classpath>
+					<fileset dir="${db_lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</javac>
+			<copy todir="${db_temp.dir}">
+								<fileset dir="${db_unit.dir}/src" >
+									<include name ="*.xml"/>
+									<include name = "*.properties"/>
+								</fileset>
+								<fileset dir="${base.dir}">
+									<include name="TestDataSet.xml"/>
+								</fileset>
+				</copy>
+		
+		</target>
+		
+	<target name="db_compile1">
 
 		<delete file="${db_lib.dir}/securityManager.jar"/>
 		<copy todir="${db_lib.dir}">
@@ -71,16 +90,11 @@
 		</jar>
 
 		<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*">
-			<classpath id="DbUnit_classpath2">
-				<fileset dir="${web_lib.dir}">
-					<include name="*.jar"/>
-				</fileset>
-					
-				<fileset dir="${db_lib.dir}">
-					<include name="*.jar"/>
-				</fileset>	
-				<!--pathelement path="${tmp.smwar}/WEB-INF/classes/"/ -->
-			</classpath>
+			<classpath>
+								<fileset dir="${lib_dir}">
+									<include name="*.jar" />
+								</fileset>
+				</classpath>
 		</javac>
 		
 		<copy todir="${db_temp.dir}">
@@ -136,7 +150,7 @@
 	
 		<copy todir="${db_src.dir}">
 			<fileset dir = "${base.dir}/csm-properties/">
-				<include name="ApplicationSecurityConfig.xml"/>
+				<include name="./src/resource/csm-properties/ApplicationSecurityConfig.xml"/>
 			</fileset>
 		</copy>
 		
