@@ -92,6 +92,25 @@ public class CSMRDBMSHelper
 
 	}
 
+	/**
+	 * Accepts the connection properties as well as the user id and password.
+	 * It opens a connection to the database and fires a the query to find. If
+	 * the query was successful then it returns TRUE else it returns FALSE
+	 * @param connection connection of the DB on which to validate the user.
+	 * @param connectionProperties table containing details for establishing
+	 * 			connection like the driver, the url, the user name and the
+	 * 			password for the establishing the database connection. It also
+	 * 			contains the actual query statement to retrieve the user record
+	 * @param userID the user entered user name provided by the calling
+	 * 			application
+	 * @param password the user entered password provided by the calling
+	 * 			application
+	 * @param subject
+	 * @return TRUE if the authentication was sucessful using the provided user
+	 * 		   	credentials and FALSE if the authentication fails
+	 * @throws CSInternalConfigurationException
+	 * @throws CSInternalInsufficientAttributesException
+	 */
 	private static boolean authenticateAndObtainSubject(Connection connection,
 			Hashtable connectionProperties, String userID, String password, Subject subject)
 			throws CSInternalInsufficientAttributesException, CSInternalConfigurationException
@@ -207,6 +226,18 @@ public class CSMRDBMSHelper
 		return loginOK;
 	}
 
+	/**
+	 * This method will get the connection from the Connection properties parameters
+	 * If the parameters contains the dataSource parameter then it will return the
+	 * connection using that data source else will take the connection by normal userId
+	 * & password etc. properties
+	 * @param connectionProperties table containing details for establishing
+	 * 			connection like the driver, the url, the user name and the
+	 * 			password for the establishing the database connection. It also
+	 * 			contains the actual query statement to retrieve the user record
+	 * @return the connection obtained using the connectionProperties.
+	 * @throws CSInternalConfigurationException exception.
+	 */
 	private static Connection getConnection(Hashtable connectionProperties)
 			throws CSInternalConfigurationException
 	{
