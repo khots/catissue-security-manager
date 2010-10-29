@@ -21,7 +21,7 @@ import gov.nih.nci.security.system.ApplicationSessionFactory;
  */
 public class UserProvisioningManagerImpl
 		extends
-			gov.nih.nci.security.provisioning.UserProvisioningManagerImpl
+			gov.nih.nci.security.provisioning.AuthorizationManagerImpl
 {
 	/**
 	 * @throws CSConfigurationException exc
