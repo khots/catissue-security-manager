@@ -363,7 +363,7 @@ public final class PrivilegeManager
 			{
 				for (Group group : list)
 				{
-					Set<User> users = group.getUsers();
+					Set<User> users = userProvManager.getUsers(String.valueOf(group.getGroupId()));
 					for (User user : users)
 					{
 						result.add(user.getLoginName());
@@ -382,7 +382,7 @@ public final class PrivilegeManager
 	 * Creates a ROle object.
 	 * @param roleName rolename
 	 * @param privileges set of privileges
-	 * @throws SMException 
+	 * @throws SMException
 	 */
 	public void createRole(String roleName,Set<String>privileges) throws SMException
 	{
@@ -411,7 +411,7 @@ public final class PrivilegeManager
 			role.setPrivileges(privilegeList);
 			UserProvisioningManager userProvisioningManager = privilegeUtility
 			.getUserProvisioningManager();
-			
+
 				userProvisioningManager.createRole(role);
 			}
 			catch (CSObjectNotFoundException e1)
@@ -431,7 +431,7 @@ public final class PrivilegeManager
 	 * @param objectId obj id
 	 * @param privilegeName name of the priv
 	 * @return boolean whether has privilege
-	 * @throws SMException 
+	 * @throws SMException
 	 */
 	public boolean hasGroupPrivilege(String roleId, String objectId, String privilegeName) throws SMException
 	{
