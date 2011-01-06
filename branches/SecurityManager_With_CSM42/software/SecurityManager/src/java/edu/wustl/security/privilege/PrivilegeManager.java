@@ -363,7 +363,7 @@ public final class PrivilegeManager
 			{
 				for (Group group : list)
 				{
-					Set<User> users = group.getUsers();
+					Set<User> users = userProvManager.getUsers(String.valueOf(group.getGroupId()));
 					for (User user : users)
 					{
 						result.add(user.getLoginName());
