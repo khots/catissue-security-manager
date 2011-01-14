@@ -40,8 +40,9 @@
 	</loadfile>
 
 	<target name="compile" depends="init,retrieve-ivy-files">
-	<!--
+	
 		<echo message="-----------------------"/>
+	<!--
 		<exec executable="cmd" >
 		<arg value="java"/>
 		<arg value="-version"/>
