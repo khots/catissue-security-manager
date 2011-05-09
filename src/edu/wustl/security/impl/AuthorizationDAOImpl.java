@@ -301,10 +301,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				" and pe.attribute " + attributeVal
 				+ " and pg.protection_group_id = ugrpg.protection_group_id "
 				+ "and pg.APPLICATION_ID=? and (( ugrpg.group_id = g.group_id" + " and ug.group_id= g.group_id"
-				+ "       and ug.user_id = u.user_id)" + "       or "
-				+ "     (ugrpg.user_id = u.user_id))" + " and u.login_name=?"
+				+ "       and ug.user_id = u.user_id)" + " and u.login_name=?"
 				+ " and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id";
-
+		
 		stbr.append(str);
 	}
 }
