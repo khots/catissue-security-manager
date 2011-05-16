@@ -65,6 +65,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		this.sessionFact = sessionFact;
 
 	}
+
 	/**
 	 * @param userName name
 	 * @param pEs pes
@@ -162,7 +163,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				if (pElement.getAttribute() == null)
 				{
 					pstmt2.setString(Constants.POSITION1, pElement.getObjectId());
-					pstmt2.setString(Constants.POSITION2, pElement.getApplication().getApplicationId().toString());
+					pstmt2.setString(Constants.POSITION2, pElement.getApplication()
+							.getApplicationId().toString());
 					pstmt2.setString(Constants.POSITION3, userName);
 					resulSet = pstmt2.executeQuery();
 				}
@@ -170,7 +172,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				{
 					pstmt.setString(Constants.POSITION1, pElement.getObjectId());
 					pstmt.setString(Constants.POSITION2, pElement.getAttribute());
-					pstmt.setString(Constants.POSITION3, pElement.getApplication().getApplicationId().toString());
+					pstmt.setString(Constants.POSITION3, pElement.getApplication()
+							.getApplicationId().toString());
 					pstmt.setString(Constants.POSITION4, userName);
 					resulSet = pstmt.executeQuery();
 				}
@@ -255,6 +258,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		return groups;
 
 	}
+
 	/**
 	 * @param session session
 	 * @param objectType objType
@@ -278,12 +282,11 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 					+ objectType.getName() + "|");
 			throw new CSObjectNotFoundException(objectType.getName() + " not found");
 		}
-		logger
-				.debug("Authorization|||getObjectByPrimaryKey|Success|" +
-						"Success in retrieving object of type "
-						+ objectType.getName() + "|");
+		logger.debug("Authorization|||getObjectByPrimaryKey|Success|"
+				+ "Success in retrieving object of type " + objectType.getName() + "|");
 		return obj;
 	}
+
 	/**
 	 * @param stbr stringBuffer
 	 * @param attributeVal string val
@@ -300,9 +303,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 				" and pe.attribute " + attributeVal
 				+ " and pg.protection_group_id = ugrpg.protection_group_id "
-				+ "and pg.APPLICATION_ID=? and (( ugrpg.group_id = g.group_id" + " and ug.group_id= g.group_id"
-				+ "       and ug.user_id = u.user_id)" + "       or "
-				+ "     (ugrpg.user_id = u.user_id))" + " and u.login_name=?"
+				+ "and pg.APPLICATION_ID=? and (( ugrpg.group_id = g.group_id"
+				+ " and ug.group_id= g.group_id" + "       and ug.user_id = u.user_id)"
+				+ "       or " + "     (ugrpg.user_id = u.user_id))" + " and u.login_name=?"
 				+ " and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id";
 
 		stbr.append(str);
