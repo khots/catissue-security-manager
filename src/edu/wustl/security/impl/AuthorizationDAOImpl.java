@@ -72,6 +72,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	}
 
 	/**
+	 * Get privilege map  from database for the given user.
 	 * @param userName name
 	 * @param pEs pes
 	 * @throws CSException exc
@@ -94,6 +95,25 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				session = sessionFact.openSession();
 				connection = session.connection();
 				Object obj = pEs.iterator().next();
+
+				// Changes done for Bug #19862 -  Slow Login
+				// FIXME remove the instanceof check.
+				/*
+				 * TODO - Here instead of getting comma separated String of cacheable and eagar object,
+				 * we will get all ProtectionElements list as input.
+				 * Iterating on this list we will generate comma separated cacheable and eager objects string.
+				 * This Code of generating comma separated list of cacheable and eagar object is already present in
+				 * PrivilegeCache class. Need to move that code from PrivilegeCache class to here.
+				 *
+				 * Thus the instanceof check will be removed since we will be getting list of PE instead of comma
+				 * separated String, so no need of explicit check of string type.
+				 *
+				 * Query will be formed based on the comma separated string. After making these changes else part will
+				 * no longer will be in use.
+				 *
+				 * So we will be modifying the processing logic of this method, input and output will remain same.
+				 *
+				 */
 				if (obj instanceof String)
 				{
 					String pElements = obj.toString();
