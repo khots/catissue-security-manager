@@ -14,18 +14,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Constants;
-
+import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
+import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
@@ -88,20 +93,31 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			{
 				session = sessionFact.openSession();
 				connection = session.connection();
-				StringBuffer stbr = new StringBuffer();
-				String attributeVal = "=?";
-				generateQuery(stbr, attributeVal);
+				Object obj = pEs.iterator().next();
+				if (obj instanceof String)
+				{
+					String pElements = obj.toString();
+					String sql = generateQuery(pElements);
+					pstmt = connection.prepareStatement(sql);
+					result = getPrivileges(userName, pElements, pstmt);
+				}
+				else
+				{
+					StringBuffer stbr = new StringBuffer();
+					String attributeVal = "=?";
+					generateQuery(stbr, attributeVal);
 
-				StringBuffer stbr2 = new StringBuffer();
-				attributeVal = " IS NULL";
-				generateQuery(stbr2, attributeVal);
+					StringBuffer stbr2 = new StringBuffer();
+					attributeVal = " IS NULL";
+					generateQuery(stbr2, attributeVal);
 
-				String sql = stbr.toString();
-				pstmt = connection.prepareStatement(sql);
+					String sql = stbr.toString();
+					pstmt = connection.prepareStatement(sql);
 
-				String sql2 = stbr2.toString();
-				pstmt2 = connection.prepareStatement(sql2);
-				result = getResult(userName, pEs, pstmt, pstmt2);
+					String sql2 = stbr2.toString();
+					pstmt2 = connection.prepareStatement(sql2);
+					result = getResult(userName, pEs, pstmt, pstmt2);
+				}
 			}
 			catch (SQLException ex)
 			{
@@ -109,6 +125,13 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 						userName).append(':').append(ex.getMessage());
 				logger.debug(mess, ex);
 				throw new CSException(mess.toString(), ex);
+			}
+			catch (SMException ex)
+			{
+				StringBuffer message = new StringBuffer("Failed to get privileges for ").append(
+						userName).append(':').append(ex.getMessage());
+				logger.debug(message, ex);
+				throw new CSException(message.toString(), ex);
 			}
 			finally
 			{
@@ -129,10 +152,22 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	{
 		try
 		{
-			session.close();
-			pstmt.close();
-			pstmt2.close();
-			connection.close();
+			if (session != null)
+			{
+				session.close();
+			}
+			if (pstmt != null)
+			{
+				pstmt.close();
+			}
+			if (pstmt2 != null)
+			{
+				pstmt2.close();
+			}
+			if (connection != null)
+			{
+				connection.close();
+			}
 		}
 		catch (SQLException ex2)
 		{
@@ -309,5 +344,154 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				+ " and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id";
 
 		stbr.append(str);
+	}
+
+	/**
+	 * Gets the privileges.
+	 *
+	 * @param userName the user name
+	 * @param pElements the elements
+	 * @param prepaidStmt the pstmt
+	 *
+	 * @return the privileges
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws CSObjectNotFoundException the CS object not found exception
+	 * @throws SMException the SM exception
+	 */
+	public List<ObjectPrivilegeMap> getPrivileges(String userName, String pElements,
+			PreparedStatement prepaidStmt) throws SQLException, CSObjectNotFoundException,
+			SMException
+	{
+
+		List<ObjectPrivilegeMap> privilegeCollection = new ArrayList<ObjectPrivilegeMap>();
+		ResultSet resulSet = null;
+		setPrepaidStatementParameters(userName, pElements, prepaidStmt);
+		try
+		{
+			resulSet = prepaidStmt.executeQuery();
+			Map<String, ObjectPrivilegeMap> objectVsPrivilegeMap = new HashMap<String, ObjectPrivilegeMap>();
+			while (resulSet.next())
+			{
+				String peObjectId = resulSet.getString(1);
+				ObjectPrivilegeMap objectPrivilegeMap;
+				if (objectVsPrivilegeMap.get(peObjectId) == null)
+				{
+					ProtectionElement pe = new ProtectionElement();
+					pe.setObjectId(peObjectId);
+					objectPrivilegeMap = new ObjectPrivilegeMap(pe, new ArrayList<Privilege>());
+					objectVsPrivilegeMap.put(peObjectId, objectPrivilegeMap);
+				}
+				else
+				{
+					objectPrivilegeMap = objectVsPrivilegeMap.get(peObjectId);
+
+				}
+				Privilege privilege = new Privilege();
+				privilege.setName(resulSet.getString(2));
+				objectPrivilegeMap.getPrivileges().add(privilege);
+				privilegeCollection.add(objectPrivilegeMap);
+			}
+		}
+		finally
+		{
+			if (resulSet != null)
+			{
+				resulSet.close();
+			}
+		}
+		return privilegeCollection;
+	}
+
+	/**
+	 * Sets the prepaid statement parameters.
+	 *
+	 * @param userName the user name
+	 * @param pElements the elements
+	 * @param prepaidStmt the prepaid stmt
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws CSObjectNotFoundException the CS object not found exception
+	 * @throws SMException the SM exception
+	 */
+	private void setPrepaidStatementParameters(String userName, String pElements,
+			PreparedStatement prepaidStmt) throws SQLException, CSObjectNotFoundException,
+			SMException
+	{
+		int position = 1;
+		if (pElements.contains(Constants.PERCENT_DELIMITER))
+		{
+			for (String pElementName : pElements.split(Constants.COMMA_DELIMITER))
+			{
+				prepaidStmt.setString(position, pElementName);
+				position++;
+			}
+		}
+		String applicationId = getApplicationId();
+		prepaidStmt.setString(position, applicationId);
+		position++;
+		prepaidStmt.setString(position, userName);
+	}
+
+	/**
+	 * Gets the application id.
+	 *
+	 * @return the application id
+	 *
+	 * @throws CSObjectNotFoundException the CS object not found exception
+	 * @throws SMException the SM exception
+	 */
+	private String getApplicationId() throws CSObjectNotFoundException, SMException
+	{
+		UserProvisioningManager upManager;
+
+		upManager = ProvisionManager.getInstance().getUserProvisioningManager();
+		String appCtxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
+		return upManager.getApplication(appCtxName).getApplicationId().toString();
+
+	}
+
+	/**
+	 * Generate query.
+	 *
+	 * @param pElements the elements
+	 *
+	 * @return the string
+	 */
+	private String generateQuery(final String pElements)
+	{
+
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("select distinct pe.object_id,p.privilege_name").append(
+				" from csm_protection_group pg, csm_protection_element pe,").append(
+				" csm_pg_pe pgpe, csm_group g, csm_user_group_role_pg ugrpg, csm_user u,").append(
+				" csm_user_group ug, csm_role_privilege rp, csm_privilege p ").append(
+				" where pgpe.protection_group_id = pg.protection_group_id").append(
+				" and pgpe.protection_element_id = pe.protection_element_id and ");
+		if (pElements.contains(Constants.PERCENT_DELIMITER))
+		{
+			stringBuffer.append(Constants.OPENING_BRACE);
+			String[] pElementArray = pElements.split(Constants.COMMA_DELIMITER);
+			for (int i = 0; i < pElementArray.length; i++)
+			{
+				if (i != 0)
+				{
+					stringBuffer.append(Constants.OR_CONDITION);
+				}
+				stringBuffer.append(" pe.object_id like ? ");
+
+			}
+			stringBuffer.append(Constants.CLOSING_BRACE);
+		}
+		else
+		{
+			stringBuffer.append(" pe.object_id in ( "+ pElements +" ) ");
+		}
+		stringBuffer.append(" and pg.protection_group_id = ugrpg.protection_group_id ").append(
+				"and pg.APPLICATION_ID=? and (ugrpg.group_id = g.group_id").append(
+				" and ug.group_id= g.group_id and ug.user_id = u.user_id)").append(
+				" and u.login_name= ?").append(
+				" and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id");
+		return stringBuffer.toString();
 	}
 }

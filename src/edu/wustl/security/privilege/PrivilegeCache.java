@@ -31,7 +31,19 @@ import gov.nih.nci.security.exceptions.CSException;
  */
 public class PrivilegeCache
 {
-	
+
+	/** The Constant STAR. */
+	private static final String STAR = "*";
+
+	/** The Constant PERCENT_DELIMITER. */
+	private static final String PERCENT_DELIMITER = "%";
+
+	/** The Constant COMMA_DELIMITER. */
+	private static final String COMMA_DELIMITER = ",";
+
+	/** The Constant SINGLE_QUOTE. */
+	private static final String SINGLE_QUOTE = "'";
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -74,47 +86,49 @@ public class PrivilegeCache
 	{
 		try
 		{
-			for (String className : PrivilegeManager.getInstance().getClasses())
+			String commaSeperatedClasses = getCommaSeparatedString(PrivilegeManager.getInstance()
+					.getClasses());
+			Collection<ObjectPrivilegeMap> objectPrivileges = getObjectPrivilegeMap(commaSeperatedClasses);
+			for (ObjectPrivilegeMap objectPrivilegeMap : objectPrivileges)
 			{
-				Collection objPrivMap = getObjectPrivilegeMap(className);
-				populatePrivileges(objPrivMap);
+				populatePrivileges(objectPrivilegeMap);
 			}
-			for (String objectPattern : PrivilegeManager.getInstance().getEagerObjects())
+			String commaSeperatedEagerObjects = getCommaSeparatedString(PrivilegeManager
+					.getInstance().getEagerObjects());
+			Collection<ObjectPrivilegeMap> eagerObjectPrivileges = getObjectPrivilegeMap(commaSeperatedEagerObjects);
+			for (ObjectPrivilegeMap objectPrivilegeMap : eagerObjectPrivileges)
 			{
-				Collection objPrivMap = getObjectPrivilegeMap(objectPattern);
-				populatePrivileges(objPrivMap);
+				populatePrivileges(objectPrivilegeMap);
 			}
+
 		}
 		catch (SMException e)
 		{
-			String message = "error in initialising cache "+e.getMessage();
+			String message = "error in initialising cache " + e.getMessage();
 			logger.error(message);
 		}
 	}
 
+
 	/**
-	 * This method gets Object Privilege Map.
-	 * @param protEleObjId Protection Element Id
-	 * @return objPrivMap return objPrivMap.
-	 * @throws SMException e
+	 * Gets the object privilege map new.
+	 *
+	 * @param protEleObjIds the prot ele obj ids
+	 *
+	 * @return the object privilege map new
+	 *
+	 * @throws SMException the SM exception
 	 */
-	private Collection getObjectPrivilegeMap(final String protEleObjId) throws SMException
+	private Collection getObjectPrivilegeMap(final String protEleObjIds) throws SMException
 	{
 		Collection objPrivMap = new ArrayList();
 		try
 		{
 			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
-			ProtectionElement protectionElement = new ProtectionElement();
-			protectionElement.setObjectId(protEleObjId);
-			ProtectionElementSearchCriteria protEleSearchCrit = new ProtectionElementSearchCriteria(
-					protectionElement);
-			List list = privilegeUtility.getUserProvisioningManager().getObjects(protEleSearchCrit);
-
-			if (!list.isEmpty())
-			{
-				objPrivMap = privilegeUtility.getUserProvisioningManager().getPrivilegeMap(
-						loginName, list);
-			}
+			List pEObjectList = new ArrayList();
+			pEObjectList.add(protEleObjIds);
+			objPrivMap = privilegeUtility.getUserProvisioningManager().getPrivilegeMap(loginName,
+					pEObjectList);
 		}
 		catch (CSException excp)
 		{
@@ -140,14 +154,7 @@ public class PrivilegeCache
 		// To populate the permissionMap
 		for (ObjectPrivilegeMap objectPrivilegeMap : objPrivMapCol)
 		{
-			String objectId = objectPrivilegeMap.getProtectionElement().getObjectId();
-			BitSet bitSet = new BitSet();
-
-			for (Object privilege : objectPrivilegeMap.getPrivileges())
-			{
-				bitSet.set(getBitNumber(((Privilege) privilege).getName()));
-			}
-			privilegeMap.put(objectId, bitSet);
+			populatePrivileges(objectPrivilegeMap);
 		}
 	}
 
@@ -194,7 +201,8 @@ public class PrivilegeCache
 	 * @return return true if user has privilege, false otherwise.
 	 * @throws SMException e
 	 */
-	public boolean hasPrivilege(AbstractDomainObject aDObject, String privilegeName) throws SMException
+	public boolean hasPrivilege(AbstractDomainObject aDObject, String privilegeName)
+			throws SMException
 	{
 		return hasPrivilege(aDObject.getObjectId(), privilegeName);
 	}
@@ -285,7 +293,7 @@ public class PrivilegeCache
 	{
 		PrivilegeLocator instance = PrivilegeLocator.getInstance();
 		edu.wustl.security.privilege.Privilege privilege = instance
-		.getPrivilegeByName(privilegeName);
+				.getPrivilegeByName(privilegeName);
 		return privilege.getBitNumber();
 	}
 
@@ -313,8 +321,6 @@ public class PrivilegeCache
 		}
 		privilegeMap.put(objectId, bitSet);
 	}
-
-
 
 	/**
 	 * get the ids and privileges where ids start with the given prefix.
@@ -354,8 +360,7 @@ public class PrivilegeCache
 			if (value.get(i))
 			{
 				NameValueBean nmv = new NameValueBean();
-				nmv.setName(PrivilegeLocator.getInstance().
-						getPrivilegeByBit(i).getPrivilegeName());
+				nmv.setName(PrivilegeLocator.getInstance().getPrivilegeByBit(i).getPrivilegeName());
 				for (Object o : CommonUtilities.getAllPrivileges())
 				{
 					NameValueBean privilege = (NameValueBean) o;
@@ -370,4 +375,50 @@ public class PrivilegeCache
 		}
 		return privilegeNames;
 	}
+
+	/**
+	 * Gets the comma separated string.
+	 *
+	 * @param objectList the object list
+	 *
+	 * @return the comma separated string
+	 *
+	 * @throws SMException the SM exception
+	 */
+	private String getCommaSeparatedString(List<String> objectList) throws SMException
+	{
+		StringBuffer stringBuffer = new StringBuffer();
+
+		for (String objectName : objectList)
+		{
+			if (objectName.contains(STAR))
+			{
+				objectName = objectName.replace(STAR, PERCENT_DELIMITER);
+				stringBuffer.append(objectName);
+			}
+			else
+			{
+				stringBuffer.append(SINGLE_QUOTE + objectName + SINGLE_QUOTE);
+			}
+			stringBuffer.append(COMMA_DELIMITER);
+		}
+		return stringBuffer.substring(0, stringBuffer.length() - 1);
+	}
+
+	/**
+	 * Populate privileges.
+	 *
+	 * @param objectPrivilegeMap the object privilege map
+	 */
+	private void populatePrivileges(ObjectPrivilegeMap objectPrivilegeMap)
+	{
+		String objectId = objectPrivilegeMap.getProtectionElement().getObjectId();
+		BitSet bitSet = new BitSet();
+		for (Object privilege : objectPrivilegeMap.getPrivileges())
+		{
+			bitSet.set(getBitNumber(((Privilege) privilege).getName()));
+		}
+		privilegeMap.put(objectId, bitSet);
+	}
+
 }
