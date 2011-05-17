@@ -69,6 +69,7 @@ public class PrivilegeCache
 		privilegeMap = new HashMap<String, BitSet>();
 		this.loginName = loginName;
 
+		//Initializing privilege cache.
 		initialize();
 	}
 
@@ -86,21 +87,49 @@ public class PrivilegeCache
 	{
 		try
 		{
+			/*
+			 * Changes done for Bug #19862 -  Slow Login
+			 *
+			 * Previously privileges were populated for each cacheable and eager objects. The query to fetch privileges
+			 * was run in for loop, so for each cacheable and eagar object privileges were fetched from database
+			 * and privilege map was populated.
+			 *
+			 * To avoid this we have generated comma separated list of cacheable and eager objects. This comma separated
+			 * list is used to fetch privileges form database. Here instead of fetching privileges for each object,
+			 * we have generated single query to fetch all the privileges. This will avoid multiple data base trips.
+			 * Now all the privileges are fetch in single query and privilege map is populated.
+			 *
+			 * Thus code changes made are related to fetching strategy of privileges from database.
+			 *
+			 */
+
+			//Get comma separated cacheable object list by reading CacheableObjects.xml.
 			String commaSeperatedClasses = getCommaSeparatedString(PrivilegeManager.getInstance()
 					.getClasses());
+			//Fetch all the privileges from the database for these comma separated cacheableObjects in a single query.
 			Collection<ObjectPrivilegeMap> objectPrivileges = getObjectPrivilegeMap(commaSeperatedClasses);
+			//Populate privilege Map for all the cacheable objects.
 			for (ObjectPrivilegeMap objectPrivilegeMap : objectPrivileges)
 			{
 				populatePrivileges(objectPrivilegeMap);
 			}
+
+			//Get comma separated eager object list by reading CacheableObjects.xml.
 			String commaSeperatedEagerObjects = getCommaSeparatedString(PrivilegeManager
 					.getInstance().getEagerObjects());
+
+			//Fetch all the privileges from the database for these comma separated eagar objects in a single query.
 			Collection<ObjectPrivilegeMap> eagerObjectPrivileges = getObjectPrivilegeMap(commaSeperatedEagerObjects);
+
+			//Populate privilege Map for all the eagar objects.
 			for (ObjectPrivilegeMap objectPrivilegeMap : eagerObjectPrivileges)
 			{
 				populatePrivileges(objectPrivilegeMap);
 			}
 
+			//TODO Instead of passing comma separated cacheable and eagar objects, passed the protection elements list.
+			// At the time of fetching privileges from database, generate query as per the protection element list.
+			// So this code of generating comma separated list will be moved in query generation code. (AuthorizationDAOImpl class)
 		}
 		catch (SMException e)
 		{
@@ -111,7 +140,7 @@ public class PrivilegeCache
 
 
 	/**
-	 * Gets the object privilege map new.
+	 * Gets the object privilege map.
 	 *
 	 * @param protEleObjIds the prot ele obj ids
 	 *
@@ -125,8 +154,12 @@ public class PrivilegeCache
 		try
 		{
 			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+
+			//Generate list of Protection Elements
 			List pEObjectList = new ArrayList();
 			pEObjectList.add(protEleObjIds);
+
+			// Fetch privileges from the database for respective user and PE object.
 			objPrivMap = privilegeUtility.getUserProvisioningManager().getPrivilegeMap(loginName,
 					pEObjectList);
 		}
@@ -154,6 +187,7 @@ public class PrivilegeCache
 		// To populate the permissionMap
 		for (ObjectPrivilegeMap objectPrivilegeMap : objPrivMapCol)
 		{
+			//Set Bitset corresponding to the objectId and populate privilege Map.
 			populatePrivileges(objectPrivilegeMap);
 		}
 	}
@@ -307,7 +341,13 @@ public class PrivilegeCache
 	}
 
 	/**
-	 * This method add object.
+	 * This method set bitset and populate privilege map.
+	 * BitSet is used for the Mapping. There are total 10 possible Privileges /
+	 * Permissions. So, we use 10 bits of bitset for storing these Permissions
+	 * For every objectId in PrivilegeMap, a bit '1' in BitSet indicates user
+	 * has permission on that Privilege & a bit '0' indicates otherwise So, in
+	 * this method, we examine each Privilege returned by PrivilegeMap & set the
+	 * BitSet corresponding to the objectId accordingly.
 	 * @param objectId object Id
 	 * @param privileges collection of privileges.
 	 */
@@ -377,7 +417,7 @@ public class PrivilegeCache
 	}
 
 	/**
-	 * Gets the comma separated string.
+	 * Gets the comma separated cacheable and eagar objects.
 	 *
 	 * @param objectList the object list
 	 *
@@ -391,6 +431,8 @@ public class PrivilegeCache
 
 		for (String objectName : objectList)
 		{
+			//Few eagar objects have pattern like 'edu.wustl.clinportal.domain.XYZ*'
+			// So to query for that pattern replace star with percent delimiter.
 			if (objectName.contains(STAR))
 			{
 				objectName = objectName.replace(STAR, PERCENT_DELIMITER);
@@ -412,12 +454,16 @@ public class PrivilegeCache
 	 */
 	private void populatePrivileges(ObjectPrivilegeMap objectPrivilegeMap)
 	{
+		//get PE object Id
 		String objectId = objectPrivilegeMap.getProtectionElement().getObjectId();
+
+		//Generate Bitset with respect to PE objects
 		BitSet bitSet = new BitSet();
 		for (Object privilege : objectPrivilegeMap.getPrivileges())
 		{
 			bitSet.set(getBitNumber(((Privilege) privilege).getName()));
 		}
+		//Populate privilege Map
 		privilegeMap.put(objectId, bitSet);
 	}
 
