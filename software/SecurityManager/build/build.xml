@@ -1,19 +1,19 @@
 <?xml version ="1.0"?>
 
 <!--Ant Script for create Build for SecurityManager-->
-<project name="SecurityManager" default="compile" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="SecurityManager" default="dist" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="../">
 
-	<property name="base.dir" value="." />
-	<property name="software.dir" value=".." />
-	<property name="lib.dir" value="${base.dir}/src/lib" />
-	<property name="src.dir" value="${base.dir}/src/java" />
+	<property name="software.dir" value="${basedir}/../" />
+	<property name="lib.dir" value="${basedir}/src/lib" />
+	<property name="src.dir" value="${basedir}/src/main/java" />
 	<property name="target.dir" value="${software.dir}/target" />
+	<property name="dist.dir" value="${basedir}/dist" />
 	<property name="src.classes.dir" value="${target.dir}/temp/classes/src" />
 	<property name="test.classes.dir" value="${target.dir}/temp/classes/test" />
 	<property name="local-ivy-repo.dir" value="${software.dir}/local-ivy-repo" />
 	<property name="report.dir" value="${software.dir}/target/reports" />
 
-	<property file="${software.dir}/SecurityManager/src/conf/sm.properties"/>
+	<property file="${basedir}/conf/sm.properties"/>
 
 	<property name="generateforce" value="true" />
 	<property name="junit.dir" value="${report.dir}/junit" />
@@ -21,9 +21,9 @@
 	<property name="junit.classes.dir" value="${junit.dir}/classes" />
 	<property name="code.coverage.report.dir" value="${junit.dir}/coverage-reports" />
 	<property name="instrumented.classes.dir" value="${junit.dir}/instrumented-classes" />
-	<property name="cobertura.home" value="${base.dir}/cobertura"/>
+	<property name="cobertura.home" value="${basedir}/cobertura"/>
 	<property name="cobertura.lib" value="${cobertura.home}/lib"/>
-	<property name="test.dir" value="${base.dir}/test" />
+	<property name="test.dir" value="${basedir}/test" />
 
 	<property name="test.src.dir" value="${software.dir}/SecurityManager/test/unit/java/SecurityManager_dbunit/src" />
 	<path id="junit.classpath">
@@ -39,7 +39,7 @@
 			</filterchain>
 	</loadfile>
 
-	<target name="compile" depends="init,retrieve-ivy-files">
+	<target name="compile" depends="init, retrieve-ivy-files">
 	
 		<echo message="-----------------------"/>
 	<!--
@@ -68,7 +68,11 @@
 		</copy>
 
 	</target>
-	<!-- sub tasks -->
+
+    <target name="clean">
+        <delete dir="${dist.dir}}" />
+    </target>
+
 	<target name="init">
 		<!-- Create the time stamp -->
 		<tstamp />
@@ -77,13 +81,14 @@
 		<delete dir="${test.classes.dir}" />
 		<mkdir dir="${src.classes.dir}" />
 		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${dist.dir}" />
 
 
 	</target>
 	<target name="build_jar" depends="compile">
-
 		<tstamp />
-		<jar taskname="build_jar" jarfile="${local-ivy-repo.dir}/securityManager-${sm.jar.version}.jar">
+
+		<jar taskname="build_jar" jarfile="${dist.dir}/securityManager-${sm.jar.version}.jar">
 			<fileset dir="${src.classes.dir}">
 				<include name="**/*" />
 			</fileset>
@@ -97,9 +102,10 @@
 			</manifest>
 		</jar>
 
+        <copy file="${dist.dir}/securityManager-${sm.jar.version}.jar" todir="${local-ivy-repo.dir}" />
 		<antcall target="build_code_zip" />
-
 	</target>
+
 	<target name="dist" depends="build_jar"/>
 
 	<target name="build_code_zip">
@@ -178,7 +184,7 @@
 		<mkdir dir="${junit.report.dir}/Html_reports" />
 		<junit printsummary="yes" haltonerror="no" haltonfailure="no" fork="yes">
 			<formatter type="xml" />
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${base.dir}/cobertura.ser" />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${basedir}/cobertura.ser" />
 			<batchtest todir="${junit.report.dir}/Html_reports">
       			<fileset dir="${test.src.dir}">
 					<include name="**/TestAll.java"/>
@@ -258,7 +264,7 @@
 					<include name ="*.xml"/>
 					<include name = "*.properties"/>
 				</fileset>
-				<fileset dir="${base.dir}">
+				<fileset dir="${basedir}">
 					<include name="TestDataSet.xml"/>
 				</fileset>
 			</copy>
