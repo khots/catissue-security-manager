@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="software/SecurityManager/src/test/resources"/>
+	<classpathentry kind="src" path="software/SecurityManager/src/main/java"/>
+	<classpathentry kind="src" path="software/SecurityManager/src/test/java"/>
+	<classpathentry kind="src" path="software/SecurityManager/src/main/web"/>
+	<classpathentry kind="src" path="software/SecurityManager/src/main/resources"/>
+	<classpathentry kind="src" path="software/SecurityManager/conf"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/smlib"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/antlr-2.7.5H3.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/asm-attrs.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/asm.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/cglib-2.1.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/clm.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/commonpackage-1.1.8.3.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/commons-collections-2.1.1.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/csmapi-4.2.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/ehcache-1.2.3.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/spring.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/washu-commons-1.1.7.jar"/>
+	<classpathentry kind="lib" path="software/SecurityManager/src/lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
