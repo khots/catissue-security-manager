@@ -3,6 +3,8 @@
 <!--Ant Script for create Build for SecurityManager-->
 <project name="SecurityManager" default="dist" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
 
+    <import file="ivy-targets.xml" />
+
 	<property name="software.dir" value="${basedir}/../" />
 	<property name="lib.dir" value="${basedir}/src/lib" />
 	<property name="src.dir" value="${basedir}/src/main/java" />
@@ -10,7 +12,6 @@
 	<property name="dist.dir" value="${basedir}/dist" />
 	<property name="src.classes.dir" value="${target.dir}/temp/classes/src" />
 	<property name="test.classes.dir" value="${target.dir}/temp/classes/test" />
-	<property name="local-ivy-repo.dir" value="${software.dir}/local-ivy-repo" />
 	<property name="report.dir" value="${software.dir}/target/reports" />
 
 	<property file="${basedir}/conf/sm.properties"/>
@@ -39,7 +40,7 @@
 			</filterchain>
 	</loadfile>
 
-	<target name="compile" depends="init, retrieve-ivy-files">
+	<target name="compile" depends="init, resolve">
 	
 		<echo message="-----------------------"/>
 	<!--
@@ -85,7 +86,7 @@
 	<target name="build_jar" depends="compile">
 		<tstamp />
 
-		<jar taskname="build_jar" jarfile="${dist.dir}/securityManager-${sm.jar.version}.jar">
+		<jar taskname="build_jar" jarfile="${dist.dir}/SecurityManager.jar">
 			<fileset dir="${src.classes.dir}">
 				<include name="**/*" />
 			</fileset>
@@ -99,7 +100,6 @@
 			</manifest>
 		</jar>
 
-        <copy file="${dist.dir}/securityManager-${sm.jar.version}.jar" todir="${local-ivy-repo.dir}" />
 		<antcall target="build_code_zip" />
 	</target>
 
@@ -110,162 +110,5 @@
 			<fileset dir="${src.dir}" includes="**/*" />
 		 </copy>
 	</target>
-
-	<!--ivy:retrieve related tags start here-->
-		<property name="common.dir" location="${software.dir}/common" />
-
-
-		<property name="bda-utils.dir" location="${target.dir}/bda-utils" />
-			<property name="project.properties.file" value="${software.dir}/build/project.properties" />
-			<property file="${project.properties.file}" />
-			<import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
-
-
-			<path id="bda-utils.classpath">
-				<fileset dir="${bda-utils.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-			</path>
-			<path id="ivy.classpath">
-				<fileset dir="${target.dir}/lib">
-					<include name="ivy-2.0.0.jar" />
-				</fileset>
-			</path>
-
-			<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
-			<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"  classpathref="bda-utils.classpath"/>
-			<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="bda-utils.classpath"/>
-
-		<property name="ivy.settings.file" location="${common.dir}/ivy/cbiit-ivy-settings.xml" />
-				<target name="ivy-settings">
-					<property name="ivy.dep.file" value="${common.dir}/bda-download/ivy-bda.xml"/>
-					<ivy:settings file="${ivy.settings.file}"/>
-				</target>
-			<target name="retrieve-ivy-files" depends="ivy-settings"  description="Updates the local ivy repository">
-				<ivy:resolve refresh="true" conf="app_lib"/>
-				<ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]" conf="app_lib" />
-
-			</target>
-
-		<!--ivy:retrieve related tags end here-->
-
-<!-- Test related targets commented since currently not used
-
-	<target name="Generate_Report_Cobertura" depends="compile">
-	 	<antcall target="instrument" />
-		<antcall target="runJunit" />
-		<cobertura-report srcdir="${src.dir}" destdir="${code.coverage.report.dir}" />
-		<delete file="${instrumented.classes.dir}/cobertura.ser" />
-	</target>
-
-	<target name="instrument">
-		<mkdir dir="${code.coverage.report.dir}" />
-		<mkdir dir="${instrumented.classes.dir}" />
-
-		<cobertura-instrument todir="${instrumented.classes.dir}">
-			<ignore regex="org.apache.log4j.*" />
-			<fileset dir="${src.classes.dir}">
-				<include name="**/*.class" />
-				<exclude name="**/*Test.class" />
-				<exclude name="**/Mock*.class" />
-			</fileset>
-
-		</cobertura-instrument>
-	</target>
-	<taskdef classpathref="junit.classpath" resource="tasks.properties" />
-	<target name="runJunit" depends="db_compile">
-		<mkdir dir="${junit.report.dir}" />
-		<delete>
-			<fileset dir="${junit.report.dir}" includes="**/*" />
-		</delete>
-		<mkdir dir="${junit.report.dir}/Html_reports" />
-		<junit printsummary="yes" haltonerror="no" haltonfailure="no" fork="yes">
-			<formatter type="xml" />
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${basedir}/cobertura.ser" />
-			<batchtest todir="${junit.report.dir}/Html_reports">
-      			<fileset dir="${test.src.dir}">
-					<include name="**/TestAll.java"/>
-			    </fileset>
-			</batchtest>
-			<classpath>
-				<pathelement location="${lib.dir}" />
-				<pathelement location="${test.src.dir}" />
-				<pathelement location="${src.classes.dir}" />
-				<pathelement location="${test.classes.dir}" />
-				<pathelement location="${instrumented.classes.dir}" />
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</junit>
-		<junitreport todir="${junit.report.dir}/Html_reports">
-			<fileset dir="${junit.report.dir}/Html_reports">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report todir="${junit.report.dir}/Html_reports" />
-		</junitreport>
-	</target>
-	<target name="compileTest">
-		<javac destdir="${test.classes.dir}" includes="**/*.*" debug="on" includeAntRuntime="false" target="1.5">
-			<src path="${test.src.dir}" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<pathelement location="${src.classes.dir}" />
-			</classpath>
-		</javac>
-		<copy todir="${test.classes.dir}">
-			<fileset dir="${test.src.dir}">
-				<include name="**/*.properties" />
-				<include name="**/*.xml" />
-				<include name="**/*.hbm.xml" />
-				<include name="**/*.ser" />
-			</fileset>
-		</copy>
-	</target>
-
-
-	<target name="db_compile">
-
-			<delete file="${db_lib.dir}/securityManager.jar"/>
-			<copy todir="${db_lib.dir}">
-				<fileset dir="${lib_dir}" >
-					<include name ="*.jar"/>
-				</fileset>
-			</copy>
-			<jar destfile="${db_lib.dir}/securityManager.jar" duplicate="preserve">
-				<fileset dir="${tmp.smwar}/WEB-INF/classes">
-					<include name="**/*.*"/>
-					<exclude name ="dbutil.properties"/>
-					<exclude name ="log4j.properties"/>
-					<exclude name="**/ApplicationSecurityConfig.xml" />
-				</fileset>
-			</jar>
-
-			<javac destdir="${db_temp.dir}" srcdir="${db_src.dir}" includes="**/*">
-				<classpath id="DbUnit_classpath2">
-					<fileset dir="${web_lib.dir}">
-						<include name="*.jar"/>
-					</fileset>
-
-					<fileset dir="${db_lib.dir}">
-						<include name="*.jar"/>
-					</fileset>
-					<!-pathelement path="${tmp.smwar}/WEB-INF/classes/"/ ->
-				</classpath>
-			</javac>
-
-			<copy todir="${db_temp.dir}">
-				<fileset dir="${db_unit.dir}/src" >
-					<include name ="*.xml"/>
-					<include name = "*.properties"/>
-				</fileset>
-				<fileset dir="${basedir}">
-					<include name="TestDataSet.xml"/>
-				</fileset>
-			</copy>
-		</target>
--->
 
 </project>
