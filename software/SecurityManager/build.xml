@@ -6,7 +6,7 @@
     <import file="ivy-targets.xml" />
 
 	<property name="software.dir" value="${basedir}/../" />
-	<property name="lib.dir" value="${basedir}/src/lib" />
+	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="src.dir" value="${basedir}/src/main/java" />
 	<property name="target.dir" value="${software.dir}/target" />
 	<property name="dist.dir" value="${basedir}/dist" />
@@ -28,10 +28,10 @@
 
 	<property name="test.src.dir" value="${software.dir}/SecurityManager/test/unit/java/SecurityManager_dbunit/src" />
 	<path id="junit.classpath">
-		<pathelement location="src/lib/cobertura.jar" />
-		<pathelement location="../src/lib/jakarta-oro-2.0.8.jar" />
-		<pathelement location="src/lib/asm-2.2.1.jar" />
-		<pathelement location="src/lib/log4j-1.2.9.jar" />
+		<pathelement location="lib/cobertura.jar" />
+		<pathelement location="lib/jakarta-oro-2.0.8.jar" />
+		<pathelement location="lib/asm-2.2.1.jar" />
+		<pathelement location="lib/log4j-1.2.9.jar" />
 	</path>
 
 	<loadfile property="dist.revision" srcFile="./.svn/entries">
