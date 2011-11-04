@@ -13,7 +13,7 @@
     <!-- CHANGE THE NEXT PROPERTIES TO MATCH YOUR PROJECT -->
     <property name="pub.revision" value="${sm.jar.version}"/>
     <property name="revision" value="${sm.jar.version}"/>
-    <property name="module" value="AdvancedQuery"/>
+    <property name="module" value="security-manager"/>
 
 
     <!-- IVY -->
