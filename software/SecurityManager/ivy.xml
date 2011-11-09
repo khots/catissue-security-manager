@@ -1,5 +1,12 @@
 <ivy-module version="2.0">
-    <info organisation="gov.nih.nci.catissue" module="security-manager"/>
+	
+	<info organisation="gov.nih.nci.catissue" module="security-manager" revision="${sm.jar.version}" status="integration" />
+	
+	<publications>
+		<artifact name="SecurityManager" ext="jar" type="jar" />
+		<artifact name="security-manager" ext="pom" type="pom" />
+	</publications>
+	
     <dependencies>
 
 <!--
