@@ -6,7 +6,6 @@
       <artifact name="asm" ext="jar" type="jar"/>
       <artifact name="cglib-2.1" ext="jar" type="jar"/>
       <artifact name="clm" ext="jar" type="jar"/>
-      <artifact name="commonpackage-1.1.8.3" ext="jar" type="jar"/>
       <artifact name="commons-collections-2.1.1" ext="jar" type="jar"/>
       <artifact name="commons-logging-1.0.4" ext="jar" type="jar"/>
       <artifact name="csmapi-4.2" ext="jar" type="jar"/>
@@ -17,7 +16,6 @@
       <artifact name="junit-4.5" ext="jar" type="jar"/>
       <artifact name="log4j" ext="jar" type="jar"/>
       <artifact name="spring" ext="jar" type="jar"/>
-      <artifact name="washu-commons-1.1.7" ext="jar" type="jar"/>
       <artifact name="xml-apis" ext="jar" type="jar"/>
   </publications>
 </ivy-module>
