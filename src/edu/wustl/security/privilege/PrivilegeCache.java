@@ -386,6 +386,23 @@ public class PrivilegeCache
 
 		return map;
 	}
+	
+	/**
+	 * returns list of privileges list with privilege name and id
+	 * @param objectId
+	 * @return
+	 */
+	public List<NameValueBean> getPrivilegesforObjectId(String objectId)
+	{
+		List<NameValueBean> privList = new ArrayList<NameValueBean>();
+		if(privilegeMap.containsKey(objectId))
+		{
+			privList = getPrivilegeNames(privilegeMap.get(objectId));
+		}
+
+		return privList;
+	}
+
 
 	/**
 	 * convert the given bitset into a set of privilege names.
