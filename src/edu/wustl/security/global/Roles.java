@@ -28,6 +28,10 @@ public interface Roles
 	 */
 	String SCIENTIST = "SCIENTIST";
 	/**
+	 * PARTICIPANT String   participant.
+	 */
+	String PARTICIPANT = "PARTICIPANT";
+	/**
 	 * READ_ONLY String read only.
 	 */
 	String READ_ONLY = "READ_ONLY";

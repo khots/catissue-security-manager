@@ -86,6 +86,13 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * PUBLIC_GROUP.
 	 */
 	public static final String PUBLIC_GROUP = "PUBLIC_GROUP";
+	
+	/**
+	 * PUBLIC_GROUP.
+	 */
+	public static final String PARTICIPANT_GROUP = "PARTICIPANT_GROUP";
+	
+	
 	/**
 	 * CLASS_NAME.
 	 */
@@ -350,7 +357,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		return role;
 	}
-
+	
 	/**
 	 * Modifies an entry for an existing User in the database based on the data
 	 * passed.
