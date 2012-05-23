@@ -110,6 +110,13 @@ public class Constants
 	 */
 	public static final String SCIENTIST = "Scientist";
 	/**
+	 * constant for SCIENTIST.
+	 */
+	public static final String PARTICIPANT = "Participant";
+	
+	
+	
+	/**
 	 * constant for ROLE_SUPER_ADMIN.
 	 */
 	public static final String ROLE_SUPER_ADMIN = "SUPERADMINISTRATOR";
