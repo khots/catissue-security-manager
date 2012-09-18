@@ -42,7 +42,7 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
- * @author ravindra_jain
+ * @author ravindra_jain, suhas_khot
  * creation date : 14th April, 2008
  * @version 1.0
  */
@@ -93,7 +93,10 @@ public final class PrivilegeManager
 		classes = new ArrayList<String>();
 		eagerObjects = new ArrayList<String>();
 		privilegeUtility = new PrivilegeUtility();
-		privilegeCaches = new HashMap<String, PrivilegeCache>();
+		synchronized (privilegeCaches)
+		{
+			privilegeCaches = new HashMap<String, PrivilegeCache>();
+		}
 		try
 		{
 			readXmlFile("CacheableObjects.xml");
@@ -127,14 +130,16 @@ public final class PrivilegeManager
 	 */
 	public PrivilegeCache getPrivilegeCache(String loginName)
 	{
-		PrivilegeCache privilegeCache = privilegeCaches.get(loginName);
-		if (privilegeCache == null)
+		synchronized (privilegeCaches)
 		{
-			privilegeCache = new PrivilegeCache(loginName);
-			privilegeCaches.put(loginName, privilegeCache);
+			PrivilegeCache privilegeCache = privilegeCaches.get(loginName);
+			if (privilegeCache == null)
+			{
+				privilegeCache = new PrivilegeCache(loginName);
+				privilegeCaches.put(loginName, privilegeCache);
+			}
+			return privilegeCache;
 		}
-
-		return privilegeCache;
 	}
 
 	/**
@@ -143,7 +148,10 @@ public final class PrivilegeManager
 	 */
 	public Collection<PrivilegeCache> getPrivilegeCaches()
 	{
-		return privilegeCaches.values();
+		synchronized (privilegeCaches)
+		{
+			return privilegeCaches.values();
+		}		
 	}
 
 	/**
@@ -153,7 +161,10 @@ public final class PrivilegeManager
 	 */
 	public void removePrivilegeCache(String userId)
 	{
-		privilegeCaches.remove(userId);
+		synchronized (privilegeCaches)
+		{
+			privilegeCaches.remove(userId);
+		}
 	}
 
 	/**
@@ -169,21 +180,22 @@ public final class PrivilegeManager
 	{
 		try
 		{
-			Collection<PrivilegeCache> listOfPrivCaches = getPrivilegeCaches();
 			ProtectionElement protectionElement = privilegeUtility.getUserProvisioningManager()
 					.getProtectionElement(objectId);
 			Collection<ProtectionElement> protElements = new ArrayList<ProtectionElement>();
 			protElements.add(protectionElement);
-
-			for (PrivilegeCache privilegeCache : listOfPrivCaches)
+			synchronized (privilegeCaches)
 			{
-				Collection<ObjectPrivilegeMap> objPrivMapCol = privilegeUtility
-						.getUserProvisioningManager().getPrivilegeMap(
-								privilegeCache.getLoginName(), protElements);
-				if (!objPrivMapCol.isEmpty())
+				for (PrivilegeCache privilegeCache : privilegeCaches.values())
 				{
-					privilegeCache.addObject(objectId, objPrivMapCol.iterator().next()
-							.getPrivileges());
+					Collection<ObjectPrivilegeMap> objPrivMapCol = privilegeUtility
+							.getUserProvisioningManager().getPrivilegeMap(
+									privilegeCache.getLoginName(), protElements);
+					if (!objPrivMapCol.isEmpty())
+					{
+						privilegeCache.addObject(objectId, objPrivMapCol.iterator().next()
+								.getPrivileges());
+					}
 				}
 			}
 		}
