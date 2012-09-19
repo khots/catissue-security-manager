@@ -93,10 +93,7 @@ public final class PrivilegeManager
 		classes = new ArrayList<String>();
 		eagerObjects = new ArrayList<String>();
 		privilegeUtility = new PrivilegeUtility();
-		synchronized (privilegeCaches)
-		{
-			privilegeCaches = new HashMap<String, PrivilegeCache>();
-		}
+		privilegeCaches = new HashMap<String, PrivilegeCache>();
 		try
 		{
 			readXmlFile("CacheableObjects.xml");
