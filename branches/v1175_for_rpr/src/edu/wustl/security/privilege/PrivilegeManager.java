@@ -127,14 +127,16 @@ public final class PrivilegeManager
 	 */
 	public PrivilegeCache getPrivilegeCache(String loginName)
 	{
-		PrivilegeCache privilegeCache = privilegeCaches.get(loginName);
-		if (privilegeCache == null)
+		synchronized (privilegeCaches)
 		{
-			privilegeCache = new PrivilegeCache(loginName);
-			privilegeCaches.put(loginName, privilegeCache);
+			PrivilegeCache privilegeCache = privilegeCaches.get(loginName);
+			if (privilegeCache == null)
+			{
+				privilegeCache = new PrivilegeCache(loginName);
+				privilegeCaches.put(loginName, privilegeCache);
+			}
+			return privilegeCache;
 		}
-
-		return privilegeCache;
 	}
 
 	/**
@@ -143,7 +145,10 @@ public final class PrivilegeManager
 	 */
 	public Collection<PrivilegeCache> getPrivilegeCaches()
 	{
-		return privilegeCaches.values();
+		synchronized (privilegeCaches)
+		{
+			return privilegeCaches.values();
+		}		
 	}
 
 	/**
@@ -153,7 +158,10 @@ public final class PrivilegeManager
 	 */
 	public void removePrivilegeCache(String userId)
 	{
-		privilegeCaches.remove(userId);
+		synchronized (privilegeCaches)
+		{
+			privilegeCaches.remove(userId);
+		}
 	}
 
 	/**
@@ -169,21 +177,22 @@ public final class PrivilegeManager
 	{
 		try
 		{
-			Collection<PrivilegeCache> listOfPrivCaches = getPrivilegeCaches();
 			ProtectionElement protectionElement = privilegeUtility.getUserProvisioningManager()
 					.getProtectionElement(objectId);
 			Collection<ProtectionElement> protElements = new ArrayList<ProtectionElement>();
 			protElements.add(protectionElement);
-
-			for (PrivilegeCache privilegeCache : listOfPrivCaches)
+			synchronized (privilegeCaches)
 			{
-				Collection<ObjectPrivilegeMap> objPrivMapCol = privilegeUtility
-						.getUserProvisioningManager().getPrivilegeMap(
-								privilegeCache.getLoginName(), protElements);
-				if (!objPrivMapCol.isEmpty())
+				for (PrivilegeCache privilegeCache : privilegeCaches.values())
 				{
-					privilegeCache.addObject(objectId, objPrivMapCol.iterator().next()
-							.getPrivileges());
+					Collection<ObjectPrivilegeMap> objPrivMapCol = privilegeUtility
+							.getUserProvisioningManager().getPrivilegeMap(
+									privilegeCache.getLoginName(), protElements);
+					if (!objPrivMapCol.isEmpty())
+					{
+						privilegeCache.addObject(objectId, objPrivMapCol.iterator().next()
+								.getPrivileges());
+					}
 				}
 			}
 		}
