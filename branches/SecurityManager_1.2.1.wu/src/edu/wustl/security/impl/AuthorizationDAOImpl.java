@@ -14,17 +14,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Constants;
+import edu.wustl.security.global.ProvisionManager;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.logging.api.logger.hibernate.HibernateSessionFactoryHelper;
+import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.ObjectPrivilegeMap;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Privilege;
@@ -64,7 +70,9 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		this.sessionFact = sessionFact;
 
 	}
+
 	/**
+	 * Get privilege map  from database for the given user.
 	 * @param userName name
 	 * @param pEs pes
 	 * @throws CSException exc
@@ -86,20 +94,50 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			{
 				session = sessionFact.openSession();
 				connection = session.connection();
-				StringBuffer stbr = new StringBuffer();
-				String attributeVal = "=?";
-				generateQuery(stbr, attributeVal);
+				Object obj = pEs.iterator().next();
 
-				StringBuffer stbr2 = new StringBuffer();
-				attributeVal = " IS NULL";
-				generateQuery(stbr2, attributeVal);
+				// Changes done for Bug #19862 -  Slow Login
+				// FIXME remove the instanceof check.
+				/*
+				 * TODO - Here instead of getting comma separated String of cacheable and eagar object,
+				 * we will get all ProtectionElements list as input.
+				 * Iterating on this list we will generate comma separated cacheable and eager objects string.
+				 * This Code of generating comma separated list of cacheable and eagar object is already present in
+				 * PrivilegeCache class. Need to move that code from PrivilegeCache class to here.
+				 *
+				 * Thus the instanceof check will be removed since we will be getting list of PE instead of comma
+				 * separated String, so no need of explicit check of string type.
+				 *
+				 * Query will be formed based on the comma separated string. After making these changes else part will
+				 * no longer will be in use.
+				 *
+				 * So we will be modifying the processing logic of this method, input and output will remain same.
+				 *
+				 */
+				if (obj instanceof String)
+				{
+					String pElements = obj.toString();
+					String sql = generateQuery(pElements);
+					pstmt = connection.prepareStatement(sql);
+					result = getPrivileges(userName, pElements, pstmt);
+				}
+				else
+				{
+					StringBuffer stbr = new StringBuffer();
+					String attributeVal = "=?";
+					generateQuery(stbr, attributeVal);
 
-				String sql = stbr.toString();
-				pstmt = connection.prepareStatement(sql);
+					StringBuffer stbr2 = new StringBuffer();
+					attributeVal = " IS NULL";
+					generateQuery(stbr2, attributeVal);
 
-				String sql2 = stbr2.toString();
-				pstmt2 = connection.prepareStatement(sql2);
-				result = getResult(userName, pEs, pstmt, pstmt2);
+					String sql = stbr.toString();
+					pstmt = connection.prepareStatement(sql);
+
+					String sql2 = stbr2.toString();
+					pstmt2 = connection.prepareStatement(sql2);
+					result = getResult(userName, pEs, pstmt, pstmt2);
+				}
 			}
 			catch (SQLException ex)
 			{
@@ -107,6 +145,13 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 						userName).append(':').append(ex.getMessage());
 				logger.debug(mess, ex);
 				throw new CSException(mess.toString(), ex);
+			}
+			catch (SMException ex)
+			{
+				StringBuffer message = new StringBuffer("Failed to get privileges for ").append(
+						userName).append(':').append(ex.getMessage());
+				logger.debug(message, ex);
+				throw new CSException(message.toString(), ex);
 			}
 			finally
 			{
@@ -127,10 +172,22 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 	{
 		try
 		{
-			session.close();
-			pstmt.close();
-			pstmt2.close();
-			connection.close();
+			if (session != null)
+			{
+				session.close();
+			}
+			if (pstmt != null)
+			{
+				pstmt.close();
+			}
+			if (pstmt2 != null)
+			{
+				pstmt2.close();
+			}
+			if (connection != null)
+			{
+				connection.close();
+			}
 		}
 		catch (SQLException ex2)
 		{
@@ -161,7 +218,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				if (pElement.getAttribute() == null)
 				{
 					pstmt2.setString(Constants.POSITION1, pElement.getObjectId());
-					pstmt2.setString(Constants.POSITION2, pElement.getApplication().getApplicationId().toString());
+					pstmt2.setString(Constants.POSITION2, pElement.getApplication()
+							.getApplicationId().toString());
 					pstmt2.setString(Constants.POSITION3, userName);
 					resulSet = pstmt2.executeQuery();
 				}
@@ -169,7 +227,8 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 				{
 					pstmt.setString(Constants.POSITION1, pElement.getObjectId());
 					pstmt.setString(Constants.POSITION2, pElement.getAttribute());
-					pstmt.setString(Constants.POSITION3, pElement.getApplication().getApplicationId().toString());
+					pstmt.setString(Constants.POSITION3, pElement.getApplication()
+							.getApplicationId().toString());
 					pstmt.setString(Constants.POSITION4, userName);
 					resulSet = pstmt.executeQuery();
 				}
@@ -254,6 +313,7 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 		return groups;
 
 	}
+
 	/**
 	 * @param session session
 	 * @param objectType objType
@@ -277,12 +337,11 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 					+ objectType.getName() + "|");
 			throw new CSObjectNotFoundException(objectType.getName() + " not found");
 		}
-		logger
-				.debug("Authorization|||getObjectByPrimaryKey|Success|" +
-						"Success in retrieving object of type "
-						+ objectType.getName() + "|");
+		logger.debug("Authorization|||getObjectByPrimaryKey|Success|"
+				+ "Success in retrieving object of type " + objectType.getName() + "|");
 		return obj;
 	}
+
 	/**
 	 * @param stbr stringBuffer
 	 * @param attributeVal string val
@@ -299,10 +358,160 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 
 				" and pe.attribute " + attributeVal
 				+ " and pg.protection_group_id = ugrpg.protection_group_id "
-				+ "and pg.APPLICATION_ID=? and ( ugrpg.group_id = g.group_id" + " and ug.group_id= g.group_id"
-				+ "       and ug.user_id = u.user_id)" + " and u.login_name=?"
+				+ "and pg.APPLICATION_ID=? and (( ugrpg.group_id = g.group_id"
+				+ " and ug.group_id= g.group_id" + "       and ug.user_id = u.user_id)"
+				+ "       or " + "     (ugrpg.user_id = u.user_id))" + " and u.login_name=?"
 				+ " and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id";
 
 		stbr.append(str);
+	}
+
+	/**
+	 * Gets the privileges.
+	 *
+	 * @param userName the user name
+	 * @param pElements the elements
+	 * @param prepaidStmt the pstmt
+	 *
+	 * @return the privileges
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws CSObjectNotFoundException the CS object not found exception
+	 * @throws SMException the SM exception
+	 */
+	public List<ObjectPrivilegeMap> getPrivileges(String userName, String pElements,
+			PreparedStatement prepaidStmt) throws SQLException, CSObjectNotFoundException,
+			SMException
+	{
+
+		List<ObjectPrivilegeMap> privilegeCollection = new ArrayList<ObjectPrivilegeMap>();
+		ResultSet resulSet = null;
+		setPrepaidStatementParameters(userName, pElements, prepaidStmt);
+		try
+		{
+			resulSet = prepaidStmt.executeQuery();
+			Map<String, ObjectPrivilegeMap> objectVsPrivilegeMap = new HashMap<String, ObjectPrivilegeMap>();
+			while (resulSet.next())
+			{
+				String peObjectId = resulSet.getString(1);
+				ObjectPrivilegeMap objectPrivilegeMap;
+				if (objectVsPrivilegeMap.get(peObjectId) == null)
+				{
+					ProtectionElement pe = new ProtectionElement();
+					pe.setObjectId(peObjectId);
+					objectPrivilegeMap = new ObjectPrivilegeMap(pe, new ArrayList<Privilege>());
+					objectVsPrivilegeMap.put(peObjectId, objectPrivilegeMap);
+				}
+				else
+				{
+					objectPrivilegeMap = objectVsPrivilegeMap.get(peObjectId);
+
+				}
+				Privilege privilege = new Privilege();
+				privilege.setName(resulSet.getString(2));
+				objectPrivilegeMap.getPrivileges().add(privilege);
+				privilegeCollection.add(objectPrivilegeMap);
+			}
+		}
+		finally
+		{
+			if (resulSet != null)
+			{
+				resulSet.close();
+			}
+		}
+		return privilegeCollection;
+	}
+
+	/**
+	 * Sets the prepaid statement parameters.
+	 *
+	 * @param userName the user name
+	 * @param pElements the elements
+	 * @param prepaidStmt the prepaid stmt
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws CSObjectNotFoundException the CS object not found exception
+	 * @throws SMException the SM exception
+	 */
+	private void setPrepaidStatementParameters(String userName, String pElements,
+			PreparedStatement prepaidStmt) throws SQLException, CSObjectNotFoundException,
+			SMException
+	{
+		int position = 1;
+		if (pElements.contains(Constants.PERCENT_DELIMITER))
+		{
+			for (String pElementName : pElements.split(Constants.COMMA_DELIMITER))
+			{
+				prepaidStmt.setString(position, pElementName);
+				position++;
+			}
+		}
+		String applicationId = getApplicationId();
+		prepaidStmt.setString(position, applicationId);
+		position++;
+		prepaidStmt.setString(position, userName);
+	}
+
+	/**
+	 * Gets the application id.
+	 *
+	 * @return the application id
+	 *
+	 * @throws CSObjectNotFoundException the CS object not found exception
+	 * @throws SMException the SM exception
+	 */
+	private String getApplicationId() throws CSObjectNotFoundException, SMException
+	{
+		UserProvisioningManager upManager;
+
+		upManager = ProvisionManager.getInstance().getUserProvisioningManager();
+		String appCtxName = SecurityManagerPropertiesLocator.getInstance().getApplicationCtxName();
+		return upManager.getApplication(appCtxName).getApplicationId().toString();
+
+	}
+
+	/**
+	 * Generate query.
+	 *
+	 * @param pElements the elements
+	 *
+	 * @return the string
+	 */
+	private String generateQuery(final String pElements)
+	{
+
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("select distinct pe.object_id,p.privilege_name").append(
+				" from csm_protection_group pg, csm_protection_element pe,").append(
+				" csm_pg_pe pgpe, csm_group g, csm_user_group_role_pg ugrpg, csm_user u,").append(
+				" csm_user_group ug, csm_role_privilege rp, csm_privilege p ").append(
+				" where pgpe.protection_group_id = pg.protection_group_id").append(
+				" and pgpe.protection_element_id = pe.protection_element_id and ");
+		if (pElements.contains(Constants.PERCENT_DELIMITER))
+		{
+			stringBuffer.append(Constants.OPENING_BRACE);
+			String[] pElementArray = pElements.split(Constants.COMMA_DELIMITER);
+			for (int i = 0; i < pElementArray.length; i++)
+			{
+				if (i != 0)
+				{
+					stringBuffer.append(Constants.OR_CONDITION);
+				}
+				stringBuffer.append(" pe.object_id like ? ");
+
+			}
+			stringBuffer.append(Constants.CLOSING_BRACE);
+		}
+		else
+		{
+			stringBuffer.append(" pe.object_id in ( "+ pElements +" ) ");
+		}
+		stringBuffer.append(" and pg.protection_group_id = ugrpg.protection_group_id ").append(
+				"and pg.APPLICATION_ID=? and (ugrpg.group_id = g.group_id").append(
+				" and ug.group_id= g.group_id and ug.user_id = u.user_id)").append(
+				" and u.login_name= ?").append(
+				" and ugrpg.role_id = rp.role_id " + " and rp.privilege_id = p.privilege_id");
+		return stringBuffer.toString();
 	}
 }
