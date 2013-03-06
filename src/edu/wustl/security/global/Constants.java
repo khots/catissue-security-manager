@@ -161,7 +161,7 @@ public class Constants
 	 * Constant for position3.
 	 */
 	public static final int POSITION3 = 3;
-	
+
 	public static final int POSITION4 = 4;
 	/**
 	 * name of the csm properties file.
@@ -187,4 +187,19 @@ public class Constants
 	 * Privilege tag name.
 	 */
 	public static final String PRIVILEGE_TAG_NAME = "PRIVILEGE_ID";
+
+	/** The Constant CLOSING_BRACE. */
+	public static final String CLOSING_BRACE = ")";
+
+	/** The Constant OPENING_BRACE. */
+	public static final String OPENING_BRACE = "(";
+
+	/** The Constant COMMA_DELIMITER. */
+	public static final String COMMA_DELIMITER = ",";
+
+	/** The Constant PERCENT_DELIMITER. */
+	public static final String PERCENT_DELIMITER = "%";
+
+	/** The Constant OR_CONDITION. */
+	public static final String OR_CONDITION = " OR ";
 }
