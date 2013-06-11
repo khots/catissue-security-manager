@@ -1,8 +1,16 @@
+/*L
+ *  Copyright Washington University in St. Louis
+ *  Copyright SemanticBits
+ *  Copyright Persistent Systems
+ *  Copyright Krishagni
+ *
+ *  Distributed under the OSI-approved BSD 3-Clause License.
+ *  See http://ncip.github.com/catissue-security-manager/LICENSE.txt for details.
+ */
+
 /**
  *<p>Title: </p>
  *<p>Description:  </p>
- *<p>Copyright: (c) Washington University, School of Medicine 2004</p>
- *<p>Company: Washington University, School of Medicine, St. Louis.</p>
  *@author Aarti Sharma
  *@version 1.0
  */
@@ -127,7 +135,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		catch (CSException exception)
 		{
-			
+
 			String mesg = "Authentication|"
 				+ "|"
 				+ loginName
@@ -724,20 +732,20 @@ public class SecurityManager implements Permissions, ISecurityManager
 	 * @param password password
 	 * @return @throws CSException
 	 */
-	/*public boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException 
+	/*public boolean login(String loginName, String password,LoginDetails loginDetails) throws SMException
 	{
 		boolean loginSuccess = false;
 		LoginAuditManager loginAuditManager=new LoginAuditManager(loginDetails);
-		try 
+		try
 		{
 			Logger.out.debug("login name: " + loginName + " passowrd: " + password);
 			//AuthenticationManager authMngr = getAuthenticationManager();
 			AuthenticationManager authMngr = ProvisionManager.getInstance().getAuthenticationManager();
 			loginSuccess = authMngr.login(loginName, password);
-		} 
-		catch (CSException ex) 
+		}
+		catch (CSException ex)
 		{
-			
+
 			String mesg = "Authentication|"
 				+ "|"
 				+ loginName
@@ -747,7 +755,7 @@ public class SecurityManager implements Permissions, ISecurityManager
 		}
 		finally
 		{
-			
+
 			loginAuditManager.audit(loginSuccess);
 		}
 		return loginSuccess;
