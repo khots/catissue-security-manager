@@ -4,8 +4,6 @@ Copyright (c) 2008, Washington University in St. Louis, SemanticBits, Persistent
 This project is distributed under the BSD 3-Clause License.
 Please see LICENSE file for details.
 
-caTissue Suite uses Common Security Module (CSM) software to accomplish the security requirements. caTissue Security Manager is an extention to CSM API addressing caTissue suite needs.
-
 The project was initially developed by Washington University in St. Louis, SemanticBits, Persistent Systems and Krishagni under funding from the CBIIT office of the National Cancer Institute.
 
 This project includes as sub-components other projects that are copyrighted by third parties and that distributed under various licenses. Please find a summary in the list below:
