@@ -3,6 +3,8 @@ Welcome to the caTissue Security Manager Project!
 
 caTissue Suite uses Common Security Module (CSM) software to accomplish the security requirements. caTissue Security Manager is an extention to CSM API addressing caTissue suite needs.
 
+caTissue Security Manager is an Open Source project and it is written in Java using caCORE CSM, Hibernate, Spring framework, Apache Commons.
+
 The caTissue Security Manager is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
