@@ -44,11 +44,13 @@ L-->
 		<pathelement location="lib/log4j-1.2.9.jar" />
 	</path>
 
+<!--
 	<loadfile property="dist.revision" srcFile="./.svn/entries">
 			<filterchain>
 				<headfilter lines="1" skip="4"/>
 			</filterchain>
 	</loadfile>
+-->
 
 	<target name="compile" depends="init, resolve">
 	

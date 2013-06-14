@@ -1,0 +1,148 @@
+Buildfile: C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\build.xml
+
+init:
+   [delete] Deleting directory C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\target\temp\classes\src
+   [delete] Deleting directory C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\target\temp\classes\test
+    [mkdir] Created dir: C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\target\temp\classes\src
+    [mkdir] Created dir: C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\target\temp\classes\test
+
+download-ivy:
+    [mkdir] Created dir: C:\Users\konkapv\.ivy
+     [echo] Installing ivy...
+      [get] Getting: http://repo1.maven.org/maven2/org/apache/ivy/ivy/2.0.0/ivy-2.0.0.jar
+      [get] To: C:\Users\konkapv\.ivy\ivy.jar
+
+init-ivy:
+
+resolve:
+No ivy:settings found for the default reference 'ivy.instance'.  A default instance will be used
+[ivy:retrieve] :: Ivy 2.0.0 - 20090108225011 :: http://ant.apache.org/ivy/ ::
+:: loading settings :: file = C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivysettings.xml
+[ivy:retrieve] :: resolving dependencies :: gov.nih.nci.catissue#security-manager;1.1.7.3-SNAPSHOT
+[ivy:retrieve] 	confs: [default]
+[ivy:retrieve] 	found local#SecurityManager;1.0 in local-repo-jars
+[ivy:retrieve] 	found ant-contrib#ant-contrib;1.0b2 in mvn.repo
+[ivy:retrieve] 	found ant#ant;1.5 in mvn.repo
+[ivy:retrieve] 	found commons-codec#commons-codec;1.3 in mvn.repo
+[ivy:retrieve] 	found gov.nih.nci.catissue#commons;1.3.1-SNAPSHOT in nci-mvn-nexus
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\commons-collections-2.1.1.jar ...
+[ivy:retrieve] .... (171kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!commons-collections-2.1.1.jar (10ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\clm.jar ...
+[ivy:retrieve] ... (73kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!clm.jar (9ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\ehcache-1.2.3.jar ...
+[ivy:retrieve] ..... (203kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!ehcache-1.2.3.jar (10ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\log4j.jar ...
+[ivy:retrieve] ....... (347kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!log4j.jar (11ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\cglib-2.1.jar ...
+[ivy:retrieve] ...... (275kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!cglib-2.1.jar (7ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\antlr-2.7.5H3.jar ...
+[ivy:retrieve] ........ (423kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!antlr-2.7.5H3.jar (9ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\csmapi-4.2.jar ...
+[ivy:retrieve] .............. (817kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!csmapi-4.2.jar (10ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\jakarta-oro-2.0.8.jar ...
+[ivy:retrieve] .. (63kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!jakarta-oro-2.0.8.jar (9ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\commons-logging-1.0.4.jar ...
+[ivy:retrieve] .. (37kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!commons-logging-1.0.4.jar (9ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\jdom.jar ...
+[ivy:retrieve] .... (149kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!jdom.jar (9ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\spring.jar ...
+[ivy:retrieve] ............................ (1719kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!spring.jar (11ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\hibernate3.jar ...
+[ivy:retrieve] ................................ (1925kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!hibernate3.jar (10ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\junit-4.5.jar ...
+[ivy:retrieve] ..... (194kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!junit-4.5.jar (10ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\xml-apis.jar ...
+[ivy:retrieve] ... (120kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!xml-apis.jar (8ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\asm.jar ...
+[ivy:retrieve] .. (25kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!asm.jar (7ms)
+[ivy:retrieve] downloading C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\ivy.local.jars\asm-attrs.jar ...
+[ivy:retrieve] .. (16kB)
+[ivy:retrieve] 	[SUCCESSFUL ] local#SecurityManager;1.0!asm-attrs.jar (7ms)
+[ivy:retrieve] downloading http://repo1.maven.org/maven2/ant-contrib/ant-contrib/1.0b2/ant-contrib-1.0b2.jar ...
+[ivy:retrieve] ........ (189kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] ant-contrib#ant-contrib;1.0b2!ant-contrib.jar (223ms)
+[ivy:retrieve] downloading http://repo1.maven.org/maven2/ant-contrib/ant-contrib/1.0b2/ant-contrib-1.0b2-sources.jar ...
+[ivy:retrieve] ....... (157kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] ant-contrib#ant-contrib;1.0b2!ant-contrib.jar(source) (764ms)
+[ivy:retrieve] downloading http://repo1.maven.org/maven2/commons-codec/commons-codec/1.3/commons-codec-1.3-sources.jar ...
+[ivy:retrieve] ... (53kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] commons-codec#commons-codec;1.3!commons-codec.jar(source) (143ms)
+[ivy:retrieve] downloading http://repo1.maven.org/maven2/commons-codec/commons-codec/1.3/commons-codec-1.3.jar ...
+[ivy:retrieve] .... (45kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] commons-codec#commons-codec;1.3!commons-codec.jar (127ms)
+[ivy:retrieve] downloading http://repo1.maven.org/maven2/commons-codec/commons-codec/1.3/commons-codec-1.3-javadoc.jar ...
+[ivy:retrieve] ........ (193kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] commons-codec#commons-codec;1.3!commons-codec.jar(javadoc) (301ms)
+[ivy:retrieve] downloading https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/gov/nih/nci/catissue/commons/1.3.1-SNAPSHOT/TreeApplet-1.3.1-SNAPSHOT.jar ...
+[ivy:retrieve] .... (9kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] gov.nih.nci.catissue#commons;1.3.1-SNAPSHOT!TreeApplet.jar (794ms)
+[ivy:retrieve] downloading https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/gov/nih/nci/catissue/commons/1.3.1-SNAPSHOT/washu-commons-1.3.1-SNAPSHOT.jar ...
+[ivy:retrieve] ..................................................................................................................... (455kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] gov.nih.nci.catissue#commons;1.3.1-SNAPSHOT!washu-commons.jar (1019ms)
+[ivy:retrieve] downloading https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/gov/nih/nci/catissue/commons/1.3.1-SNAPSHOT/washu-commons-src-1.3.1-SNAPSHOT.jar ...
+[ivy:retrieve] .................................................................................................. (381kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] gov.nih.nci.catissue#commons;1.3.1-SNAPSHOT!washu-commons-src.jar (987ms)
+[ivy:retrieve] downloading https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/gov/nih/nci/catissue/commons/1.3.1-SNAPSHOT/washu-commons-1.3.1-SNAPSHOT.pom ...
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] gov.nih.nci.catissue#commons;1.3.1-SNAPSHOT!washu-commons.pom (787ms)
+[ivy:retrieve] downloading http://repo1.maven.org/maven2/ant/ant/1.5/ant-1.5.jar ...
+[ivy:retrieve] ....................... (699kB)
+[ivy:retrieve] .. (0kB)
+[ivy:retrieve] 	[SUCCESSFUL ] ant#ant;1.5!ant.jar (791ms)
+[ivy:retrieve] :: resolution report :: resolve 3137ms :: artifacts dl 6118ms
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   5   |   5   |   5   |   0   ||   26  |   26  |
+	---------------------------------------------------------------------
+[ivy:retrieve] 
+[ivy:retrieve] 
+[ivy:retrieve] :: USE VERBOSE OR DEBUG MESSAGE LEVEL FOR MORE DETAILS
+[ivy:retrieve] :: retrieving :: gov.nih.nci.catissue#security-manager
+[ivy:retrieve] 	confs: [default]
+[ivy:retrieve] 	conflict on C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\lib\commons-codec-1.3.jar in [default]: 1.3 won
+[ivy:retrieve] 	conflict on C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\lib\ant-contrib-1.0b2.jar in [default]: 1.0b2 won
+[ivy:retrieve] 	0 artifacts copied, 23 already retrieved (0kB/21ms)
+
+compile:
+     [echo] -----------------------
+    [javac] Compiling 27 source files to C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\target\temp\classes\src
+    [javac] Note: Some input files use or override a deprecated API.
+    [javac] Note: Recompile with -Xlint:deprecation for details.
+    [javac] Note: Some input files use unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+
+build_jar:
+[build_jar] Building jar: C:\DEV\GIT-WORK\catissue\catissue-security-manager\software\SecurityManager\dist\SecurityManager.jar
+
+build_code_zip:
+
+dist:
+
+BUILD SUCCESSFUL
+Total time: 13 seconds
