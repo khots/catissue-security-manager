@@ -9,7 +9,7 @@ This project was developed as part of the NCI caBIG initiative.
 This project includes as sub-components other projects that are copyrighted by third parties and that distributed under various licenses. Please find a summary in the list below:
 
 In 2013, as part of the National Cancer Informatics Program (NCIP) Open Development Initiative, 
-the caTissue Participant Manager source code was migrated to GitHub to allow further development by the broader community.
+the caTissue Security Manager source code was migrated to GitHub to allow further development by the broader community.
 
 1 junit-frames.xsl, junit-noframes.xsl, checkstyle-frames-errors.xsl:
    Copyright by Apache Software Foundation
