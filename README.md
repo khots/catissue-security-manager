@@ -10,7 +10,7 @@ Please see the NOTICE and LICENSE files for details.
 
 You will find more details about the caTissue Security Manager in the following links:
  * [caTissue Tools Wiki] (https://wiki.nci.nih.gov/x/uIH_Ag)
- * [caTissue Wiki] (https://wiki.nci.nih.gov/x/uJT9AQ)
+ * [caTissue Documentation Wiki] (https://wiki.nci.nih.gov/x/uJT9AQ)
  * [Issue Tracker] (https://bugzilla.wustl.edu/bugzilla/)
  * [Code Repository] (https://github.com/NCIP/catissue-security-manager)
 
