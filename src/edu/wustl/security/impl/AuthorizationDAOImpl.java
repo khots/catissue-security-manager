@@ -34,6 +34,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.jdbc.ReturningWork;
 
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Constants;
@@ -103,7 +104,13 @@ public class AuthorizationDAOImpl extends gov.nih.nci.security.dao.Authorization
 			try
 			{
 				session = sessionFact.openSession();
-				connection = session.connection();
+				connection = session.doReturningWork(new ReturningWork<Connection>() 
+				{
+				    @Override
+				    public Connection execute(Connection conn) throws SQLException {
+				    return conn;
+				    }
+				});
 				Object obj = pEs.iterator().next();
 
 				// Changes done for Bug #19862 -  Slow Login
